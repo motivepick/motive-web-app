@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
+import 'uikit/dist/css/uikit.min.css';
+import 'uikit/dist/css/uikit-rtl.min.css';
+import UIkit from 'uikit';
+import Icons from 'uikit/dist/js/uikit-icons';
 import './App.css';
 
 class App extends Component {
@@ -33,6 +36,7 @@ class App extends Component {
     }
 
     render() {
+        UIkit.use(Icons);
         const {error, isLoaded, tasks} = this.state;
         if (error) {
             return <div>Error: {error.message}</div>;
@@ -40,15 +44,17 @@ class App extends Component {
             return <div>Loading...</div>;
         } else {
             return (
-                <div className="App">
-                    <header className="App-header">
-                        <img src={logo} className="App-logo" alt="logo"/>
-                        <h1 className="App-title">Welcome to React</h1>
-                    </header>
-                    <ul className="App-intro">
+                <div className="uk-container uk-container-small">
+                    <ul className="uk-list uk-list-divider">
                         {tasks.map(task => (
                             <li key={task.name}>
-                                {task.name}: {task.description}
+                                <div className="uk-flex uk-flex-between uk-flex-middle">
+                                    <input className="uk-checkbox uk-margin-auto-vertical uk-margin-small-left uk-margin-small-right"
+                                        type="checkbox"/>
+                                    <input className="uk-input uk-form-blank uk-text-truncate" type="text" value={task.name} placeholder={task.name}
+                                           readOnly/>
+                                    <a href="javascript:void(0)" uk-icon="icon: check"/>
+                                </div>
                             </li>
                         ))}
                     </ul>
