@@ -35,25 +35,61 @@ class App extends Component {
             )
     }
 
+    onAddNewTask(e) {
+        if (e.key === 'Enter') {
+            const component = this;
+            const input = e.target;
+            const task = {name: input.value};
+            fetch('http://staymotivated.tk/tasks', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(task)
+            }).then(function (response) {
+                if (response.ok) {
+                    component.setState({tasks: [task].concat(component.state.tasks)});
+                    input.value = '';
+                } else {
+                    alert('fail');
+                }
+            });
+        }
+    }
+
     render() {
         UIkit.use(Icons);
         const {error, isLoaded, tasks} = this.state;
         if (error) {
-            return <div>Error: {error.message}</div>;
+            return (
+                <div className="uk-container uk-container-small">
+                    <br/>
+                    Error: {error.message}
+                </div>
+            );
         } else if (!isLoaded) {
-            return <div>Loading...</div>;
+            return (
+                <div className="uk-container uk-container-small">
+                    <br/>
+                    Loading...
+                </div>
+            );
         } else {
             return (
                 <div className="uk-container uk-container-small">
+                    <br/>
+                    <div className="uk-flex uk-flex-between uk-flex-middle">
+                        <input className="uk-input" type="text" placeholder="Write new task"
+                               onKeyPress={this.onAddNewTask.bind(this)}/>
+                    </div>
                     <ul className="uk-list uk-list-divider">
                         {tasks.map(task => (
                             <li key={task.name}>
                                 <div className="uk-flex uk-flex-between uk-flex-middle">
-                                    <input className="uk-checkbox uk-margin-auto-vertical uk-margin-small-left uk-margin-small-right"
-                                        type="checkbox"/>
-                                    <input className="uk-input uk-form-blank uk-text-truncate" type="text" value={task.name} placeholder={task.name}
-                                           readOnly/>
-                                    <a href="javascript:void(0)" uk-icon="icon: check"/>
+                                    <input className="uk-input uk-form-blank uk-text-truncate" type="text"
+                                           value={task.name} placeholder={task.name} readOnly/>
+                                    <a href="javascript:void(0)" data-uk-icon="icon: check"/>
                                 </div>
                             </li>
                         ))}
