@@ -17,7 +17,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        fetch("http://185.206.144.54:8080/tasks")
+        fetch("http://staymotivated.tk/tasks")
             .then(response => response.json())
             .then(
                 (json) => {
