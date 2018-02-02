@@ -32,7 +32,7 @@ class App extends Component {
                         error
                     });
                 }
-            )
+            );
     }
 
     onAddNewTask(e) {
@@ -47,14 +47,16 @@ class App extends Component {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(task)
-            }).then(function (response) {
-                if (response.ok) {
-                    component.setState({tasks: [task].concat(component.state.tasks)});
-                    input.value = '';
-                } else {
-                    alert('fail');
-                }
-            });
+            })
+                .then(response => response.json())
+                .then(
+                    (taskWithId) => {
+                        component.setState({tasks: [taskWithId].concat(component.state.tasks)});
+                        input.value = '';
+                    }, (error) => {
+                        component.setState({error});
+                    }
+                );
         }
     }
 
