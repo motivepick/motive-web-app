@@ -36,9 +36,9 @@ class App extends Component {
     }
 
     onAddNewTask(e) {
-        if (e.key === 'Enter') {
+        const input = e.target;
+        if (e.key === 'Enter' && input.value.trim() !== '') {
             const component = this;
-            const input = e.target;
             const task = {name: input.value};
             fetch('http://staymotivated.tk/tasks', {
                 method: 'POST',
@@ -58,6 +58,21 @@ class App extends Component {
                     }
                 );
         }
+    }
+
+    onCloseTask(id) {
+        const component = this;
+        fetch('http://staymotivated.tk/closed-tasks/' + id, {
+            method: 'POST'
+        })
+            .then(response => response.json())
+            .then(
+                (taskWithId) => {
+                    component.setState({tasks: component.state.tasks.filter(t => t.id !== taskWithId.id)});
+                }, (error) => {
+                    component.setState({error});
+                }
+            );
     }
 
     render() {
@@ -87,11 +102,12 @@ class App extends Component {
                     </div>
                     <ul className="uk-list uk-list-divider">
                         {tasks.map(task => (
-                            <li key={task.name}>
+                            <li key={task.id}>
                                 <div className="uk-flex uk-flex-between uk-flex-middle">
                                     <input className="uk-input uk-form-blank uk-text-truncate" type="text"
                                            value={task.name} placeholder={task.name} readOnly/>
-                                    <a href="javascript:void(0)" data-uk-icon="icon: check"/>
+                                    <a href="javascript:void(0)" onClick={this.onCloseTask.bind(this, task.id)}
+                                       data-uk-icon="icon: check"/>
                                 </div>
                             </li>
                         ))}
