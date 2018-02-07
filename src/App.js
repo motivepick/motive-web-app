@@ -40,6 +40,7 @@ class App extends Component {
         if (e.key === 'Enter' && input.value.trim() !== '') {
             const component = this;
             const task = {name: input.value};
+            input.disabled = true;
             fetch('http://staymotivated.tk/tasks', {
                 method: 'POST',
                 headers: {
@@ -53,8 +54,10 @@ class App extends Component {
                     (taskWithId) => {
                         component.setState({tasks: [taskWithId].concat(component.state.tasks)});
                         input.value = '';
+                        input.disabled = false;
                     }, (error) => {
                         component.setState({error});
+                        input.disabled = false;
                     }
                 );
         }
