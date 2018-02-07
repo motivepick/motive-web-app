@@ -12,7 +12,8 @@ class App extends Component {
         this.state = {
             error: null,
             isLoaded: false,
-            tasks: []
+            tasks: [],
+            closingTask: false
         };
     }
 
@@ -65,22 +66,38 @@ class App extends Component {
 
     onCloseTask(id) {
         const component = this;
+        component.setState({closingTask: true});
         fetch('http://staymotivated.tk/closed-tasks/' + id, {
             method: 'POST'
         })
             .then(response => response.json())
             .then(
                 (taskWithId) => {
-                    component.setState({tasks: component.state.tasks.filter(t => t.id !== taskWithId.id)});
+                    component.setState({
+                        tasks: component.state.tasks.filter(t => t.id !== taskWithId.id),
+                        closingTask: false
+                    });
                 }, (error) => {
-                    component.setState({error});
+                    component.setState({error, closingTask: false});
                 }
             );
     }
 
+
     render() {
         UIkit.use(Icons);
-        const {error, isLoaded, tasks} = this.state;
+        const component = this;
+
+        function close(closingTask, taskId) {
+            if (closingTask) {
+                return <span data-uk-spinner={''}/>;
+            } else {
+                return <a href="javascript:void(0)" onClick={component.onCloseTask.bind(component, taskId)}
+                          data-uk-icon="icon: check"/>;
+            }
+        }
+
+        const {error, isLoaded, tasks, closingTask} = this.state;
         if (error) {
             return (
                 <div className="uk-container uk-container-small">
@@ -109,8 +126,7 @@ class App extends Component {
                                 <div className="uk-flex uk-flex-between uk-flex-middle">
                                     <input className="uk-input uk-form-blank uk-text-truncate" type="text"
                                            value={task.name} placeholder={task.name} readOnly/>
-                                    <a href="javascript:void(0)" onClick={this.onCloseTask.bind(this, task.id)}
-                                       data-uk-icon="icon: check"/>
+                                    {close(closingTask, task.id)}
                                 </div>
                             </li>
                         ))}
