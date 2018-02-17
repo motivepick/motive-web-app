@@ -124,8 +124,7 @@ class App extends Component {
                         {tasks.map(task => (
                             <li key={task.id}>
                                 <div className="uk-flex uk-flex-between uk-flex-middle">
-                                    <input className="uk-input uk-form-blank uk-text-truncate" type="text"
-                                           value={task.name} placeholder={task.name} readOnly/>
+                                    {task.name}
                                     {close(closingTask, task.id)}
                                 </div>
                             </li>
