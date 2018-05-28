@@ -6,4 +6,4 @@ To run locally run `npm start`.
 
 To deploy to GitHub Pages run `npm run deploy`.
 
-Try it out on http://motiv.yaskovdev.com.
+Try it out on https://motiv.yaskovdev.com.
