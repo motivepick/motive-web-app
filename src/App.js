@@ -18,7 +18,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        fetch("http://staymotivated.tk/tasks")
+        fetch("https://api-motiv.yaskovdev.com/tasks")
             .then(response => response.json())
             .then(
                 (json) => {
@@ -42,7 +42,7 @@ class App extends Component {
             const component = this;
             const task = {name: input.value};
             input.disabled = true;
-            fetch('http://staymotivated.tk/tasks', {
+            fetch('https://api-motiv.yaskovdev.com/tasks', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -67,7 +67,7 @@ class App extends Component {
     onCloseTask(id) {
         const component = this;
         component.setState({closingTask: true});
-        fetch('http://staymotivated.tk/closed-tasks/' + id, {
+        fetch('https://api-motiv.yaskovdev.com/closed-tasks/' + id, {
             method: 'POST'
         })
             .then(response => response.json())
@@ -82,7 +82,6 @@ class App extends Component {
                 }
             );
     }
-
 
     render() {
         UIkit.use(Icons);
