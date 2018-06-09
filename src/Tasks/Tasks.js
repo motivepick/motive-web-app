@@ -18,29 +18,33 @@ class Tasks extends Component {
     }
 
     componentDidMount() {
-        fetch("https://api-motiv.yaskovdev.com/tasks")
-            .then(response => response.json())
-            .then(
-                (json) => {
-                    this.setState({
-                        isLoaded: true,
-                        tasks: json
-                    });
-                },
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                }
-            );
+        const {id} = this.currentUser();
+        if (id) {
+            fetch(`https://api-motiv.yaskovdev.com/${id}/tasks`)
+                .then(response => response.json())
+                .then(
+                    (json) => {
+                        this.setState({
+                            isLoaded: true,
+                            tasks: json
+                        });
+                    },
+                    (error) => {
+                        this.setState({
+                            isLoaded: true,
+                            error
+                        });
+                    }
+                );
+        }
     }
 
     onAddNewTask(e) {
         const input = e.target;
         if (e.key === 'Enter' && input.value.trim() !== '') {
             const component = this;
-            const task = {name: input.value};
+            const {id} = this.currentUser();
+            const task = {userId: id, name: input.value};
             input.disabled = true;
             fetch('https://api-motiv.yaskovdev.com/tasks', {
                 method: 'POST',
@@ -135,6 +139,11 @@ class Tasks extends Component {
                 </div>
             );
         }
+    }
+
+    currentUser = () => {
+        const user = localStorage.getItem('user');
+        return user ? JSON.parse(user) : {};
     }
 }
 

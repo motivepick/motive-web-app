@@ -21,12 +21,10 @@ class LoginForm extends Component {
             method: 'GET'
         }).then(r => r.json()).then(json => {
             const {access_token} = json;
-            localStorage.setItem('token', access_token);
             fetch(`https://graph.facebook.com/me?access_token=${access_token}`, {
                 method: 'GET'
             }).then(r => r.json()).then(({id, name}) => {
-                localStorage.setItem('userId', id);
-                localStorage.setItem('userName', name);
+                localStorage.setItem('user', JSON.stringify({id, name, token: access_token}));
                 console.log('Sending user ID, user name and access token to the server...', id, name, access_token);
             });
             this.props.history.push(`/`);
