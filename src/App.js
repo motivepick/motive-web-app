@@ -3,7 +3,7 @@ import 'uikit/dist/css/uikit.min.css';
 import 'uikit/dist/css/uikit-rtl.min.css';
 import './App.css';
 import Tasks from "./Tasks/Tasks";
-import LoginForm from "./LoginForm/LoginForm";
+import LoginForm from "./Authentication/LoginForm";
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 class App extends Component {

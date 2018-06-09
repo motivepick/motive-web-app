@@ -3,7 +3,7 @@ import 'uikit/dist/css/uikit.min.css';
 import 'uikit/dist/css/uikit-rtl.min.css';
 import UIkit from 'uikit';
 import Icons from 'uikit/dist/js/uikit-icons';
-import LoginButton from "../LoginButton/LoginButton";
+import AuthenticationPanel from "../Authentication/AuthenticationPanel";
 
 class Tasks extends Component {
 
@@ -100,7 +100,7 @@ class Tasks extends Component {
         if (error) {
             return (
                 <div className="uk-container uk-container-small">
-                    <LoginButton/>
+                    <AuthenticationPanel/>
                     <br/>
                     Error: {error.message}
                 </div>
@@ -108,7 +108,7 @@ class Tasks extends Component {
         } else if (!isLoaded) {
             return (
                 <div className="uk-container uk-container-small">
-                    <LoginButton/>
+                    <AuthenticationPanel/>
                     <br/>
                     Loading...
                 </div>
@@ -116,7 +116,7 @@ class Tasks extends Component {
         } else {
             return (
                 <div className="uk-container uk-container-small">
-                    <LoginButton/>
+                    <AuthenticationPanel/>
                     <br/>
                     <div className="uk-flex uk-flex-between uk-flex-middle">
                         <input className="uk-input" type="text" placeholder="Write new task"
