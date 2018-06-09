@@ -3,7 +3,9 @@ import React, {Component} from 'react';
 class LoginButton extends Component {
 
     render() {
-        return <a href={'https://github.com/login/oauth/authorize?client_id=72d4b07903134b5aaa52'}>Login</a>;
+        const clientId = '2066377776913735';
+        const redirectUrl = encodeURI('https://motiv.yaskovdev.com/login');
+        return <a href={`https://www.facebook.com/v3.0/dialog/oauth?client_id=${clientId}&redirect_uri=${redirectUrl}&state=123`}>Login</a>;
     }
 }
 
