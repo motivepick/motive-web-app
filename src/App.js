@@ -10,25 +10,6 @@ import {setUser} from "./actions";
 
 class App extends Component {
 
-    componentDidMount() {
-        const {user, setUser} = this.props;
-        if (!user) {
-            const id = localStorage.getItem('id');
-            if (id) {
-                fetch(`https://api-motiv.yaskovdev.com/users/${id}`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                    }
-                }).then(r => r.json()).then((user) => {
-                    setUser(user);
-                });
-            } else {
-                console.log('nobody was logged in');
-            }
-        }
-    }
-
     render() {
         return (
             <Router>
