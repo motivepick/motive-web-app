@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
+import {setUser} from "../actions";
+import {connect} from 'react-redux';
 
 class LoginForm extends Component {
 
@@ -24,12 +26,32 @@ class LoginForm extends Component {
             fetch(`https://graph.facebook.com/me?access_token=${access_token}`, {
                 method: 'GET'
             }).then(r => r.json()).then(({id, name}) => {
-                localStorage.setItem('user', JSON.stringify({id, name, token: access_token}));
-                console.log('Sending user ID, user name and access token to the server...', id, name, access_token);
+                this.createUser({id, name, token: access_token});
             });
+        });
+    };
+
+    createUser = (user) => {
+        console.log('Sending user to the server...', user);
+
+        fetch(`https://api-motiv.yaskovdev.com/users`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(user)
+        }).then(r => r.json()).then(() => {
             this.props.history.push(`/`);
+            localStorage.setItem('id', user.id)
         });
     }
 }
 
-export default withRouter(LoginForm);
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = dispatch => ({
+    setUser: user => dispatch(setUser(user))
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm));

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter} from "react-router-dom";
+import {removeUser} from "../actions";
+import {connect} from 'react-redux';
 
 class LogoutButton extends Component {
 
@@ -8,9 +10,23 @@ class LogoutButton extends Component {
     }
 
     handleLogout = () => {
-        localStorage.removeItem('user');
-        this.props.history.push(`/`);
+        const {user, removeUser} = this.props;
+        fetch(`https://api-motiv.yaskovdev.com/users/${user.id}/deletion`, {
+            method: 'POST'
+        }).then(() => {
+            console.log('user deleted from server');
+            localStorage.removeItem('id');
+            removeUser();
+        });
     }
 }
 
-export default withRouter(LogoutButton);
+const mapStateToProps = state => ({
+    user: state.authentication.user
+});
+
+const mapDispatchToProps = dispatch => ({
+    removeUser: () => dispatch(removeUser())
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LogoutButton));

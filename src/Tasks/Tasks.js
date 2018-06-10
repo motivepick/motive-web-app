@@ -4,6 +4,7 @@ import 'uikit/dist/css/uikit-rtl.min.css';
 import UIkit from 'uikit';
 import Icons from 'uikit/dist/js/uikit-icons';
 import AuthenticationPanel from "../Authentication/AuthenticationPanel";
+import {connect} from 'react-redux';
 
 class Tasks extends Component {
 
@@ -17,9 +18,11 @@ class Tasks extends Component {
         };
     }
 
-    componentDidMount() {
-        const {id} = this.currentUser();
-        if (id) {
+    componentWillReceiveProps(props) {
+        console.log('props in tasks', props);
+        const {user} = props;
+        if (user) {
+            const {id} = user;
             fetch(`https://api-motiv.yaskovdev.com/${id}/tasks`)
                 .then(response => response.json())
                 .then(
@@ -43,14 +46,15 @@ class Tasks extends Component {
         const input = e.target;
         if (e.key === 'Enter' && input.value.trim() !== '') {
             const component = this;
-            const {id} = this.currentUser();
+            const {props} = this;
+            const {id} = props.user;
             const task = {userId: id, name: input.value};
             input.disabled = true;
             fetch('https://api-motiv.yaskovdev.com/tasks', {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                 },
                 body: JSON.stringify(task)
             })
@@ -101,6 +105,7 @@ class Tasks extends Component {
         }
 
         const {error, isLoaded, tasks, closingTask} = this.state;
+        const {user} = this.props;
         if (error) {
             return (
                 <div className="uk-container uk-container-small">
@@ -109,7 +114,7 @@ class Tasks extends Component {
                     Error: {error.message}
                 </div>
             );
-        } else if (!isLoaded) {
+        } else if (!isLoaded || !user) {
             return (
                 <div className="uk-container uk-container-small">
                     <AuthenticationPanel/>
@@ -140,11 +145,15 @@ class Tasks extends Component {
             );
         }
     }
-
-    currentUser = () => {
-        const user = localStorage.getItem('user');
-        return user ? JSON.parse(user) : {};
-    }
 }
 
-export default Tasks;
+const mapStateToProps = state => {
+    console.log('state in tasks', state);
+    return ({
+        user: state.authentication.user
+    });
+};
+
+const mapDispatchToProps = () => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tasks);
