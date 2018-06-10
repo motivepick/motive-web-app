@@ -42,8 +42,8 @@ class LoginForm extends Component {
             },
             body: JSON.stringify(user)
         }).then(r => r.json()).then(() => {
+            localStorage.setItem('id', user.id);
             this.props.history.push(`/`);
-            localStorage.setItem('id', user.id)
         });
     }
 }
