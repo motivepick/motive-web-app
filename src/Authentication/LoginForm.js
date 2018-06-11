@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
-import {setUser} from "../actions";
 import {connect} from 'react-redux';
 
 class LoginForm extends Component {
@@ -48,8 +47,6 @@ class LoginForm extends Component {
 
 const mapStateToProps = () => ({});
 
-const mapDispatchToProps = dispatch => ({
-    setUser: user => dispatch(setUser(user))
-});
+const mapDispatchToProps = () => ({});
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm));

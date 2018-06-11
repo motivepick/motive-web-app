@@ -14,7 +14,6 @@ class LogoutButton extends Component {
         fetch(`https://api-motiv.yaskovdev.com/users/${user.id}/deletion`, {
             method: 'POST'
         }).then(() => {
-            localStorage.removeItem('id');
             removeUser();
         });
     }

@@ -6,7 +6,6 @@ import Tasks from "./Tasks/Tasks";
 import LoginForm from "./Authentication/LoginForm";
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import {connect} from "react-redux";
-import {setUser} from "./actions";
 
 class App extends Component {
 
@@ -26,9 +25,6 @@ const mapStateToProps = state => ({
     user: state.authentication.user
 });
 
-const mapDispatchToProps = dispatch => ({
-    setUser: user => dispatch(setUser(user))
-});
+const mapDispatchToProps = () => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-
