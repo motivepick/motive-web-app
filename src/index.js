@@ -19,8 +19,6 @@ const fetchUser = () => {
                 'Accept': 'application/json',
             }
         }).then(response => response.json()).then(user => store.dispatch(setUser(user)));
-    } else {
-        console.log('nobody was logged in');
     }
 };
 

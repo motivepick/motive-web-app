@@ -32,8 +32,6 @@ class LoginForm extends Component {
     };
 
     createUser = (user) => {
-        console.log('Sending user to the server...', user);
-
         fetch(`https://api-motiv.yaskovdev.com/users`, {
             method: 'POST',
             headers: {
