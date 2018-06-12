@@ -7,6 +7,7 @@ import stayMotivatedApp from './reducers'
 import {Provider} from 'react-redux'
 import {createStore} from 'redux'
 import {setUser} from "./actions";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const store = createStore(stayMotivatedApp);
 

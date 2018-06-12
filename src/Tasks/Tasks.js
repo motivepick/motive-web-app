@@ -3,8 +3,9 @@ import 'uikit/dist/css/uikit.min.css';
 import 'uikit/dist/css/uikit-rtl.min.css';
 import UIkit from 'uikit';
 import Icons from 'uikit/dist/js/uikit-icons';
-import AuthenticationPanel from "../Authentication/AuthenticationPanel";
 import {connect} from 'react-redux';
+import LogoutButton from '../Authentication/LogoutButton';
+import {Nav, Navbar, NavbarBrand, NavItem} from 'reactstrap';
 
 class Tasks extends Component {
 
@@ -18,28 +19,26 @@ class Tasks extends Component {
         };
     }
 
-    componentWillReceiveProps(props) {
-        console.log('props in tasks', props);
-        const {user} = props;
-        if (user) {
-            const {id} = user;
-            fetch(`https://api-motiv.yaskovdev.com/${id}/tasks`)
-                .then(response => response.json())
-                .then(
-                    (json) => {
-                        this.setState({
-                            isLoaded: true,
-                            tasks: json
-                        });
-                    },
-                    (error) => {
-                        this.setState({
-                            isLoaded: true,
-                            error
-                        });
-                    }
-                );
-        }
+    componentWillMount() {
+        console.log('props in tasks', this.props);
+        const {user} = this.props;
+        const {id} = user;
+        fetch(`https://api-motiv.yaskovdev.com/${id}/tasks`)
+            .then(response => response.json())
+            .then(
+                (json) => {
+                    this.setState({
+                        isLoaded: true,
+                        tasks: json
+                    });
+                },
+                (error) => {
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            );
     }
 
     onAddNewTask(e) {
@@ -91,6 +90,19 @@ class Tasks extends Component {
             );
     }
 
+    navigation = () => {
+        return (
+            <Navbar color="light" light expand="md">
+                <NavbarBrand href="/">Your Tasks</NavbarBrand>
+                <Nav className="ml-auto" navbar>
+                    <NavItem>
+                        <LogoutButton/>
+                    </NavItem>
+                </Nav>
+            </Navbar>
+        );
+    };
+
     render() {
         UIkit.use(Icons);
         const component = this;
@@ -108,39 +120,45 @@ class Tasks extends Component {
         const {user} = this.props;
         if (error) {
             return (
-                <div className="uk-container uk-container-small">
-                    <AuthenticationPanel/>
-                    <br/>
-                    Error: {error.message}
+                <div>
+                    {this.navigation()}
+                    <div className="uk-container uk-container-small">
+                        <br/>
+                        Error: {error.message}
+                    </div>
                 </div>
             );
         } else if (!isLoaded || !user) {
             return (
-                <div className="uk-container uk-container-small">
-                    <AuthenticationPanel/>
-                    <br/>
-                    Loading...
+                <div>
+                    {this.navigation()}
+                    <div className="uk-container uk-container-small">
+                        <br/>
+                        Loading...
+                    </div>
                 </div>
             );
         } else {
             return (
-                <div className="uk-container uk-container-small">
-                    <AuthenticationPanel/>
-                    <br/>
-                    <div className="uk-flex uk-flex-between uk-flex-middle">
-                        <input className="uk-input" type="text" placeholder="Write new task"
-                               onKeyPress={this.onAddNewTask.bind(this)}/>
+                <div>
+                    {this.navigation()}
+                    <div className="uk-container uk-container-small">
+                        <br/>
+                        <div className="uk-flex uk-flex-between uk-flex-middle">
+                            <input className="uk-input" type="text" placeholder="Write new task"
+                                   onKeyPress={this.onAddNewTask.bind(this)}/>
+                        </div>
+                        <ul className="uk-list uk-list-divider">
+                            {tasks.map(task => (
+                                <li key={task.id}>
+                                    <div className="uk-flex uk-flex-between uk-flex-middle">
+                                        {task.name}
+                                        {close(closingTask, task.id)}
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-                    <ul className="uk-list uk-list-divider">
-                        {tasks.map(task => (
-                            <li key={task.id}>
-                                <div className="uk-flex uk-flex-between uk-flex-middle">
-                                    {task.name}
-                                    {close(closingTask, task.id)}
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
                 </div>
             );
         }
