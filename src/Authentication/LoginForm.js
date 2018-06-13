@@ -1,15 +1,18 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
+import {setUser} from "../actions";
 
 class LoginForm extends Component {
 
     render() {
         const query = new URLSearchParams(this.props.location.search);
         const code = query.get('code');
-        this.exchangeCodeForToken(code);
         return (
-            <dev>Login is in progress...</dev>
+            <dev>Login is in progress...
+                <button onClick={() => this.exchangeCodeForToken(code)} value={'Exchange'}>Exchange</button>
+                <button onClick={() => this.props.history.push('/')} value={'Login'}>Login</button>
+            </dev>
         )
     }
 
@@ -22,15 +25,19 @@ class LoginForm extends Component {
             method: 'GET'
         }).then(r => r.json()).then(json => {
             const {access_token} = json;
+            console.log('retrieved token', access_token);
             fetch(`https://graph.facebook.com/me?access_token=${access_token}`, {
                 method: 'GET'
             }).then(r => r.json()).then(({id, name}) => {
-                this.createUser({id, name, token: access_token});
+                const user = {id, name, token: access_token};
+                console.log('retrieved user', user);
+                this.createUser(user);
             });
         });
     };
 
     createUser = (user) => {
+        const {history, setUser} = this.props;
         fetch(`https://api-motiv.yaskovdev.com/users`, {
             method: 'POST',
             headers: {
@@ -39,14 +46,17 @@ class LoginForm extends Component {
             },
             body: JSON.stringify(user)
         }).then(r => r.json()).then(() => {
+            console.log('created user in backend, setting its ID', user);
             localStorage.setItem('id', user.id);
-            window.location.href = '/';
+            setUser(user);
         });
     }
 }
 
 const mapStateToProps = () => ({});
 
-const mapDispatchToProps = () => ({});
+const mapDispatchToProps = dispatch => ({
+    setUser: (user) => dispatch(setUser(user))
+});
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm));

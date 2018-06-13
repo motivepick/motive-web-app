@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import LogoutButton from "./LogoutButton";
-import LoginButton from "./LoginButton";
+import Tasks from "../Tasks/Tasks";
 import {connect} from "react-redux";
+import LoginView from "./LoginView";
 
 class AuthenticationPanel extends Component {
 
     render() {
         const {user} = this.props;
         return (
-            user ? <LogoutButton/> : <LoginButton/>
+            user ? <Tasks/> : <LoginView/>
         );
     }
 }
