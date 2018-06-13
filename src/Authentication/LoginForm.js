@@ -11,7 +11,6 @@ class LoginForm extends Component {
         return (
             <dev>Login is in progress...
                 <button onClick={() => this.exchangeCodeForToken(code)} value={'Exchange'}>Exchange</button>
-                <button onClick={() => this.props.history.push('/')} value={'Login'}>Login</button>
             </dev>
         )
     }
@@ -49,6 +48,7 @@ class LoginForm extends Component {
             console.log('created user in backend, setting its ID', user);
             localStorage.setItem('id', user.id);
             setUser(user);
+            history.push('/')
         });
     }
 }
