@@ -5,13 +5,15 @@ import {setUser} from "../actions";
 
 class LoginForm extends Component {
 
-    render() {
+    componentDidMount() {
         const query = new URLSearchParams(this.props.location.search);
         const code = query.get('code');
+        this.exchangeCodeForToken(code);
+    }
+
+    render() {
         return (
-            <dev>Login is in progress...
-                <button onClick={() => this.exchangeCodeForToken(code)} value={'Exchange'}>Exchange</button>
-            </dev>
+            <dev>Login is in progress...</dev>
         )
     }
 
