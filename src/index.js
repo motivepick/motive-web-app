@@ -7,6 +7,7 @@ import stayMotivatedApp from './reducers'
 import {Provider} from 'react-redux'
 import {createStore} from 'redux'
 import {setUser} from "./actions";
+import {API_URL} from './const';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const store = createStore(stayMotivatedApp);
@@ -14,7 +15,7 @@ const store = createStore(stayMotivatedApp);
 const fetchUser = () => {
     const userId = localStorage.getItem('id');
     if (userId) {
-        fetch(`https://api-motiv.yaskovdev.com/users/${userId}`, {
+        fetch(`${API_URL}/users/${userId}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
