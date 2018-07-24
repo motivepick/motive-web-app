@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {withRouter} from "react-router-dom";
 import {removeUser} from "../actions";
 import {connect} from 'react-redux';
 
@@ -27,4 +26,4 @@ const mapDispatchToProps = dispatch => ({
     removeUser: () => dispatch(removeUser())
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LogoutButton));
+export default connect(mapStateToProps, mapDispatchToProps)(LogoutButton);

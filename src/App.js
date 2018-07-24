@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import 'uikit/dist/css/uikit.min.css';
 import 'uikit/dist/css/uikit-rtl.min.css';
 import './App.css';
-import AuthenticationPanel from './Authentication/AuthenticationPanel';
+import Tasks from './Tasks/Tasks';
 import LoginForm from './Authentication/LoginForm';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
 import {connect} from 'react-redux';
@@ -16,7 +16,7 @@ class App extends Component {
         return (
             <Router>
                 <Container>
-                    <Route exact={true} path="/" component={AuthenticationPanel}/>
+                    <Route exact={true} path="/" component={user ? <Tasks/> : <LoginView/>}/>
                     <Route path="/login" component={LoginForm}/>
                     <Route path="/development" component={LoginView}/>
                 </Container>

@@ -20,7 +20,6 @@ class Tasks extends Component {
     }
 
     componentWillMount() {
-        console.log('props in tasks', this.props);
         const {user} = this.props;
         const {id} = user;
         fetch(`https://api-motiv.yaskovdev.com/${id}/tasks`)

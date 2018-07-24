@@ -15,7 +15,6 @@ const fetchUser = () => {
     const userId = localStorage.getItem('id');
     if (userId) {
         fetch(`https://api-motiv.yaskovdev.com/users/${userId}`, {
-            method: 'GET',
             headers: {
                 'Accept': 'application/json',
             }
