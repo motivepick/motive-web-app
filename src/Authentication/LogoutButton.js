@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {removeUser} from "../actions";
 import {connect} from 'react-redux';
+import {API_URL} from '../const';
 
 class LogoutButton extends Component {
 
@@ -10,7 +11,7 @@ class LogoutButton extends Component {
 
     handleLogout = () => {
         const {user, removeUser} = this.props;
-        fetch(`https://api-motiv.yaskovdev.com/users/${user.id}/deletion`, {
+        fetch(`${API_URL}/users/${user.id}/deletion`, {
             method: 'POST'
         }).then(() => {
             removeUser();

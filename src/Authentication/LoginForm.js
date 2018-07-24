@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {setUser} from "../actions";
+import {APP_URL, FACEBOOK_CLIENT_ID} from '../const';
 
 class LoginForm extends Component {
 
@@ -18,10 +19,9 @@ class LoginForm extends Component {
     }
 
     exchangeCodeForToken = (code) => {
-        const clientId = '2066377776913735';
-        const clientSecret = '0d9cfee0a17164bdcc1a034a3db9230b';
-        const redirectUrl = encodeURI('https://motiv.yaskovdev.com/login');
-        const url = `https://graph.facebook.com/v3.0/oauth/access_token?client_id=${clientId}&redirect_uri=${redirectUrl}&client_secret=${clientSecret}&code=${code}`;
+        const clientSecret = '0d9cfee0a17164bdcc1a034a3db9230b'; // TODO: Remove this, please.
+        const redirectUrl = encodeURI(`${APP_URL}/login`);
+        const url = `https://graph.facebook.com/v3.0/oauth/access_token?client_id=${FACEBOOK_CLIENT_ID}&redirect_uri=${redirectUrl}&client_secret=${clientSecret}&code=${code}`;
         fetch(url).then(r => r.json()).then(json => {
             const {access_token} = json;
             fetch(`https://graph.facebook.com/me?access_token=${access_token}`).then(r => r.json()).then(({id, name}) => {
