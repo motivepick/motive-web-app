@@ -8,6 +8,7 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {Container} from 'reactstrap';
 import LoginView from './Authentication/LoginView';
+import ErrorBoundary from './ErrorBoundary';
 
 class App extends Component {
 
@@ -15,11 +16,13 @@ class App extends Component {
         const {user} = this.props;
         return (
             <Router>
-                <Container>
-                    <Route exact={true} path="/" component={user ? Tasks : LoginView}/>
-                    <Route path="/login" component={LoginForm}/>
-                    <Route path="/development" component={LoginView}/>
-                </Container>
+                <ErrorBoundary>
+                    <Container>
+                        <Route exact={true} path="/" component={user ? Tasks : LoginView}/>
+                        <Route path="/login" component={LoginForm}/>
+                        <Route path="/development" component={LoginView}/>
+                    </Container>
+                </ErrorBoundary>
             </Router>
         );
     }
