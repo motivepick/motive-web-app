@@ -16,7 +16,7 @@ class App extends Component {
         return (
             <Router>
                 <Container>
-                    <Route exact={true} path="/" component={user ? <Tasks/> : <LoginView/>}/>
+                    <Route exact={true} path="/" component={user ? Tasks : LoginView}/>
                     <Route path="/login" component={LoginForm}/>
                     <Route path="/development" component={LoginView}/>
                 </Container>

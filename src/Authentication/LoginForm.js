@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {setUser} from "../actions";
-import {APP_URL, FACEBOOK_CLIENT_ID} from '../const';
+import {API_URL, APP_URL, FACEBOOK_CLIENT_ID} from '../const';
 
 class LoginForm extends Component {
 
@@ -33,7 +33,7 @@ class LoginForm extends Component {
 
     createUser = (user) => {
         const {history, setUser} = this.props;
-        fetch(`https://api-motiv.yaskovdev.com/users`, {
+        fetch(`${API_URL}/users`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

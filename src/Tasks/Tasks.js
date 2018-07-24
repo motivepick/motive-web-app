@@ -6,6 +6,7 @@ import Icons from 'uikit/dist/js/uikit-icons';
 import {connect} from 'react-redux';
 import LogoutButton from '../Authentication/LogoutButton';
 import {Nav, Navbar, NavbarBrand, NavItem} from 'reactstrap';
+import {API_URL} from "../const";
 
 class Tasks extends Component {
 
@@ -22,7 +23,7 @@ class Tasks extends Component {
     componentWillMount() {
         const {user} = this.props;
         const {id} = user;
-        fetch(`https://api-motiv.yaskovdev.com/${id}/tasks`)
+        fetch(`${API_URL}/users/${id}/tasks`)
             .then(response => response.json())
             .then(
                 (json) => {
@@ -48,7 +49,7 @@ class Tasks extends Component {
             const {id} = props.user;
             const task = {userId: id, name: input.value};
             input.disabled = true;
-            fetch('https://api-motiv.yaskovdev.com/tasks', {
+            fetch(`${API_URL}/tasks`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ class Tasks extends Component {
     onCloseTask(id) {
         const component = this;
         component.setState({closingTask: true});
-        fetch('https://api-motiv.yaskovdev.com/closed-tasks/' + id, {
+        fetch(`${API_URL}/closed-tasks/${id}`, {
             method: 'POST'
         })
             .then(response => response.json())
