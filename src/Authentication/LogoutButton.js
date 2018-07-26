@@ -6,7 +6,7 @@ import {API_URL} from '../const';
 class LogoutButton extends Component {
 
     render() {
-        return <a onClick={this.handleLogout}>Logout</a>;
+        return <a onClick={this.handleLogout} style={{cursor: 'pointer'}}>Logout</a>;
     }
 
     handleLogout = () => {

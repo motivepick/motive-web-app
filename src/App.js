@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import 'uikit/dist/css/uikit.min.css';
-import 'uikit/dist/css/uikit-rtl.min.css';
 import './App.css';
 import Tasks from './Tasks/Tasks';
 import LoginForm from './Authentication/LoginForm';

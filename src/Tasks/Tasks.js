@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
-import 'uikit/dist/css/uikit.min.css';
-import 'uikit/dist/css/uikit-rtl.min.css';
-import UIkit from 'uikit';
-import Icons from 'uikit/dist/js/uikit-icons';
 import {connect} from 'react-redux';
 import LogoutButton from '../Authentication/LogoutButton';
-import {Nav, Navbar, NavbarBrand, NavItem} from 'reactstrap';
+import {Col, Input, ListGroup, ListGroupItem, Nav, Navbar, NavbarBrand, NavItem, Row} from 'reactstrap';
 import {API_URL} from "../const";
 
 class Tasks extends Component {
@@ -63,6 +59,7 @@ class Tasks extends Component {
                         component.setState({tasks: [taskWithId].concat(component.state.tasks)});
                         input.value = '';
                         input.disabled = false;
+                        this.taskNameInput.focus();
                     }, (error) => {
                         component.setState({error});
                         input.disabled = false;
@@ -104,17 +101,7 @@ class Tasks extends Component {
     };
 
     render() {
-        UIkit.use(Icons);
         const component = this;
-
-        function close(closingTask, taskId) {
-            if (closingTask) {
-                return <span data-uk-spinner={''}/>;
-            } else {
-                return <a href="javascript:void(0)" onClick={component.onCloseTask.bind(component, taskId)}
-                          data-uk-icon="icon: check"/>;
-            }
-        }
 
         const {error, isLoaded, tasks, closingTask} = this.state;
         const {user} = this.props;
@@ -142,22 +129,31 @@ class Tasks extends Component {
             return (
                 <div>
                     {this.navigation()}
-                    <div className="uk-container uk-container-small">
+                    <div>
                         <br/>
-                        <div className="uk-flex uk-flex-between uk-flex-middle">
-                            <input className="uk-input" type="text" placeholder="Write new task"
-                                   onKeyPress={this.onAddNewTask.bind(this)}/>
-                        </div>
-                        <ul className="uk-list uk-list-divider">
-                            {tasks.map(task => (
-                                <li key={task.id}>
-                                    <div className="uk-flex uk-flex-between uk-flex-middle">
-                                        {task.name}
-                                        {close(closingTask, task.id)}
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                        <Row>
+                            <Col>
+                                <Input type="text" name="name" id="exampleEmail" placeholder="Write new task"
+                                       onKeyPress={this.onAddNewTask.bind(this)} autoFocus innerRef={input => this.taskNameInput = input}/>
+                            </Col>
+                        </Row>
+                        <Row style={{marginTop: '10px'}}>
+                            <Col>
+                                <ListGroup>
+                                    {tasks.map(task => (
+                                        <ListGroupItem key={task.id}>
+                                            <div className="d-flex justify-content-between">
+                                                {task.name}
+                                                <div>
+                                                    <Input type="checkbox" style={{'margin-left': '-0.65rem'}}
+                                                           onClick={component.onCloseTask.bind(component, task.id)}/>
+                                                </div>
+                                            </div>
+                                        </ListGroupItem>
+                                    ))}
+                                </ListGroup>
+                            </Col>
+                        </Row>
                     </div>
                 </div>
             );
