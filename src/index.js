@@ -19,7 +19,16 @@ const fetchUser = () => {
             headers: {
                 'Accept': 'application/json',
             }
-        }).then(response => response.json()).then(user => store.dispatch(setUser(user)));
+        }).then(response => {
+            if (response.status === 404) {
+                store.dispatch(setUser(undefined));
+            }
+            return response.json();
+        }).then(user => {
+            store.dispatch(setUser(user));
+        });
+    } else {
+        store.dispatch(setUser(undefined))
     }
 };
 
