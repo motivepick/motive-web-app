@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import LogoutButton from '../Authentication/LogoutButton';
-import {Col, Input, ListGroup, ListGroupItem, Nav, Navbar, NavbarBrand, NavItem, Row} from 'reactstrap';
+import {Col, Input, ListGroup, Row} from 'reactstrap';
 import {API_URL} from "../const";
+import Task from "./Task";
+import Navigation from "../Navigation/Navigation";
 
 class Tasks extends Component {
 
@@ -10,9 +11,7 @@ class Tasks extends Component {
         super(props);
         this.state = {
             error: null,
-            isLoaded: false,
-            tasks: [],
-            closingTask: false
+            tasks: []
         };
     }
 
@@ -22,18 +21,8 @@ class Tasks extends Component {
         fetch(`${API_URL}/users/${id}/tasks`)
             .then(response => response.json())
             .then(
-                (json) => {
-                    this.setState({
-                        isLoaded: true,
-                        tasks: json
-                    });
-                },
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                }
+                tasks => this.setState({tasks}),
+                error => this.setState({error})
             );
     }
 
@@ -55,12 +44,12 @@ class Tasks extends Component {
             })
                 .then(response => response.json())
                 .then(
-                    (taskWithId) => {
+                    taskWithId => {
                         component.setState({tasks: [taskWithId].concat(component.state.tasks)});
                         input.value = '';
                         input.disabled = false;
                         this.taskNameInput.focus();
-                    }, (error) => {
+                    }, error => {
                         component.setState({error});
                         input.disabled = false;
                     }
@@ -68,96 +57,40 @@ class Tasks extends Component {
         }
     }
 
-    onCloseTask(id) {
-        const component = this;
-        component.setState({closingTask: true});
+    onCloseTask = (id) => {
         fetch(`${API_URL}/closed-tasks/${id}`, {
             method: 'POST'
         })
             .then(response => response.json())
             .then(
-                (taskWithId) => {
-                    component.setState({
-                        tasks: component.state.tasks.filter(t => t.id !== taskWithId.id),
-                        closingTask: false
-                    });
-                }, (error) => {
-                    component.setState({error, closingTask: false});
-                }
+                taskWithId => this.setState({tasks: this.state.tasks.filter(t => t.id !== taskWithId.id)}),
+                error => this.setState({error})
             );
-    }
-
-    navigation = () => {
-        return (
-            <Navbar color="light" light expand="md">
-                <NavbarBrand href="/">Your Tasks</NavbarBrand>
-                <Nav className="ml-auto" navbar>
-                    <NavItem>
-                        <LogoutButton/>
-                    </NavItem>
-                </Nav>
-            </Navbar>
-        );
     };
 
     render() {
-        const component = this;
-
-        const {error, isLoaded, tasks, closingTask} = this.state;
-        const {user} = this.props;
-        if (error) {
-            return (
+        const {tasks} = this.state;
+        return (
+            <div>
+                <Navigation/>
                 <div>
-                    {this.navigation()}
-                    <div className="uk-container uk-container-small">
-                        <br/>
-                        Error: {error.message}
-                    </div>
+                    <Row style={{marginTop: '10px'}}>
+                        <Col>
+                            <Input type="text" name="name" id="exampleEmail" placeholder="Write new task"
+                                   onKeyPress={this.onAddNewTask.bind(this)} autoFocus
+                                   innerRef={input => this.taskNameInput = input}/>
+                        </Col>
+                    </Row>
+                    <Row style={{marginTop: '10px'}}>
+                        <Col>
+                            <ListGroup>
+                                {tasks.map(task => <Task value={task} onClose={this.onCloseTask}/>)}
+                            </ListGroup>
+                        </Col>
+                    </Row>
                 </div>
-            );
-        } else if (!isLoaded || !user) {
-            return (
-                <div>
-                    {this.navigation()}
-                    <div className="uk-container uk-container-small">
-                        <br/>
-                        Loading...
-                    </div>
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    {this.navigation()}
-                    <div>
-                        <br/>
-                        <Row>
-                            <Col>
-                                <Input type="text" name="name" id="exampleEmail" placeholder="Write new task"
-                                       onKeyPress={this.onAddNewTask.bind(this)} autoFocus innerRef={input => this.taskNameInput = input}/>
-                            </Col>
-                        </Row>
-                        <Row style={{marginTop: '10px'}}>
-                            <Col>
-                                <ListGroup>
-                                    {tasks.map(task => (
-                                        <ListGroupItem key={task.id}>
-                                            <div className="d-flex justify-content-between">
-                                                {task.name}
-                                                <div>
-                                                    <Input type="checkbox" style={{'margin-left': '-0.65rem'}}
-                                                           onClick={component.onCloseTask.bind(component, task.id)}/>
-                                                </div>
-                                            </div>
-                                        </ListGroupItem>
-                                    ))}
-                                </ListGroup>
-                            </Col>
-                        </Row>
-                    </div>
-                </div>
-            );
-        }
+            </div>
+        );
     }
 }
 
