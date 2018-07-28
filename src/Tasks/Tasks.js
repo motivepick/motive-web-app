@@ -4,6 +4,7 @@ import {Col, Input, ListGroup, Row} from 'reactstrap';
 import {API_URL} from "../const";
 import Task from "./Task";
 import Navigation from "../Navigation/Navigation";
+import moment from 'moment';
 
 class Tasks extends Component {
 
@@ -21,7 +22,7 @@ class Tasks extends Component {
         fetch(`${API_URL}/users/${id}/tasks`)
             .then(response => response.json())
             .then(
-                tasks => this.setState({tasks}),
+                tasks => this.setState({tasks: Tasks.ordered(tasks)}),
                 error => this.setState({error})
             );
     }
@@ -29,10 +30,9 @@ class Tasks extends Component {
     onAddNewTask(e) {
         const input = e.target;
         if (e.key === 'Enter' && input.value.trim() !== '') {
-            const component = this;
             const {props} = this;
             const {id} = props.user;
-            const task = {userId: id, name: input.value};
+            const task = this.handleDueDateOf({userId: id, name: input.value});
             input.disabled = true;
             fetch(`${API_URL}/tasks`, {
                 method: 'POST',
@@ -45,16 +45,37 @@ class Tasks extends Component {
                 .then(response => response.json())
                 .then(
                     taskWithId => {
-                        component.setState({tasks: [taskWithId].concat(component.state.tasks)});
+                        this.setState({tasks: [taskWithId].concat(this.state.tasks)});
                         input.value = '';
                         input.disabled = false;
                         this.taskNameInput.focus();
                     }, error => {
-                        component.setState({error});
+                        this.setState({error});
                         input.disabled = false;
                     }
                 );
         }
+    }
+
+    handleDueDateOf = (task) => {
+        const lastWord = Tasks.lastWordOf(task.name);
+        if (['today', 'сегодня'].includes(lastWord)) {
+            return {...task, name: Tasks.nameWithoutLastWord(task, lastWord), dueDate: moment().endOf('day')};
+        } else if (['tomorrow', 'завтра'].includes(lastWord)) {
+            return {
+                ...task, name: Tasks.nameWithoutLastWord(task, lastWord), dueDate: moment().add(1, 'days').endOf('day')
+            };
+        } else {
+            return {...task};
+        }
+    };
+
+    static nameWithoutLastWord(task, lastWord) {
+        return task.name.substring(0, task.name.length - lastWord.length).trim();
+    }
+
+    static lastWordOf(name) {
+        return name.split(' ').splice(-1)[0].toLowerCase().trim();
     }
 
     onCloseTask = (id) => {
@@ -69,10 +90,11 @@ class Tasks extends Component {
     };
 
     render() {
+        const {user} = this.props;
         const {tasks} = this.state;
         return (
             <div>
-                <Navigation/>
+                <Navigation user={user}/>
                 <div>
                     <Row style={{marginTop: '10px'}}>
                         <Col>
@@ -84,13 +106,39 @@ class Tasks extends Component {
                     <Row style={{marginTop: '10px'}}>
                         <Col>
                             <ListGroup>
-                                {tasks.map(task => <Task value={task} onClose={this.onCloseTask}/>)}
+                                {tasks.map(task => <Task key={task.id} value={task} onClose={this.onCloseTask}/>)}
                             </ListGroup>
                         </Col>
                     </Row>
                 </div>
             </div>
         );
+    }
+
+    static ordered(tasks) {
+        return tasks.sort((a, b) => {
+            if (Tasks.absent(a.dueDate) && Tasks.absent(b.dueDate)) {
+                return 0;
+            } else if (Tasks.absent(a.dueDate) && Tasks.present(b.dueDate)) {
+                return 1;
+            } else if (Tasks.present(a.dueDate) && Tasks.absent(b.dueDate)) {
+                return -1;
+            } else {
+                return Tasks.dueDateOf(a).isAfter(Tasks.dueDateOf(b)) ? 1 : -1;
+            }
+        });
+    }
+
+    static dueDateOf(task) {
+        return moment(task.dueDate, moment.ISO_8601);
+    }
+
+    static present(value) {
+        return !Tasks.absent(value);
+    }
+
+    static absent(value) {
+        return !value;
     }
 }
 

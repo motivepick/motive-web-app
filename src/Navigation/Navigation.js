@@ -4,9 +4,10 @@ import {Nav, Navbar, NavbarBrand, NavItem} from "reactstrap";
 
 class Navigation extends Component {
     render() {
+        const {user} = this.props;
         return (
             <Navbar color="light" light expand="md">
-                <NavbarBrand href="/">Your Tasks</NavbarBrand>
+                <NavbarBrand href="/">{user.name.split(' ')[0]}'s Tasks</NavbarBrand>
                 <Nav className="ml-auto" navbar>
                     <NavItem>
                         <LogoutButton/>

@@ -9,6 +9,8 @@ import {createStore} from 'redux'
 import {setUser} from "./actions";
 import {API_URL} from './const';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import moment from "moment";
+import 'font-awesome/css/font-awesome.min.css';
 
 const store = createStore(stayMotivatedApp);
 
@@ -33,6 +35,16 @@ const fetchUser = () => {
 };
 
 fetchUser();
+
+moment.updateLocale('ru', {
+    calendar : {
+        sameDay: '[сегодня]',
+        nextDay: '[завтра]',
+        nextWeek: 'dddd',
+        lastDay: '[вчера]',
+        sameElse: 'DD/MM/YYYY'
+    }
+});
 
 ReactDOM.render(<Provider store={store}><App/></Provider>, document.getElementById('root'));
 registerServiceWorker();
