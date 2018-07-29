@@ -1,13 +1,19 @@
 import React, {Component} from 'react';
 import {Col, Row} from 'reactstrap';
 import LoginButton from "./LoginButton";
+import logo from './logo.png';
 
 class LoginView extends Component {
 
     render() {
         return (
             <div>
-                <Row style={{marginTop: '150px', marginBottom: '10px'}}>
+                <Row style={{marginTop: '40px', marginBottom: '10px'}}>
+                    <Col className="text-center">
+                        <img src={logo} alt="Motiv Logo" height={'64px'}/>
+                    </Col>
+                </Row>
+                <Row style={{marginTop: '20px', marginBottom: '10px'}}>
                     <Col className="text-center">
                         <h1>Welcome to Motiv!</h1>
                     </Col>
