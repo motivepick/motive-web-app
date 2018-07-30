@@ -42,7 +42,8 @@ moment.updateLocale('ru', {
         nextDay: '[завтра]',
         nextWeek: 'dddd',
         lastDay: '[вчера]',
-        sameElse: 'DD/MM/YYYY'
+        lastWeek: 'DD.MM.YYYY',
+        sameElse: 'DD.MM.YYYY'
     }
 });
 

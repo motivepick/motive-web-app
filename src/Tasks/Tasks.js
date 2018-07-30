@@ -32,7 +32,7 @@ class Tasks extends Component {
         if (e.key === 'Enter' && input.value.trim() !== '') {
             const {props} = this;
             const {id} = props.user;
-            const task = this.handleDueDateOf({userId: id, name: input.value});
+            const task = this.handleDueDateOf({userId: id, name: input.value.trim()});
             input.disabled = true;
             fetch(`${API_URL}/tasks`, {
                 method: 'POST',
