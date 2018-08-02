@@ -1,0 +1,15 @@
+.task {
+    border: 1px solid rgba(0, 0, 0, .125);
+    margin-bottom: -1px;
+    padding: .75rem 0.2rem;
+}
+
+.task-wrapper:first-child .task {
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
+.task-wrapper:last-child .task {
+    border-bottom-right-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+}

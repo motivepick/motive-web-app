@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Col, Input, ListGroup, Row} from 'reactstrap';
+import {Col, Input, Row} from 'reactstrap';
 import {API_URL} from "../const";
 import Task from "./Task";
 import Navigation from "../Navigation/Navigation";
@@ -103,13 +103,9 @@ class Tasks extends Component {
                                    innerRef={input => this.taskNameInput = input}/>
                         </Col>
                     </Row>
-                    <Row style={{marginTop: '10px'}}>
-                        <Col>
-                            <ListGroup>
-                                {tasks.map(task => <Task key={task.id} value={task} onClose={this.onCloseTask}/>)}
-                            </ListGroup>
-                        </Col>
-                    </Row>
+                    <div style={{marginTop: '10px'}}>
+                        {tasks.map(task => <Task key={task.id} value={task} onClose={this.onCloseTask}/>)}
+                    </div>
                 </div>
             </div>
         );

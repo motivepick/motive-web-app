@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {Input, ListGroupItem} from "reactstrap";
+import {Button, Col, Row} from "reactstrap";
 import moment from "moment";
+import FontAwesome from 'react-fontawesome';
+import './Task.css';
 
 class Task extends Component {
 
@@ -10,14 +12,16 @@ class Task extends Component {
         const due = dueDate ? moment(dueDate, moment.ISO_8601) : null;
 
         return (
-            <ListGroupItem className={`${Task.classOf(due)} list-group-item-action`}>
-                <div className="d-flex justify-content-between">
-                    {value.name} {due ? ` (${Task.format(due)})` : ''}
-                    <div>
-                        <Input type="checkbox" style={{marginLeft: '-0.65rem'}} onClick={() => onClose(value.id)}/>
+            <Row className={'task-wrapper'}>
+                <Col>
+                    <div className='task'>
+                        <Button color="link" onClick={() => onClose(value.id)}>
+                            <FontAwesome name='check' style={{color: '#000'}}/>
+                        </Button>
+                        {value.name} {due ? ` (${Task.format(due)})` : ''}
                     </div>
-                </div>
-            </ListGroupItem>
+                </Col>
+            </Row>
         );
     }
 
