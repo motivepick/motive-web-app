@@ -98,7 +98,7 @@ class Tasks extends Component {
                 <div>
                     <Row style={{marginTop: '10px'}}>
                         <Col>
-                            <Input type="text" name="name" id="exampleEmail" placeholder="Write new task"
+                            <Input type="text" name="name" placeholder="Write new task"
                                    onKeyPress={this.onAddNewTask.bind(this)} autoFocus
                                    innerRef={input => this.taskNameInput = input}/>
                         </Col>
