@@ -26,15 +26,16 @@ class Task extends Component {
                         </div>
                         {this.state.opened && <Row>
                             <Col>
-                                <Form style={{padding: '.65rem 0.6rem'}}>
+                                <Form onSubmit={e => e.preventDefault()} style={{padding: '.65rem 0.6rem'}}>
                                     <FormGroup>
                                         <Input type="text" value={this.state.name} onChange={this.handleNameChange}
-                                               onBlur={this.handleNameBlur}/>
+                                               onBlur={this.saveName}
+                                               onKeyPress={target => target.charCode === 13 && this.saveName()}/>
                                     </FormGroup>
                                     <FormGroup style={{marginBottom: '0'}}>
                                         <Input type="textarea" value={this.state.description}
                                                onChange={this.handleDescriptionChange}
-                                               onBlur={this.handleDescriptionBlur}
+                                               onBlur={this.saveDescription}
                                                placeholder={'Add task description'}/>
                                     </FormGroup>
                                 </Form>
@@ -52,36 +53,33 @@ class Task extends Component {
     };
 
     handleNameChange = ({target}) => {
-        this.setState({name: target.value});
+        this.setState({name: target.value.trim()});
     };
 
     handleDescriptionChange = ({target}) => {
-        this.setState({description: target.value});
+        this.setState({description: target.value.trim()});
     };
 
-    handleNameBlur = () => {
+    saveName = () => {
         const {value} = this.props;
-        fetch(`${API_URL}/tasks/${value.id}`, {
+        Task.updateTask(value.id, {name: this.state.name});
+    };
+
+    saveDescription = () => {
+        const {value} = this.props;
+        Task.updateTask(value.id, {description: this.state.description});
+    };
+
+    static updateTask(id, newTask) {
+        fetch(`${API_URL}/tasks/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
-            body: JSON.stringify({name: this.state.name})
+            body: JSON.stringify(newTask)
         });
-    };
-
-    handleDescriptionBlur = () => {
-        const {value} = this.props;
-        fetch(`${API_URL}/tasks/${value.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({description: this.state.description})
-        });
-    };
+    }
 
     static classOf(due) {
         if (due) {
