@@ -1,14 +1,14 @@
 .task {
     border: 1px solid rgba(0, 0, 0, .125);
     margin-bottom: -1px;
-    padding: .75rem 0.2rem;
+    padding: .4rem .2rem;
 }
 
 .task-name {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding-right: 0.5rem;
+    padding-right: .4rem;
 }
 
 .task-wrapper:first-child .task {

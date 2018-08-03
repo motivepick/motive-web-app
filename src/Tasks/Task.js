@@ -18,15 +18,20 @@ class Task extends Component {
             <Row className="task-wrapper">
                 <Col>
                     <div className="task">
-                        <div onClick={this.handleTaskClick} style={{cursor: 'pointer'}} className="task-name">
-                            <Button color="link" onClick={() => onClose(value.id)}>
-                                <FontAwesome name='check' style={{color: '#000'}}/>
-                            </Button>
-                            {this.state.name} {due ? ` (${Task.format(due)})` : ''}
+                        <div style={{cursor: 'pointer', display: 'flex'}} className="task-name">
+                            <div style={{flexGrow: '0', flexBasis: '0'}}>
+                                <Button color="link" onClick={() => onClose(value.id)}>
+                                    <FontAwesome name='check' style={{color: '#000'}}/>
+                                </Button>
+                            </div>
+                            <div onClick={this.handleTaskClick} className="task-name"
+                                 style={{flexGrow: '1', flexBasis: '0', paddingTop: '.40rem'}}>
+                                {this.state.name} {due ? ` (${Task.format(due)})` : ''}
+                            </div>
                         </div>
                         {this.state.opened && <Row>
                             <Col>
-                                <Form onSubmit={e => e.preventDefault()} style={{padding: '.65rem 0.6rem'}}>
+                                <Form onSubmit={e => e.preventDefault()} style={{padding: '.65rem .6rem'}}>
                                     <FormGroup>
                                         <Input type="text" value={this.state.name} onChange={this.handleNameChange}
                                                onBlur={this.saveName}
