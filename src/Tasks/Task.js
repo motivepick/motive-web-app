@@ -1,43 +1,43 @@
-import React, {Component} from 'react';
-import {Button, Col, Form, FormGroup, Input, Row} from "reactstrap";
-import moment from "moment";
+import React, { Component } from 'react';
+import { Button, Col, Form, FormGroup, Input, Row } from 'reactstrap';
+import moment from 'moment';
 import FontAwesome from 'react-fontawesome';
 import './Task.css';
-import {API_URL} from "../const";
+import { API_URL } from '../const';
 
 class Task extends Component {
 
-    state = {name: this.props.value.name, description: this.props.value.description, opened: false};
+    state = { name: this.props.value.name, description: this.props.value.description, opened: false };
 
     render() {
-        const {value, onClose} = this.props;
-        const {dueDate} = value;
+        const { value, onClose } = this.props;
+        const { dueDate } = value;
         const due = dueDate ? moment(dueDate, moment.ISO_8601) : null;
 
         return (
             <Row className="task-wrapper">
                 <Col>
                     <div className="task">
-                        <div style={{cursor: 'pointer', display: 'flex'}} className="task-name">
-                            <div style={{flexGrow: '0', flexBasis: '0'}}>
+                        <div style={{ cursor: 'pointer', display: 'flex' }} className="task-name">
+                            <div style={{ flexGrow: '0', flexBasis: '0' }}>
                                 <Button color="link" onClick={() => onClose(value.id)}>
-                                    <FontAwesome name='check' style={{color: '#000'}}/>
+                                    <FontAwesome name='check' style={{ color: '#000' }}/>
                                 </Button>
                             </div>
                             <div onClick={this.handleTaskClick} className="task-name"
-                                 style={{flexGrow: '1', flexBasis: '0', paddingTop: '.40rem'}}>
+                                 style={{ flexGrow: '1', flexBasis: '0', paddingTop: '.40rem' }}>
                                 {this.state.name} {due ? ` (${Task.format(due)})` : ''}
                             </div>
                         </div>
                         {this.state.opened && <Row>
                             <Col>
-                                <Form onSubmit={e => e.preventDefault()} style={{padding: '.65rem .6rem'}}>
+                                <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
                                     <FormGroup>
                                         <Input type="text" value={this.state.name} onChange={this.handleNameChange}
                                                onBlur={this.saveName}
                                                onKeyPress={target => target.charCode === 13 && this.saveName()}/>
                                     </FormGroup>
-                                    <FormGroup style={{marginBottom: '0'}}>
+                                    <FormGroup style={{ marginBottom: '0' }}>
                                         <Input type="textarea" value={this.state.description}
                                                onChange={this.handleDescriptionChange}
                                                onBlur={this.saveDescription}
@@ -53,26 +53,26 @@ class Task extends Component {
     }
 
     handleTaskClick = () => {
-        const {opened} = this.state;
-        this.setState({opened: !opened});
+        const { opened } = this.state;
+        this.setState({ opened: !opened });
     };
 
-    handleNameChange = ({target}) => {
-        this.setState({name: target.value.trim()});
+    handleNameChange = ({ target }) => {
+        this.setState({ name: target.value.trim() });
     };
 
-    handleDescriptionChange = ({target}) => {
-        this.setState({description: target.value.trim()});
+    handleDescriptionChange = ({ target }) => {
+        this.setState({ description: target.value.trim() });
     };
 
     saveName = () => {
-        const {value} = this.props;
-        Task.updateTask(value.id, {name: this.state.name});
+        const { value } = this.props;
+        Task.updateTask(value.id, { name: this.state.name });
     };
 
     saveDescription = () => {
-        const {value} = this.props;
-        Task.updateTask(value.id, {description: this.state.description});
+        const { value } = this.props;
+        Task.updateTask(value.id, { description: this.state.description });
     };
 
     static updateTask(id, newTask) {
@@ -80,7 +80,7 @@ class Task extends Component {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify(newTask)
         });

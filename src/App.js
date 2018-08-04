@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import Tasks from './Tasks/Tasks';
 import LoginForm from './Authentication/LoginForm';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
-import {connect} from 'react-redux';
-import {Container} from 'reactstrap';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Container } from 'reactstrap';
 import LoginView from './Authentication/LoginView';
 import ErrorBoundary from './ErrorBoundary';
-import SpinnerView from "./SpinnerView";
+import SpinnerView from './SpinnerView';
 
 class App extends Component {
 
@@ -26,7 +26,7 @@ class App extends Component {
     }
 
     mainComponent = () => {
-        const {user, done} = this.props;
+        const { user, done } = this.props;
         if (done) {
             return user ? Tasks : LoginView;
         } else {

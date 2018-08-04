@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {Button} from 'reactstrap';
-import {APP_URL, FACEBOOK_CLIENT_ID} from '../const';
+import React, { Component } from 'react';
+import { Button } from 'reactstrap';
+import { APP_URL, FACEBOOK_CLIENT_ID } from '../const';
 
 class LoginButton extends Component {
 

@@ -1,18 +1,18 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class ErrorBoundary extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {error: undefined};
+        this.state = { error: undefined };
     }
 
     componentDidCatch(error, info) {
-        this.setState({error, info});
+        this.setState({ error, info });
     }
 
     render() {
-        const {error, info} = this.state;
+        const { error, info } = this.state;
         if (error) {
             return (
                 <div>

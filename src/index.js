@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import stayMotivatedApp from './reducers'
-import {Provider} from 'react-redux'
-import {createStore} from 'redux'
-import {setUser} from "./actions";
-import {API_URL} from './const';
+import stayMotivatedApp from './reducers';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { setUser } from './actions';
+import { API_URL } from './const';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import moment from "moment";
+import moment from 'moment';
 import 'font-awesome/css/font-awesome.min.css';
 
 const store = createStore(stayMotivatedApp);
@@ -19,7 +19,7 @@ const fetchUser = () => {
     if (userId) {
         fetch(`${API_URL}/users/${userId}`, {
             headers: {
-                'Accept': 'application/json',
+                'Accept': 'application/json'
             }
         }).then(response => {
             if (response.status === 404) {
@@ -30,7 +30,7 @@ const fetchUser = () => {
             store.dispatch(setUser(user));
         });
     } else {
-        store.dispatch(setUser(undefined))
+        store.dispatch(setUser(undefined));
     }
 };
 
