@@ -16,7 +16,7 @@ class LogoutButton extends Component {
         }).then(() => {
             removeUser();
         });
-    }
+    };
 }
 
 const mapStateToProps = state => ({

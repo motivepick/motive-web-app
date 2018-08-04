@@ -4,15 +4,20 @@ import moment from 'moment';
 import FontAwesome from 'react-fontawesome';
 import './Task.css';
 import { API_URL } from '../const';
+import { handleDueDateOf } from './parser';
 
 class Task extends Component {
 
-    state = { name: this.props.value.name, description: this.props.value.description, opened: false };
+    state = {
+        name: this.props.value.name,
+        description: this.props.value.description,
+        dueDate: this.props.value.dueDate ? moment(this.props.value.dueDate, moment.ISO_8601) : null,
+        opened: false
+    };
 
     render() {
         const { value, onClose } = this.props;
-        const { dueDate } = value;
-        const due = dueDate ? moment(dueDate, moment.ISO_8601) : null;
+        const { dueDate } = this.state;
 
         return (
             <Row className="task-wrapper">
@@ -26,15 +31,19 @@ class Task extends Component {
                             </div>
                             <div onClick={this.handleTaskClick} className="task-name"
                                  style={{ flexGrow: '1', flexBasis: '0', paddingTop: '.40rem' }}>
-                                {this.state.name} {due ? ` (${Task.format(due)})` : ''}
+                                {this.state.name}
                             </div>
+                            {dueDate &&
+                            <div onClick={this.handleTaskClick} className={`task-name ${Task.classOf(dueDate)}`}
+                                 style={{ flexGrow: '0', flexBasis: '1', paddingTop: '.32rem' }}>
+                                <small>{Task.format(dueDate)}</small>
+                            </div>}
                         </div>
                         {this.state.opened && <Row>
                             <Col>
                                 <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
                                     <FormGroup>
-                                        <Input type="text" value={this.state.name} onChange={this.handleNameChange}
-                                               onBlur={this.saveName}
+                                        <Input type="text" value={this.state.name} onChange={this.handleNameChange} onBlur={this.saveName}
                                                onKeyPress={target => target.charCode === 13 && this.saveName()}/>
                                     </FormGroup>
                                     <FormGroup style={{ marginBottom: '0' }}>
@@ -58,16 +67,18 @@ class Task extends Component {
     };
 
     handleNameChange = ({ target }) => {
-        this.setState({ name: target.value.trim() });
+        this.setState({ name: target.value });
     };
 
     handleDescriptionChange = ({ target }) => {
-        this.setState({ description: target.value.trim() });
+        this.setState({ description: target.value });
     };
 
     saveName = () => {
         const { value } = this.props;
-        Task.updateTask(value.id, { name: this.state.name });
+        const task = handleDueDateOf({ name: this.state.name });
+        this.setState({ name: task.name, dueDate: task.dueDate || this.state.dueDate });
+        Task.updateTask(value.id, { ...task });
     };
 
     saveDescription = () => {
@@ -86,13 +97,13 @@ class Task extends Component {
         });
     }
 
-    static classOf(due) {
-        if (due) {
+    static classOf(dueDate) {
+        if (dueDate) {
             const now = new Date();
-            if (due.isSame(now, 'day')) {
-                return 'list-group-item-secondary';
-            } else if (due.isBefore(now, 'day')) {
-                return 'list-group-item-dark';
+            if (dueDate.isBefore(now, 'day')) {
+                return 'text-danger';
+            } else if (dueDate.isSame(now, 'day')) {
+                return 'text-primary';
             } else {
                 return '';
             }
@@ -101,8 +112,8 @@ class Task extends Component {
         }
     }
 
-    static format(due) {
-        return due.local().calendar();
+    static format(dueDate) {
+        return dueDate.local().calendar();
     }
 }
 

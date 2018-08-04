@@ -5,6 +5,7 @@ import { API_URL } from '../const';
 import Task from './Task';
 import Navigation from '../Navigation/Navigation';
 import moment from 'moment';
+import { handleDueDateOf } from './parser';
 
 class Tasks extends Component {
 
@@ -32,7 +33,7 @@ class Tasks extends Component {
         if (e.key === 'Enter' && input.value.trim() !== '') {
             const { props } = this;
             const { id } = props.user;
-            const task = this.handleDueDateOf({ userId: id, name: input.value.trim() });
+            const task = handleDueDateOf({ userId: id, name: input.value.trim() });
             input.disabled = true;
             fetch(`${API_URL}/tasks`, {
                 method: 'POST',
@@ -45,7 +46,7 @@ class Tasks extends Component {
                 .then(response => response.json())
                 .then(
                     taskWithId => {
-                        this.setState({ tasks: [ taskWithId ].concat(this.state.tasks) });
+                        this.setState({ tasks: [taskWithId].concat(this.state.tasks) });
                         input.value = '';
                         input.disabled = false;
                         this.taskNameInput.focus();
@@ -55,27 +56,6 @@ class Tasks extends Component {
                     }
                 );
         }
-    }
-
-    handleDueDateOf = (task) => {
-        const lastWord = Tasks.lastWordOf(task.name);
-        if ([ 'today', 'сегодня' ].includes(lastWord)) {
-            return { ...task, name: Tasks.nameWithoutLastWord(task, lastWord), dueDate: moment().endOf('day') };
-        } else if ([ 'tomorrow', 'завтра' ].includes(lastWord)) {
-            return {
-                ...task, name: Tasks.nameWithoutLastWord(task, lastWord), dueDate: moment().add(1, 'days').endOf('day')
-            };
-        } else {
-            return { ...task };
-        }
-    };
-
-    static nameWithoutLastWord(task, lastWord) {
-        return task.name.substring(0, task.name.length - lastWord.length).trim();
-    }
-
-    static lastWordOf(name) {
-        return name.split(' ').splice(-1)[0].toLowerCase().trim();
     }
 
     onCloseTask = (id) => {
