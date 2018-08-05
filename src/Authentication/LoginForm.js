@@ -33,8 +33,8 @@ class LoginForm extends Component {
 
     createUser = (user) => {
         const { history, setUser } = this.props;
-        fetch(`${API_URL}/users`, {
-            method: 'POST',
+        fetch(`${API_URL}/users/${user.id}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
@@ -45,7 +45,7 @@ class LoginForm extends Component {
             setUser(user);
             history.push('/');
         });
-    }
+    };
 }
 
 const mapStateToProps = () => ({});
