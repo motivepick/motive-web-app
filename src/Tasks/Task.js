@@ -10,7 +10,7 @@ class Task extends Component {
 
     state = {
         name: this.props.value.name,
-        description: this.props.value.description,
+        description: this.props.value.description || '',
         dueDate: this.props.value.dueDate ? moment(this.props.value.dueDate, moment.ISO_8601) : null,
         opened: false
     };
@@ -76,13 +76,14 @@ class Task extends Component {
 
     saveName = () => {
         const { value } = this.props;
-        const task = handleDueDateOf({ name: this.state.name });
+        const task = handleDueDateOf({ name: this.state.name.trim() });
         this.setState({ name: task.name, dueDate: task.dueDate || this.state.dueDate });
         Task.updateTask(value.id, { ...task });
     };
 
     saveDescription = () => {
         const { value } = this.props;
+        this.setState({ description: this.state.description.trim() });
         Task.updateTask(value.id, { description: this.state.description });
     };
 
