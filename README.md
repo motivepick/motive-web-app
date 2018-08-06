@@ -1,4 +1,4 @@
-# Stay Motivated [![Build Status](https://travis-ci.com/motivepick/motive-web-app.svg?branch=master)](https://travis-ci.com/motivepick/motive-web-app)
+# Motive Front End [![Build Status](https://travis-ci.com/motivepick/motive-web-app.svg?branch=master)](https://travis-ci.com/motivepick/motive-web-app)
 
 The service that is going to defeat the laziness.
 
