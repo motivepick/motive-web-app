@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import './App.css';
-import Tasks from './Tasks/Tasks';
-import LoginForm from './Authentication/LoginForm';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Container } from 'reactstrap';
-import LoginView from './Authentication/LoginView';
-import ErrorBoundary from './ErrorBoundary';
-import SpinnerView from './SpinnerView';
+import React, { Component } from 'react'
+import './App.css'
+import Tasks from './Tasks/Tasks'
+import LoginForm from './Authentication/LoginForm'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { Container } from 'reactstrap'
+import LoginView from './Authentication/LoginView'
+import ErrorBoundary from './ErrorBoundary'
+import SpinnerView from './SpinnerView'
+import { translate } from 'react-i18next'
 
 class App extends Component {
 
@@ -22,15 +23,15 @@ class App extends Component {
                     </Container>
                 </ErrorBoundary>
             </Router>
-        );
+        )
     }
 
     mainComponent = () => {
-        const { user, done } = this.props;
+        const { user, done } = this.props
         if (done) {
-            return user ? Tasks : LoginView;
+            return user ? Tasks : LoginView
         } else {
-            return SpinnerView;
+            return SpinnerView
         }
     }
 }
@@ -38,8 +39,8 @@ class App extends Component {
 const mapStateToProps = state => ({
     user: state.authentication.user,
     done: state.authentication.done
-});
+})
 
-const mapDispatchToProps = () => ({});
+const mapDispatchToProps = () => ({})
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(translate('translations')(App))

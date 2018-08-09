@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
-import LogoutButton from '../Authentication/LogoutButton';
-import { Nav, Navbar, NavbarBrand, NavItem } from 'reactstrap';
-import logo from '../logo.png';
+import React, { Component } from 'react'
+import LogoutButton from '../Authentication/LogoutButton'
+import { Nav, Navbar, NavbarBrand, NavItem } from 'reactstrap'
+import logo from '../logo.png'
 
 class Navigation extends Component {
+
     render() {
-        const { user } = this.props;
+        const { user } = this.props
         return (
             <Navbar color="light" light expand="md">
                 <NavbarBrand href="/">
@@ -18,8 +19,8 @@ class Navigation extends Component {
                     </NavItem>
                 </Nav>
             </Navbar>
-        );
+        )
     }
 }
 
-export default Navigation;
+export default Navigation

@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import { Button, Col, Form, FormGroup, Input, Row } from 'reactstrap';
-import moment from 'moment';
-import FontAwesome from 'react-fontawesome';
-import './Task.css';
-import { API_URL } from '../const';
-import { handleDueDateOf } from './parser';
+import React, { Component } from 'react'
+import { Button, Col, Form, FormGroup, Input, Row } from 'reactstrap'
+import moment from 'moment'
+import FontAwesome from 'react-fontawesome'
+import './Task.css'
+import { API_URL } from '../const'
+import { handleDueDateOf } from './parser'
+import { translate } from 'react-i18next'
 
 class Task extends Component {
 
@@ -13,11 +14,11 @@ class Task extends Component {
         description: this.props.value.description || '',
         dueDate: this.props.value.dueDate ? moment(this.props.value.dueDate, moment.ISO_8601) : null,
         opened: false
-    };
+    }
 
     render() {
-        const { value, onClose } = this.props;
-        const { dueDate } = this.state;
+        const { value, onClose, t } = this.props
+        const { dueDate } = this.state
 
         return (
             <Row className="task-wrapper">
@@ -50,7 +51,7 @@ class Task extends Component {
                                         <Input type="textarea" value={this.state.description}
                                                onChange={this.handleDescriptionChange}
                                                onBlur={this.saveDescription}
-                                               placeholder={'Add task description'}/>
+                                               placeholder={t('task.description')}/>
                                     </FormGroup>
                                 </Form>
                             </Col>
@@ -58,34 +59,34 @@ class Task extends Component {
                     </div>
                 </Col>
             </Row>
-        );
+        )
     }
 
     handleTaskClick = () => {
-        const { opened } = this.state;
-        this.setState({ opened: !opened });
-    };
+        const { opened } = this.state
+        this.setState({ opened: !opened })
+    }
 
     handleNameChange = ({ target }) => {
-        this.setState({ name: target.value });
-    };
+        this.setState({ name: target.value })
+    }
 
     handleDescriptionChange = ({ target }) => {
-        this.setState({ description: target.value });
-    };
+        this.setState({ description: target.value })
+    }
 
     saveName = () => {
-        const { value } = this.props;
-        const task = handleDueDateOf({ name: this.state.name.trim() });
-        this.setState({ name: task.name, dueDate: task.dueDate || this.state.dueDate });
-        Task.updateTask(value.id, { ...task });
-    };
+        const { value } = this.props
+        const task = handleDueDateOf({ name: this.state.name.trim() })
+        this.setState({ name: task.name, dueDate: task.dueDate || this.state.dueDate })
+        Task.updateTask(value.id, { ...task })
+    }
 
     saveDescription = () => {
-        const { value } = this.props;
-        this.setState({ description: this.state.description.trim() });
-        Task.updateTask(value.id, { description: this.state.description });
-    };
+        const { value } = this.props
+        this.setState({ description: this.state.description.trim() })
+        Task.updateTask(value.id, { description: this.state.description })
+    }
 
     static updateTask(id, newTask) {
         fetch(`${API_URL}/tasks/${id}`, {
@@ -95,27 +96,27 @@ class Task extends Component {
                 'Accept': 'application/json'
             },
             body: JSON.stringify(newTask)
-        });
+        })
     }
 
     static classOf(dueDate) {
         if (dueDate) {
-            const now = new Date();
+            const now = new Date()
             if (dueDate.isBefore(now, 'day')) {
-                return 'text-danger';
+                return 'text-danger'
             } else if (dueDate.isSame(now, 'day')) {
-                return 'text-primary';
+                return 'text-primary'
             } else {
-                return '';
+                return ''
             }
         } else {
-            return '';
+            return ''
         }
     }
 
     static format(dueDate) {
-        return dueDate.local().calendar();
+        return dueDate.local().calendar()
     }
 }
 
-export default Task;
+export default translate('translations')(Task)

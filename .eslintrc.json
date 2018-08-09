@@ -28,7 +28,7 @@
     "no-undef": 2,
     "comma-dangle": [2, "never"],
     "quotes": [2, "single"],
-    "semi": [2, "always"],
+    "semi": [1, "never"],
     "guard-for-in": 2,
     "no-eval": 2,
     "no-with": 2,
