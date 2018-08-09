@@ -11,7 +11,8 @@ i18n.use(LanguageDetector).init({
                 'logout': 'Logout',
                 'loading': 'Loading...',
                 'new.task': 'What should I not forget?',
-                'task.description': 'Additional Details'
+                'task.description': 'Additional Details',
+                'your.tasks': '{{name}}\'s Tasks'
             }
         },
         ru: {
@@ -22,7 +23,8 @@ i18n.use(LanguageDetector).init({
                 'logout': 'Выйти',
                 'loading': 'Загрузка...',
                 'new.task': 'О чём нужно не забыть?',
-                'task.description': 'Дополнительные подробности'
+                'task.description': 'Дополнительные подробности',
+                'your.tasks': 'Ваши задачи'
             }
         }
     },
