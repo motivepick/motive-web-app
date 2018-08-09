@@ -20,7 +20,7 @@ class Tasks extends Component {
     componentWillMount() {
         const { user } = this.props;
         const { id } = user;
-        fetch(`${API_URL}/users/${id}/tasks`)
+        fetch(`${API_URL}/tasks/list/${id}`)
             .then(response => response.json())
             .then(
                 tasks => this.setState({ tasks: Tasks.ordered(tasks) }),
@@ -59,8 +59,8 @@ class Tasks extends Component {
     }
 
     onCloseTask = (id) => {
-        fetch(`${API_URL}/closed-tasks/${id}`, {
-            method: 'POST'
+        fetch(`${API_URL}/tasks/${id}/close`, {
+            method: 'PUT'
         })
             .then(response => response.json())
             .then(

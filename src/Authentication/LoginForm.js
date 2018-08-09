@@ -34,7 +34,7 @@ class LoginForm extends Component {
     createUser = (user) => {
         const { history, setUser } = this.props;
         fetch(`${API_URL}/users/${user.id}`, {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
