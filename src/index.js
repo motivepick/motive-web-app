@@ -40,6 +40,17 @@ const fetchUser = () => {
 
 
 const setUpLocale = () => {
+    moment.updateLocale('en', {
+        calendar: {
+            sameDay: '[today]',
+            nextDay: '[tomorrow]',
+            nextWeek: 'dddd',
+            lastDay: '[yesterday]',
+            lastWeek: 'DD.MM.YYYY',
+            sameElse: 'DD.MM.YYYY'
+        }
+    })
+
     moment.updateLocale('ru', {
         calendar: {
             sameDay: '[сегодня]',
@@ -51,12 +62,12 @@ const setUpLocale = () => {
         }
     })
 
-    moment.updateLocale('en', {
+    moment.updateLocale('zh-tw', {
         calendar: {
-            sameDay: '[today]',
-            nextDay: '[tomorrow]',
+            sameDay: '[今天]',
+            nextDay: '[明天]',
             nextWeek: 'dddd',
-            lastDay: '[yesterday]',
+            lastDay: '[昨天]',
             lastWeek: 'DD.MM.YYYY',
             sameElse: 'DD.MM.YYYY'
         }

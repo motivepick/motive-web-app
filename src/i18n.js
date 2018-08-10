@@ -26,6 +26,18 @@ i18n.use(LanguageDetector).init({
                 'task.description': 'Дополнительные подробности',
                 'your.tasks': 'Ваши задачи'
             }
+        },
+        zh: {
+            translations: {
+                'welcome': '歡迎來到 Motive!',
+                'description': '小小工具，幫你大大打擊懶惰蟲',
+                'login': '以Facebook登入',
+                'logout': '登出',
+                'loading': '載入中',
+                'new.task': '有什麼要做的?',
+                'task.description': '更多細節',
+                'your.tasks': '待辦事項'
+            }
         }
     },
     fallbackLng: 'en',
