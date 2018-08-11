@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { setUser } from '../actions'
 import { API_URL, APP_URL, FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET } from '../const'
 import SpinnerView from '../SpinnerView'
+import 'url-search-params-polyfill'
 
 class LoginForm extends Component {
 
