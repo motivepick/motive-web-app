@@ -13,7 +13,7 @@ class LogoutButton extends Component {
 
     handleLogout = () => {
         const { user, removeUser } = this.props
-        fetch(`${API_URL}/users/${user.id}`, {
+        fetch(`${API_URL}/users/${user.accountId}`, {
             method: 'DELETE'
         }).then(() => {
             removeUser()

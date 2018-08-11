@@ -20,8 +20,8 @@ class Tasks extends Component {
 
     componentWillMount() {
         const { user } = this.props
-        const { id } = user
-        fetch(`${API_URL}/tasks/list/${id}`)
+        const { accountId } = user
+        fetch(`${API_URL}/tasks/list/${accountId}`)
             .then(response => response.json())
             .then(
                 tasks => this.setState({ tasks: Tasks.ordered(tasks) }),
@@ -33,8 +33,8 @@ class Tasks extends Component {
         const input = e.target
         if (e.key === 'Enter' && input.value.trim() !== '') {
             const { props } = this
-            const { id } = props.user
-            const task = handleDueDateOf({ userId: id, name: input.value.trim() })
+            const { accountId } = props.user
+            const task = handleDueDateOf({ accountId, name: input.value.trim() })
             input.disabled = true
             fetch(`${API_URL}/tasks`, {
                 method: 'POST',
