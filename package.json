@@ -4,22 +4,24 @@
   "private": true,
   "homepage": "http://motiv.yaskovdev.com",
   "dependencies": {
-    "bootstrap": "^4.1.1",
-    "font-awesome": "^4.7.0",
-    "i18next": "^11.6.0",
-    "i18next-browser-languagedetector": "^2.2.3",
-    "moment": "^2.22.2",
-    "ramda": "^0.25.0",
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0",
-    "react-fontawesome": "^1.6.1",
-    "react-i18next": "^7.10.1",
-    "react-redux": "^5.0.7",
-    "react-router-dom": "^4.3.1",
+    "bootstrap": "4.1.1",
+    "font-awesome": "4.7.0",
+    "i18next": "11.6.0",
+    "i18next-browser-languagedetector": "2.2.3",
+    "moment": "2.22.2",
+    "ramda": "0.25.0",
+    "react": "16.4.0",
+    "react-dom": "16.4.0",
+    "react-fontawesome": "1.6.1",
+    "react-i18next": "7.10.1",
+    "react-redux": "5.0.7",
+    "react-router-dom": "4.3.1",
     "react-scripts": "1.1.0",
-    "reactstrap": "^6.3.0",
-    "redux": "^4.0.0",
-    "url-search-params-polyfill": "^4.0.1"
+    "reactstrap": "6.3.0",
+    "redux": "4.0.0",
+    "redux-promise": "0.6.0",
+    "superagent": "3.8.3",
+    "url-search-params-polyfill": "4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -31,11 +33,11 @@
     "lint": "./node_modules/.bin/eslint ./src --ext .js"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb": "^17.0.0",
-    "eslint-plugin-import": "^2.13.0",
-    "eslint-plugin-jsx-a11y": "^6.1.1",
-    "eslint-plugin-react": "^7.10.0",
-    "gh-pages": "^1.1.0"
+    "eslint": "4.19.1",
+    "eslint-config-airbnb": "17.0.0",
+    "eslint-plugin-import": "2.13.0",
+    "eslint-plugin-jsx-a11y": "6.1.1",
+    "eslint-plugin-react": "7.10.0",
+    "gh-pages": "1.1.0"
   }
 }

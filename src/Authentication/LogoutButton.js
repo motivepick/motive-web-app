@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { removeUser } from '../actions'
+import { logout, removeUser } from '../actions/userActions'
 import { connect } from 'react-redux'
-import { API_URL } from '../const'
 import { translate } from 'react-i18next'
 
 class LogoutButton extends Component {
@@ -12,21 +11,18 @@ class LogoutButton extends Component {
     }
 
     handleLogout = () => {
-        const { user, removeUser } = this.props
-        fetch(`${API_URL}/users/${user.accountId}`, {
-            method: 'DELETE'
-        }).then(() => {
-            removeUser()
-        })
+        const { user, logout, removeUser } = this.props
+        logout(user.accountId).then(() => removeUser())
     };
 }
 
 const mapStateToProps = state => ({
-    user: state.authentication.user
+    user: state.user.user
 })
 
 const mapDispatchToProps = dispatch => ({
-    removeUser: () => dispatch(removeUser())
+    removeUser: () => dispatch(removeUser()),
+    logout: (accountId) => dispatch(logout(accountId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(translate('translations')(LogoutButton))

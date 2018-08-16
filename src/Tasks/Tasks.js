@@ -120,7 +120,7 @@ class Tasks extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.authentication.user
+    user: state.user.user
 })
 
 const mapDispatchToProps = () => ({})

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { setUser } from '../actions'
-import { API_URL, APP_URL, FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET } from '../const'
+import { createUserData, setUser } from '../actions/userActions'
+import { APP_URL, FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET } from '../const'
 import SpinnerView from '../SpinnerView'
 import 'url-search-params-polyfill'
 
@@ -33,15 +33,10 @@ class LoginForm extends Component {
     }
 
     createUser = (user) => {
-        const { history, setUser } = this.props
-        fetch(`${API_URL}/users`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(user)
-        }).then(r => r.json()).then(() => {
+        const { history, setUser, createUserData } = this.props
+
+        createUserData(user).then(() => {
+            // TODO: handle exceptional case
             localStorage.setItem('id', user.accountId)
             setUser(user)
             history.push('/')
@@ -52,7 +47,8 @@ class LoginForm extends Component {
 const mapStateToProps = () => ({})
 
 const mapDispatchToProps = dispatch => ({
-    setUser: (user) => dispatch(setUser(user))
+    setUser: (user) => dispatch(setUser(user)),
+    createUserData: (user) => dispatch(createUserData(user))
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm))

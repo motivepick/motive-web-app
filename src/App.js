@@ -1,46 +1,44 @@
-import React, { Component } from 'react'
+import React from 'react'
 import './App.css'
 import Tasks from './Tasks/Tasks'
-import LoginForm from './Authentication/LoginForm'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Container } from 'reactstrap'
 import LoginView from './Authentication/LoginView'
-import ErrorBoundary from './ErrorBoundary'
 import SpinnerView from './SpinnerView'
-import { translate } from 'react-i18next'
+import { loadUserData, setUser } from './actions/userActions'
 
-class App extends Component {
+class App extends React.Component {
 
-    render() {
-        return (
-            <Router>
-                <ErrorBoundary>
-                    <Container>
-                        <Route exact={true} path="/" component={this.mainComponent()}/>
-                        <Route path="/login" component={LoginForm}/>
-                        <Route path="/development" component={LoginView}/>
-                    </Container>
-                </ErrorBoundary>
-            </Router>
-        )
+    componentDidMount() {
+        const { setUser, loadUserData } = this.props
+        const accountId = localStorage.getItem('id')
+
+        if (accountId) {
+            loadUserData(accountId)
+                .then((res) => setUser(res.payload.body))
+                .catch(() => setUser())
+        } else {
+            setUser()
+        }
     }
 
-    mainComponent = () => {
+    render() {
         const { user, done } = this.props
         if (done) {
-            return user ? Tasks : LoginView
+            return user ? <Tasks/> : <LoginView/>
         } else {
-            return SpinnerView
+            return <SpinnerView/>
         }
     }
 }
 
 const mapStateToProps = state => ({
-    user: state.authentication.user,
-    done: state.authentication.done
+    user: state.user.user,
+    done: state.user.done
 })
 
-const mapDispatchToProps = () => ({})
+const mapDispatchToProps = dispatch => ({
+    setUser: (user) => dispatch(setUser(user)),
+    loadUserData: (accountId) => dispatch(loadUserData(accountId))
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate('translations')(App))
+export default connect(mapStateToProps, mapDispatchToProps)(App)
