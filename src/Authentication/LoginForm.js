@@ -46,9 +46,9 @@ class LoginForm extends Component {
 
 const mapStateToProps = () => ({})
 
-const mapDispatchToProps = dispatch => ({
-    setUser: (user) => dispatch(setUser(user)),
-    createUserData: (user) => dispatch(createUserData(user))
-})
+const mapDispatchToProps = {
+    setUser,
+    createUserData
+}
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm))
