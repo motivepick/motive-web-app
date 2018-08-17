@@ -12,7 +12,10 @@ class LogoutButton extends Component {
 
     handleLogout = () => {
         const { user, logout, removeUser } = this.props
-        logout(user.accountId).then(() => removeUser())
+        logout(user.accountId).then(() => {
+            localStorage.removeItem('id')
+            removeUser()
+        })
     };
 }
 
@@ -20,9 +23,9 @@ const mapStateToProps = state => ({
     user: state.user.user
 })
 
-const mapDispatchToProps = dispatch => ({
-    removeUser: () => dispatch(removeUser()),
-    logout: (accountId) => dispatch(logout(accountId))
-})
+const mapDispatchToProps = {
+    removeUser,
+    logout
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(translate('translations')(LogoutButton))

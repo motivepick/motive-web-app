@@ -5,7 +5,7 @@ export const CREATE_USER = 'CREATE_USER'
 export const LOAD_USER = 'LOAD_USER'
 export const SET_USER = 'SET_USER'
 export const LOGOUT = 'LOGOUT'
-export const LOGOUT_CALLBACK = 'LOGOUT_CALLBACK'
+export const REMOVE_USER = 'REMOVE_USER'
 
 export const createUserData = (user) => {
     const req = request.post(`${API_URL}/users`).send(user)
@@ -36,6 +36,5 @@ export const logout = (accountId) => {
 }
 
 export const removeUser = () => {
-    localStorage.removeItem('id')
-    return { type: LOGOUT_CALLBACK }
+    return { type: REMOVE_USER }
 }

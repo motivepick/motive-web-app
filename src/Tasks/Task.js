@@ -26,7 +26,7 @@ class Task extends Component {
                     <div className="task">
                         <div style={{ cursor: 'pointer', display: 'flex' }} className="task-name">
                             <div style={{ flexGrow: '0', flexBasis: '0' }}>
-                                <Button color="link" onClick={() => onClose(value.id)}>
+                                <Button color="link" onClick={() => onClose(value)}>
                                     <FontAwesome name='check' style={{ color: '#000' }}/>
                                 </Button>
                             </div>

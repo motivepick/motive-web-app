@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css'
-import Tasks from './Tasks/Tasks'
+import TaskView from './Tasks/TaskView'
 import { connect } from 'react-redux'
 import LoginView from './Authentication/LoginView'
 import SpinnerView from './SpinnerView'
@@ -24,7 +24,7 @@ class App extends React.Component {
     render() {
         const { user, done } = this.props
         if (done) {
-            return user ? <Tasks/> : <LoginView/>
+            return user ? <TaskView/> : <LoginView/>
         } else {
             return <SpinnerView/>
         }
@@ -36,9 +36,9 @@ const mapStateToProps = state => ({
     done: state.user.done
 })
 
-const mapDispatchToProps = dispatch => ({
-    setUser: (user) => dispatch(setUser(user)),
-    loadUserData: (accountId) => dispatch(loadUserData(accountId))
-})
+const mapDispatchToProps = {
+    setUser,
+    loadUserData
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
