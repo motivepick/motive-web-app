@@ -1,38 +1,43 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Button, Col, Form, FormGroup, Input, Row } from 'reactstrap'
 import moment from 'moment'
 import FontAwesome from 'react-fontawesome'
 import './Task.css'
-import { API_URL } from '../const'
-import { handleDueDateOf } from './parser'
+import { handleDueDateOf } from '../utils/taskUtils'
 import { translate } from 'react-i18next'
 
 class Task extends Component {
 
+    static propTypes = {
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        dueDate: PropTypes.string.isRequired,
+        onTaskUpdate: PropTypes.func.isRequired,
+        saveTask: PropTypes.func.isRequired
+    }
+
     state = {
-        name: this.props.value.name,
-        description: this.props.value.description || '',
-        dueDate: this.props.value.dueDate ? moment(this.props.value.dueDate, moment.ISO_8601) : null,
         opened: false
     }
 
     render() {
-        const { value, onClose, t } = this.props
-        const { dueDate } = this.state
-
+        const { t } = this.props
+        const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
         return (
             <Row className="task-wrapper">
                 <Col>
                     <div className="task">
                         <div style={{ cursor: 'pointer', display: 'flex' }} className="task-name">
                             <div style={{ flexGrow: '0', flexBasis: '0' }}>
-                                <Button color="link" onClick={() => onClose(value)}>
+                                <Button color="link" onClick={() => this.handleTaskClose()}>
                                     <FontAwesome name='check' style={{ color: '#000' }}/>
                                 </Button>
                             </div>
                             <div onClick={this.handleTaskClick} className="task-name"
                                  style={{ flexGrow: '1', flexBasis: '0', paddingTop: '.40rem' }}>
-                                {this.state.name}
+                                {this.props.name}
                             </div>
                             {dueDate &&
                             <div onClick={this.handleTaskClick} className={`task-name ${Task.classOf(dueDate)}`}
@@ -44,11 +49,11 @@ class Task extends Component {
                             <Col>
                                 <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
                                     <FormGroup>
-                                        <Input type="text" value={this.state.name} onChange={this.handleNameChange} onBlur={this.saveName}
+                                        <Input type="text" value={this.props.name} onChange={this.handleNameChange} onBlur={this.saveName}
                                                onKeyPress={target => target.charCode === 13 && this.saveName()}/>
                                     </FormGroup>
                                     <FormGroup style={{ marginBottom: '0' }}>
-                                        <Input type="textarea" value={this.state.description}
+                                        <Input type="textarea" value={this.props.description}
                                                onChange={this.handleDescriptionChange}
                                                onBlur={this.saveDescription}
                                                placeholder={t('task.description')}/>
@@ -62,41 +67,43 @@ class Task extends Component {
         )
     }
 
+    handleTaskClose = async() => {
+        const taskId = this.props.id
+
+        await this.props.onTaskUpdate(taskId, 'closed', true)
+        this.props.saveTask(taskId)
+    }
+
     handleTaskClick = () => {
         const { opened } = this.state
         this.setState({ opened: !opened })
     }
 
     handleNameChange = ({ target }) => {
-        this.setState({ name: target.value })
+        const taskId = this.props.id
+        this.props.onTaskUpdate(taskId, 'name', target.value)
     }
 
     handleDescriptionChange = ({ target }) => {
-        this.setState({ description: target.value })
+        const taskId = this.props.id
+        this.props.onTaskUpdate(taskId, 'description', target.value)
     }
 
-    saveName = () => {
-        const { value } = this.props
-        const task = handleDueDateOf({ name: this.state.name.trim() })
-        this.setState({ name: task.name, dueDate: task.dueDate || this.state.dueDate })
-        Task.updateTask(value.id, { ...task })
+    saveName = async() => {
+        const name = this.props.name;
+        const task = handleDueDateOf({ name: name ? name.trim() : '' })
+
+        const taskId = this.props.id
+        await this.props.onTaskUpdate(taskId, 'name', task.name.trim())
+        await this.props.onTaskUpdate(taskId, 'dueDate', task.dueDate || this.props.dueDate)
+        this.props.saveTask(taskId)
     }
 
-    saveDescription = () => {
-        const { value } = this.props
-        this.setState({ description: this.state.description.trim() })
-        Task.updateTask(value.id, { description: this.state.description })
-    }
-
-    static updateTask(id, newTask) {
-        fetch(`${API_URL}/tasks/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(newTask)
-        })
+    saveDescription = async() => {
+        const taskId = this.props.id
+        const description = this.props.description;
+        await this.props.onTaskUpdate(taskId, 'description', description ? description.trim() : '')
+        this.props.saveTask(taskId)
     }
 
     static classOf(dueDate) {

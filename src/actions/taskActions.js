@@ -16,10 +16,10 @@ export const searchUserTasks = (accountId) => {
     }
 }
 
-export const updateUserTasks = (tasks) => {
+export const updateUserTasks = (query) => {
     return {
         type: UPDATE_USER_TASKS,
-        tasks: tasks
+        query: query
     }
 }
 

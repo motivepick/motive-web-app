@@ -1,3 +1,5 @@
+import update from 'immutability-helper'
+
 import { SHOW_ERROR, SEARCH_USER_TASKS, UPDATE_USER_TASKS, CREATE_TASK, UPDATE_TASK } from '../actions/taskActions'
 
 const INITIAL_STATE = {
@@ -11,7 +13,7 @@ export default function(state = INITIAL_STATE, action) {
         case UPDATE_TASK:
             return { ...state } // TODO: spinner
         case UPDATE_USER_TASKS:
-            return { ...state, tasks: action.tasks }
+            return { ...state, tasks: update(state.tasks, action.query) }
         case SHOW_ERROR:
             return { ...state, error: action.error }
         default:
