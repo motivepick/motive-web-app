@@ -12,7 +12,7 @@ i18n.use(LanguageDetector).init({
                 'loading': 'Loading...',
                 'new.task': 'What should I not forget?',
                 'task.description': 'Additional Details',
-                'your.tasks': '{{name}}\'s Tasks'
+                'your.tasks': 'Your Tasks'
             }
         },
         ru: {
