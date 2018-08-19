@@ -29,7 +29,7 @@ class LoginForm extends Component {
                 })
             })
         } else {
-            throw 'expected state ' + expectedState + ' and actual state ' + state + ' are not equal'
+            throw new Error('expected state ' + expectedState + ' and actual state ' + state + ' are not equal')
         }
     }
 
