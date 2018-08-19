@@ -7,8 +7,8 @@ export const SHOW_ERROR = 'SHOW_ERROR'
 export const CREATE_TASK = 'CREATE_TASK'
 export const UPDATE_TASK = 'UPDATE_TASK'
 
-export const searchUserTasks = accountId => {
-    const req = request.get(`${API_URL}/tasks/list/${accountId}`)
+export const searchUserTasks = () => {
+    const req = request.get(`${API_URL}/tasks/list`).withCredentials()
 
     return {
         type: SEARCH_USER_TASKS,
@@ -27,7 +27,7 @@ export const showError = error => ({
 })
 
 export const createTask = task => {
-    const req = request.post(`${API_URL}/tasks`).send(task)
+    const req = request.post(`${API_URL}/tasks`).send(task).withCredentials()
 
     return {
         type: CREATE_TASK,
@@ -36,7 +36,7 @@ export const createTask = task => {
 }
 
 export const updateTask = (taskId, task) => {
-    const req = request.put(`${API_URL}/tasks/${taskId}`).send(task)
+    const req = request.put(`${API_URL}/tasks/${taskId}`).send(task).withCredentials()
 
     return {
         type: UPDATE_TASK,

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Col, Row } from 'reactstrap'
-import LoginButton from './LoginButton'
-import logo from '../logo.png'
+import { Col, Row, Button } from 'reactstrap'
 import { translate } from 'react-i18next'
+import logo from '../logo.png'
+import { API_URL } from '../const'
 
 class LoginView extends Component {
 
@@ -27,7 +27,7 @@ class LoginView extends Component {
                 </Row>
                 <Row style={{ marginTop: '30px', marginBottom: '10px' }}>
                     <Col className="text-center">
-                        <LoginButton/>
+                        <Button href={`${API_URL}/oauth2/authorization/facebook`}>{t('login')}</Button>
                     </Col>
                 </Row>
             </div>

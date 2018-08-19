@@ -12,8 +12,8 @@ class Task extends Component {
     static propTypes = {
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired,
-        dueDate: PropTypes.string.isRequired,
+        description: PropTypes.string,
+        dueDate: PropTypes.string,
         onTaskUpdate: PropTypes.func.isRequired,
         saveTask: PropTypes.func.isRequired
     }

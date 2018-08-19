@@ -7,23 +7,29 @@ import Navigation from '../Navigation/Navigation'
 import { translate } from 'react-i18next'
 import { searchUserTasks, createTask, updateUserTasks, updateTask, showError } from '../actions/taskActions'
 import { ordered, handleDueDateOf } from '../utils/taskUtils'
+import SpinnerView from '../SpinnerView'
 
 class TaskView extends Component {
 
     componentDidMount() {
-        const { user, searchUserTasks, updateUserTasks, showError } = this.props
-        const { accountId } = user
+        const { searchUserTasks, updateUserTasks, showError, history } = this.props
 
-        searchUserTasks(accountId)
+        searchUserTasks()
             .then((res) => ordered(updateUserTasks({ $push: res.payload.body })))
-            .catch((err) => showError(err))
+            .catch((err) => {
+                if (err.status === 403) {
+                    history.push('/login')
+                } else {
+                    showError(err)
+                }
+            })
     }
 
     onAddNewTask(e) {
         const input = e.target
         if (e.key === 'Enter' && input.value.trim() !== '') {
-            const { user, updateUserTasks, createTask } = this.props
-            const task = handleDueDateOf({ accountId: user.accountId, name: input.value.trim() })
+            const { updateUserTasks, createTask } = this.props
+            const task = handleDueDateOf({ name: input.value.trim() })
             input.disabled = true
 
             createTask(task)
@@ -56,10 +62,14 @@ class TaskView extends Component {
     }
 
     render() {
-        const { user, tasks, t } = this.props
+        const { tasks, t, initialized } = this.props
+        // FIXME: it's not a good place to implement here
+        if (!initialized) {
+            return <SpinnerView/>
+        }
         return (
             <div>
-                <Navigation user={user}/>
+                <Navigation history={this.props.history}/>
                 <div>
                     <Row style={{ marginTop: '10px' }}>
                         <Col>
@@ -81,8 +91,8 @@ class TaskView extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.user.user,
-    tasks: state.tasks.tasks
+    tasks: state.tasks.tasks,
+    initialized: state.tasks.initialized
 })
 
 
