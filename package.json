@@ -23,7 +23,8 @@
     "redux": "4.0.0",
     "redux-promise": "0.6.0",
     "superagent": "3.8.3",
-    "url-search-params-polyfill": "4.0.1"
+    "url-search-params-polyfill": "4.0.1",
+    "uuid": "3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",

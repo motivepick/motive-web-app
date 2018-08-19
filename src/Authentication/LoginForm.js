@@ -11,24 +11,26 @@ class LoginForm extends Component {
 
     componentDidMount() {
         const query = new URLSearchParams(this.props.location.search)
-        const code = query.get('code')
-        this.exchangeCodeForToken(code)
+        this.exchangeCodeForToken(query.get('code'), atob(query.get('state')))
     }
 
     render() {
-        return (
-            <SpinnerView/>
-        )
+        return <SpinnerView/>
     }
 
-    exchangeCodeForToken = (code) => {
-        const redirectUrl = encodeURI(`${APP_URL}/login`)
-        request.post(`${API_URL}/users/codes/${code}`).query({ clientId: FACEBOOK_CLIENT_ID, redirectUrl }).then(response => {
-            const token = response.text
-            fetch(`https://graph.facebook.com/me?access_token=${token}`).then(r => r.json()).then(({ id, name }) => {
-                this.createUser({ accountId: id, name, token })
+    exchangeCodeForToken = (code, state) => {
+        const expectedState = sessionStorage.getItem('state')
+        if (expectedState === state) {
+            const redirectUrl = encodeURI(`${APP_URL}/login`)
+            request.post(`${API_URL}/users/codes/${code}`).query({ clientId: FACEBOOK_CLIENT_ID, redirectUrl }).then(response => {
+                const token = response.text
+                fetch(`https://graph.facebook.com/me?access_token=${token}`).then(r => r.json()).then(({ id, name }) => {
+                    this.createUser({ accountId: id, name, token })
+                })
             })
-        })
+        } else {
+            throw 'expected state ' + expectedState + ' and actual state ' + state + ' are not equal'
+        }
     }
 
     createUser = (user) => {
