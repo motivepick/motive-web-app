@@ -8,7 +8,7 @@ export const CREATE_TASK = 'CREATE_TASK'
 export const UPDATE_TASK = 'UPDATE_TASK'
 
 export const searchUserTasks = () => {
-    const req = request.get(`${API_URL}/tasks/list`).withCredentials()
+    const req = request.get(`${API_URL}/tasks`).withCredentials()
 
     return {
         type: SEARCH_USER_TASKS,
