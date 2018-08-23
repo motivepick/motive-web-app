@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Col, Form, FormGroup, Input, Row } from 'reactstrap'
 import moment from 'moment'
-import FontAwesome from 'react-fontawesome'
 import './Task.css'
 import { handleDueDateOf } from '../utils/taskUtils'
 import { translate } from 'react-i18next'
@@ -32,7 +31,7 @@ class Task extends Component {
                         <div style={{ cursor: 'pointer', display: 'flex' }} className="task-name">
                             <div style={{ flexGrow: '0', flexBasis: '0' }}>
                                 <Button color="link" onClick={() => this.handleTaskClose()}>
-                                    <FontAwesome name='check' style={{ color: '#000' }}/>
+                                    <div className={'circle incompleteCircle'}></div>
                                 </Button>
                             </div>
                             <div onClick={this.handleTaskClick} className="task-name"

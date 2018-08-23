@@ -20,3 +20,19 @@
     border-bottom-right-radius: .25rem;
     border-bottom-left-radius: .25rem;
 }
+
+.circle {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+    -moz-border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+    -webkit-border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
+}
+
+.completeCircle {
+    border: .1rem solid #bbb;
+}
+
+.incompleteCircle {
+    border: .1rem solid #a56d54;
+}
