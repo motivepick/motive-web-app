@@ -89,7 +89,7 @@ class Task extends Component {
     }
 
     saveName = async() => {
-        const name = this.props.name;
+        const name = this.props.name
         const task = handleDueDateOf({ name: name ? name.trim() : '' })
 
         const taskId = this.props.id
@@ -100,7 +100,7 @@ class Task extends Component {
 
     saveDescription = async() => {
         const taskId = this.props.id
-        const description = this.props.description;
+        const description = this.props.description
         await this.props.onTaskUpdate(taskId, 'description', description ? description.trim() : '')
         this.props.saveTask(taskId)
     }
