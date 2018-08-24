@@ -15,7 +15,7 @@ class TaskView extends Component {
         const { searchUserTasks, updateUserTasks, showError, history } = this.props
 
         searchUserTasks()
-            .then((res) => ordered(updateUserTasks({ $push: res.payload.body })))
+            .then((res) => updateUserTasks({ $push: ordered(res.payload.body) }))
             .catch((err) => {
                 if (err.status === 403) {
                     history.push('/login')
