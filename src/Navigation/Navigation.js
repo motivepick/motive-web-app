@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import { Nav, Navbar, NavbarBrand, NavItem } from 'reactstrap'
 import logo from '../logo.png'
 import { translate } from 'react-i18next'
-import { logout } from '../actions/userActions'
-import { connect } from 'react-redux'
+import { withCookies } from 'react-cookie'
 
 class Navigation extends Component {
 
@@ -25,15 +24,10 @@ class Navigation extends Component {
     }
 
     handleLogout = () => {
-        const { logout, history } = this.props
-        logout().then(() => history.push('/login'))
+        const { cookies, history } = this.props
+        cookies.remove('SESSION')
+        history.push('/login')
     };
 }
 
-const mapStateToProps = () => ({})
-
-const mapDispatchToProps = {
-    logout
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(translate('translations')(Navigation))
+export default withCookies(translate('translations')(Navigation))

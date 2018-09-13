@@ -17,7 +17,7 @@ class TaskView extends Component {
         searchUserTasks()
             .then((res) => updateUserTasks({ $push: ordered(res.payload.body) }))
             .catch((err) => {
-                if (err.status === 403) {
+                if (err.status === 401) {
                     history.push('/login')
                 } else {
                     showError(err)

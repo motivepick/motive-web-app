@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
+import { CookiesProvider } from 'react-cookie';
 
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
@@ -61,11 +62,13 @@ const setUpLocale = () => {
 setUpLocale()
 
 ReactDOM.render(
-    <Provider store={store}>
-        <I18nextProvider i18n={i18n}>
-            <BrowserRouter>
-                <Routes/>
-            </BrowserRouter>
-        </I18nextProvider>
-    </Provider>, document.getElementById('root'))
+    <CookiesProvider>
+        <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+                <BrowserRouter>
+                    <Routes/>
+                </BrowserRouter>
+            </I18nextProvider>
+        </Provider>
+    </CookiesProvider>, document.getElementById('root'))
 registerServiceWorker()
