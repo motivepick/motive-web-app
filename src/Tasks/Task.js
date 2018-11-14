@@ -17,9 +17,7 @@ class Task extends Component {
         saveTask: PropTypes.func.isRequired
     }
 
-    state = {
-        opened: false
-    }
+    state = { opened: false }
 
     render() {
         const { t } = this.props
@@ -31,7 +29,7 @@ class Task extends Component {
                         <div style={{ cursor: 'pointer', display: 'flex' }} className="task-name">
                             <div style={{ flexGrow: '0', flexBasis: '0' }}>
                                 <Button color="link" onClick={() => this.handleTaskClose()}>
-                                    <div className={'circle incompleteCircle'}></div>
+                                    <div className={'circle incompleteCircle'}/>
                                 </Button>
                             </div>
                             <div onClick={this.handleTaskClick} className="task-name"

@@ -12,7 +12,7 @@ class Navigation extends Component {
             <Navbar color="light" light expand="md">
                 <NavbarBrand href="/">
                     <img src={logo} width="30" height="30" className="d-inline-block align-top" alt="Motive Logo"/>
-                    <span> {t('your.tasks')}</span>
+                    <span> {t('my.tasks')}</span>
                 </NavbarBrand>
                 <Nav className="ml-auto" navbar>
                     <NavItem>

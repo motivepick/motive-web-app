@@ -5,9 +5,10 @@ import Task from './Task'
 import Navigation from '../Navigation/Navigation'
 
 import { translate } from 'react-i18next'
-import { searchUserTasks, createTask, updateUserTasks, updateTask, showError } from '../actions/taskActions'
-import { ordered, handleDueDateOf } from '../utils/taskUtils'
+import { createTask, searchUserTasks, showError, updateTask, updateUserTasks } from '../actions/taskActions'
+import { handleDueDateOf, ordered } from '../utils/taskUtils'
 import SpinnerView from '../SpinnerView'
+import { isBrowser } from 'react-device-detect'
 
 class TaskView extends Component {
 
@@ -64,29 +65,30 @@ class TaskView extends Component {
     render() {
         const { tasks, t, initialized } = this.props
         // FIXME: it's not a good place to implement here
-        if (!initialized) {
-            return <SpinnerView/>
-        }
-        return (
-            <div>
-                <Navigation history={this.props.history}/>
+        if (initialized) {
+            return (
                 <div>
-                    <Row style={{ marginTop: '10px' }}>
-                        <Col>
-                            <Input type="text" placeholder={t('new.task')}
-                                   onKeyPress={this.onAddNewTask.bind(this)} autoFocus
-                                   innerRef={input => this.taskNameInput = input}/>
-                        </Col>
-                    </Row>
-                    <div style={{ marginTop: '10px' }}>
-                        {tasks.filter(t => !t.closed).map(task =>
-                            <Task key={task.id} id={task.id} name={task.name} description={task.description}
-                                  dueDate={task.dueDate} onTaskUpdate={this.onTaskUpdate} saveTask={this.saveTask}/>
-                        )}
+                    <Navigation history={this.props.history}/>
+                    <div>
+                        <Row style={{ marginTop: '10px' }}>
+                            <Col>
+                                <Input type="text" placeholder={t('new.task')}
+                                       onKeyPress={this.onAddNewTask.bind(this)} autoFocus={isBrowser}
+                                       innerRef={input => this.taskNameInput = input}/>
+                            </Col>
+                        </Row>
+                        <div style={{ marginTop: '10px' }}>
+                            {tasks.filter(t => !t.closed).map(task =>
+                                <Task key={task.id} id={task.id} name={task.name} description={task.description}
+                                      dueDate={task.dueDate} onTaskUpdate={this.onTaskUpdate} saveTask={this.saveTask}/>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
-        )
+            )
+        } else {
+            return <SpinnerView/>
+        }
     }
 }
 

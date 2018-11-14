@@ -11,7 +11,9 @@ import ErrorBoundary from './ErrorBoundary'
 
 const LoginSuccess = ({ cookies }) => {
     let token = window.location.pathname.replace('/login-success/', '')
-    cookies.set('SESSION', token, { path: '/' })
+    const now = new Date()
+    // TODO: temporary solution. Move cookie operations to back end and restrict access to them for JavaScript
+    cookies.set('SESSION', token, { domain: '.yaskovdev.com', path: '/', expires: new Date(now.getFullYear() + 10, now.getMonth(), now.getDate()) })
     return <Redirect to="/"/>
 }
 
@@ -26,7 +28,7 @@ class Routes extends React.Component {
                     <Route path="/login-success" render={() => (<LoginSuccess cookies={this.props.cookies}/>)}/>
                 </Container>
             </ErrorBoundary>
-        );
+        )
     }
 }
 
