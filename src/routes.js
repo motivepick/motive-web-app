@@ -3,6 +3,7 @@ import { Redirect, Route } from 'react-router-dom'
 import { withCookies } from 'react-cookie'
 import { Container } from 'reactstrap'
 import { translate } from 'react-i18next'
+import { COOKIE_DOMAIN } from './const'
 
 import './App.css'
 import TaskView from './Tasks/TaskView'
@@ -13,7 +14,7 @@ const LoginSuccess = ({ cookies }) => {
     let token = window.location.pathname.replace('/login-success/', '')
     const now = new Date()
     // TODO: temporary solution. Move cookie operations to back end and restrict access to them for JavaScript
-    cookies.set('SESSION', token, { domain: '.yaskovdev.com', path: '/', expires: new Date(now.getFullYear() + 10, now.getMonth(), now.getDate()) })
+    cookies.set('SESSION', token, { domain: COOKIE_DOMAIN, path: '/', expires: new Date(now.getFullYear() + 10, now.getMonth(), now.getDate()) })
     return <Redirect to="/"/>
 }
 
