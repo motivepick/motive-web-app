@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, ButtonGroup, Col, Row } from 'reactstrap'
+import { Button, Col, Row } from 'reactstrap'
 import { translate } from 'react-i18next'
 import logo from '../logo.png'
 import { API_URL } from '../const'
@@ -27,10 +27,10 @@ class LoginView extends Component {
                 </Row>
                 <Row style={{ marginTop: '30px', marginBottom: '10px' }}>
                     <Col className="text-center">
-                        <ButtonGroup>
-                            <Button color={'secondary'} href={`${API_URL}/oauth2/authorization/vk`}>{t('login.vk')}</Button>
-                            <Button color={'primary'} href={`${API_URL}/oauth2/authorization/facebook`}>{t('login.facebook')}</Button>
-                        </ButtonGroup>
+                        <Button color={'primary'} href={`${API_URL}/oauth2/authorization/vk`}
+                                style={{ margin: '0 5px 10px 0' }}>{t('login.vk')}</Button>
+                        <Button color={'secondary'} href={`${API_URL}/oauth2/authorization/facebook`}
+                                style={{ margin: '0 0 10px 5px' }}>{t('login.facebook')}</Button>
                     </Col>
                 </Row>
             </div>
