@@ -7,7 +7,8 @@ i18n.use(LanguageDetector).init({
             translations: {
                 'welcome': 'Welcome to Motive!',
                 'description': 'A minimalistic application which is going to defeat your laziness',
-                'login': 'Login With Facebook',
+                'login.facebook': 'Login With Facebook',
+                'login.vk': 'Login With VK',
                 'logout': 'Logout',
                 'loading': 'Loading...',
                 'new.task': 'What should I not forget?',
@@ -19,7 +20,8 @@ i18n.use(LanguageDetector).init({
             translations: {
                 'welcome': 'Добро пожаловать в Motive!',
                 'description': 'Минималистичное приложение для борьбы с ленью',
-                'login': 'Войти через Facebook',
+                'login.facebook': 'Войти через Facebook',
+                'login.vk': 'Войти через VK',
                 'logout': 'Выйти',
                 'loading': 'Загрузка...',
                 'new.task': 'О чём нужно не забыть?',
@@ -31,7 +33,8 @@ i18n.use(LanguageDetector).init({
             translations: {
                 'welcome': '歡迎來到 Motive!',
                 'description': '小小工具，幫你大大打擊懶惰蟲',
-                'login': '以Facebook登入',
+                'login.facebook': '以Facebook登入',
+                'login.vk': '以VK登入',
                 'logout': '登出',
                 'loading': '載入中',
                 'new.task': '有什麼要做的?',
