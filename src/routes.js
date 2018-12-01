@@ -9,6 +9,7 @@ import './App.css'
 import TaskView from './Tasks/TaskView'
 import LoginView from './Authentication/LoginView'
 import ErrorBoundary from './ErrorBoundary'
+import PrivacyView from './PrivacyView'
 
 const LoginSuccess = ({ cookies }) => {
     const token = window.location.pathname.replace('/login-success/', '')
@@ -28,6 +29,7 @@ class Routes extends React.Component {
                     <Route exact={true} path="/" component={TaskView}/>
                     <Route path="/login" component={LoginView}/>
                     <Route path="/login-success" render={() => (<LoginSuccess cookies={this.props.cookies}/>)}/>
+                    <Route path="/privacy" component={PrivacyView}/>
                 </Container>
             </ErrorBoundary>
         )
