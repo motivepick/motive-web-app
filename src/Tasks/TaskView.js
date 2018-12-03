@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { Col, Input, Row } from 'reactstrap'
 import Task from './Task'
@@ -10,7 +10,7 @@ import { handleDueDateOf, ordered } from '../utils/taskUtils'
 import SpinnerView from '../SpinnerView'
 import { isBrowser } from 'react-device-detect'
 
-class TaskView extends Component {
+class TaskView extends PureComponent {
 
     componentDidMount() {
         const { searchUserTasks, updateUserTasks, showError, history } = this.props
@@ -96,7 +96,6 @@ const mapStateToProps = state => ({
     tasks: state.tasks.tasks,
     initialized: state.tasks.initialized
 })
-
 
 const mapDispatchToProps = {
     searchUserTasks,

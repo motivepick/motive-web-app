@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Col, Form, FormGroup, Input, Row } from 'reactstrap'
 import moment from 'moment'
@@ -6,7 +6,7 @@ import './Task.css'
 import { handleDueDateOf } from '../utils/taskUtils'
 import { translate } from 'react-i18next'
 
-class Task extends Component {
+class Task extends PureComponent {
 
     static propTypes = {
         id: PropTypes.number.isRequired,

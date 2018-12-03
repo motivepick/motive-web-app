@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { Button, Col, Row } from 'reactstrap'
 import { translate } from 'react-i18next'
 import logo from '../logo.png'
 import { API_URL } from '../const'
 import { Link } from 'react-router-dom'
 
-class LoginView extends Component {
+class LoginView extends PureComponent {
 
     render() {
         const { t } = this.props

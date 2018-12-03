@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import { withCookies } from 'react-cookie'
 import { Container } from 'reactstrap'
@@ -20,7 +20,7 @@ const LoginSuccess = ({ cookies }) => {
     return <Redirect to="/"/>
 }
 
-class Routes extends React.Component {
+class Routes extends PureComponent {
 
     render() {
         return (
@@ -28,7 +28,7 @@ class Routes extends React.Component {
                 <Container>
                     <Route exact={true} path="/" component={TaskView}/>
                     <Route path="/login" component={LoginView}/>
-                    <Route path="/login-success" render={() => (<LoginSuccess cookies={this.props.cookies}/>)}/>
+                    <Route path="/login-success" render={() => <LoginSuccess cookies={this.props.cookies}/>}/>
                     <Route path="/privacy" component={PrivacyView}/>
                 </Container>
             </ErrorBoundary>

@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { Col, Row } from 'reactstrap'
 import { translate } from 'react-i18next'
 
-class SpinnerView extends Component {
+class SpinnerView extends PureComponent {
 
     render() {
         const { t } = this.props

@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { Nav, Navbar, NavbarBrand, NavItem } from 'reactstrap'
 import logo from '../logo.png'
 import { translate } from 'react-i18next'
 import { withCookies } from 'react-cookie'
 import { COOKIE_DOMAIN, COOKIE_PATH } from '../const'
 
-class Navigation extends Component {
+class Navigation extends PureComponent {
 
     render() {
         const { t } = this.props

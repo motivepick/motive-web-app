@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { PureComponent } from 'react'
 
 import { Button, Col, Row } from 'reactstrap'
 import { translate } from 'react-i18next'
 import logo from './logo.png'
 import { Link } from 'react-router-dom'
 
-class PrivacyView extends React.Component {
+class PrivacyView extends PureComponent {
 
     render() {
         return (
@@ -22,7 +22,7 @@ class PrivacyView extends React.Component {
                         </Col>
                     </Row>
                     <Row style={{ fontSize: '14px' }}>
-                        <Col sm="12" md={{size: 6, offset: 3}}>
+                        <Col sm="12" md={{ size: 6, offset: 3 }}>
                             <p>At MotivePick, accessible from <a
                                 href="https://motivepick.com">https://motivepick.com</a>,
                                 one of our main priorities is the
