@@ -13,7 +13,9 @@ i18n.use(LanguageDetector).init({
                 'loading': 'Loading...',
                 'new.task': 'What should I not forget?',
                 'task.description': 'Additional Details',
-                'my.tasks': 'My Tasks'
+                'my.tasks': 'My Tasks',
+                'contactUs': 'Contact us',
+                'privacyPolicy': 'Privacy Policy'
             }
         },
         ru: {
@@ -26,7 +28,9 @@ i18n.use(LanguageDetector).init({
                 'loading': 'Загрузка...',
                 'new.task': 'О чём нужно не забыть?',
                 'task.description': 'Дополнительные подробности',
-                'my.tasks': 'Мои задачи'
+                'my.tasks': 'Мои задачи',
+                'contactUs': 'Связаться с нами',
+                'privacyPolicy': 'Политика конфиденциальности'
             }
         },
         zh: {
@@ -39,7 +43,9 @@ i18n.use(LanguageDetector).init({
                 'loading': '載入中',
                 'new.task': '有什麼要做的?',
                 'task.description': '更多細節',
-                'my.tasks': '待辦事項'
+                'my.tasks': '待辦事項',
+                'contactUs': 'Contact us',
+                'privacyPolicy': 'Privacy Policy'
             }
         }
     },

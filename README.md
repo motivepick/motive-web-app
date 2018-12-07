@@ -2,7 +2,7 @@
 
 The service that is going to defeat the laziness.
 
-Try it out on https://motiv.yaskovdev.com.
+Try it out on https://motivepick.com.
 
 To run locally run `npm start`.
 

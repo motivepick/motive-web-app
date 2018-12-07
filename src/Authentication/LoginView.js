@@ -40,11 +40,11 @@ class LoginView extends PureComponent {
                     <div className="container">
                         <span className="text-muted">
                              <a href="mailto:motivepick@yahoo.com">
-                                Contact us
+                                 {t('contactUs')}
                              </a>
                         </span>
 
-                        <span className="text-muted">  |  <Link to='/privacy'>Privacy Policy</Link></span>
+                        <span className="text-muted">  |  <Link to='/privacy'>{t('privacyPolicy')}</Link></span>
                     </div>
                 </footer>
             </div>
