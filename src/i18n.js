@@ -5,8 +5,8 @@ i18n.use(LanguageDetector).init({
     resources: {
         en: {
             translations: {
-                'welcome': 'Welcome to Motive!',
-                'description': 'A minimalistic application which is going to defeat your laziness',
+                'welcome': 'Motive',
+                'description': 'Defeat your laziness',
                 'login.facebook': 'Login With Facebook',
                 'login.vk': 'Login With VK',
                 'logout': 'Logout',
@@ -20,8 +20,8 @@ i18n.use(LanguageDetector).init({
         },
         ru: {
             translations: {
-                'welcome': 'Добро пожаловать в Motive!',
-                'description': 'Минималистичное приложение для борьбы с ленью',
+                'welcome': 'Motive',
+                'description': 'Победи лень',
                 'login.facebook': 'Войти через Facebook',
                 'login.vk': 'Войти через VK',
                 'logout': 'Выйти',
@@ -35,7 +35,7 @@ i18n.use(LanguageDetector).init({
         },
         zh: {
             translations: {
-                'welcome': '歡迎來到 Motive!',
+                'welcome': 'Motive',
                 'description': '小小工具，幫你大大打擊懶惰蟲',
                 'login.facebook': '以Facebook登入',
                 'login.vk': '以VK登入',
