@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Button, Col, Row, i } from 'reactstrap'
+import { Button, Col, i, Row } from 'reactstrap'
 import { translate } from 'react-i18next'
 import logo from '../logo.png'
 import { API_URL } from '../const'
@@ -29,24 +29,26 @@ class LoginView extends PureComponent {
                     </Row>
                     <Row style={{ marginTop: '30px', marginBottom: '10px' }}>
                         <Col className="text-center">
-                            <Button color={'primary'} href={`${API_URL}/oauth2/authorization/vk`}
-                                    style={{ margin: '0 5px 10px 0' }}><i className="fa fa-vk" style={{ marginRight: '1em' }}/>{t('login.vk')}</Button>
-                            <Button color={'secondary'} href={`${API_URL}/oauth2/authorization/facebook`}
-                                    style={{ margin: '0 0 10px 5px' }}><i className="fa fa-facebook-square" style={{ marginRight: '1em' }}/>{t('login.facebook')}</Button>
+                            <Button color={'primary'} href={`${API_URL}/oauth2/authorization/vk`} style={{ margin: '0 5px 10px 0' }}>
+                                <i className="fa fa-vk" style={{ marginRight: '1em' }}/>
+                                {t('login.vk')}
+                            </Button>
+                            <Button color={'secondary'} href={`${API_URL}/oauth2/authorization/facebook`} style={{ margin: '0 0 10px 5px' }}>
+                                <i className="fa fa-facebook-square" style={{ marginRight: '1em' }}/>
+                                {t('login.facebook')}
+                            </Button>
                         </Col>
                     </Row>
                 </main>
-                <footer className="footer">
-                    <div className="container">
-                        <span className="text-muted">
-                             <a href="mailto:motivepick@yahoo.com">
-                                 {t('contactUs')}
-                             </a>
-                        </span>
+                <div className="footer">
+                    <span className="text-muted">
+                         <a href="mailto:motivepick@yahoo.com">
+                             {t('contactUs')}
+                         </a>
+                    </span>
 
-                        <span className="text-muted">  |  <Link to='/privacy'>{t('privacyPolicy')}</Link></span>
-                    </div>
-                </footer>
+                    <span className="text-muted">  |  <Link to='/privacy'>{t('privacyPolicy')}</Link></span>
+                </div>
             </div>
         )
     }
