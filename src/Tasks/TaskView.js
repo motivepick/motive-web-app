@@ -3,10 +3,9 @@ import { connect } from 'react-redux'
 import { Col, Input, Row } from 'reactstrap'
 import Task from './Task'
 import Navigation from '../Navigation/Navigation'
-
 import { translate } from 'react-i18next'
 import { createTask, searchUserTasks, showError, updateTask, updateUserTasks } from '../actions/taskActions'
-import { handleDueDateOf, ordered } from '../utils/taskUtils'
+import { handleDueDateOf } from '../utils/taskUtils'
 import SpinnerView from '../SpinnerView'
 import { isBrowser } from 'react-device-detect'
 
@@ -16,7 +15,7 @@ class TaskView extends PureComponent {
         const { searchUserTasks, updateUserTasks, showError, history } = this.props
 
         searchUserTasks()
-            .then((res) => updateUserTasks({ $push: ordered(res.payload.body) }))
+            .then((res) => updateUserTasks({ $push: res.payload.body }))
             .catch((err) => {
                 if (err.status === 401) {
                     history.push('/login')
