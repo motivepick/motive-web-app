@@ -28,7 +28,7 @@ class Task extends PureComponent {
                     <div className="task">
                         <div style={{ cursor: 'pointer', display: 'flex' }} className="task-name">
                             <div style={{ flexGrow: '0', flexBasis: '0' }}>
-                                <Button color="link" onClick={() => this.handleTaskClose()}>
+                                <Button color="link" onClick={this.handleTaskClose}>
                                     <div className={'circle incompleteCircle'}/>
                                 </Button>
                             </div>

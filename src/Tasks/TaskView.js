@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Fragment, PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { Col, Input, Row } from 'reactstrap'
 import Task from './Task'
@@ -8,6 +8,7 @@ import { createTask, searchUserTasks, showError, updateTask, updateUserTasks } f
 import { handleDueDateOf } from '../utils/taskUtils'
 import SpinnerView from '../SpinnerView'
 import { isBrowser } from 'react-device-detect'
+import TasksSubtitle from './TasksSubtitle'
 
 class TaskView extends PureComponent {
 
@@ -25,7 +26,7 @@ class TaskView extends PureComponent {
             })
     }
 
-    onAddNewTask(e) {
+    onAddNewTask = (e) => {
         const input = e.target
         if (e.key === 'Enter' && input.value.trim() !== '') {
             const { updateUserTasks, createTask } = this.props
@@ -63,31 +64,29 @@ class TaskView extends PureComponent {
 
     render() {
         const { tasks, t, initialized } = this.props
-        // FIXME: it's not a good place to implement here
-        if (initialized) {
-            return (
+        return (
+            <Fragment>
+                <Navigation history={this.props.history}/>
                 <div>
-                    <Navigation history={this.props.history}/>
-                    <div>
-                        <Row style={{ marginTop: '10px' }}>
-                            <Col>
-                                <Input type="text" placeholder={t('new.task')}
-                                       onKeyPress={this.onAddNewTask.bind(this)} autoFocus={isBrowser}
-                                       innerRef={input => this.taskNameInput = input}/>
-                            </Col>
-                        </Row>
-                        <div style={{ marginTop: '10px' }}>
-                            {tasks.filter(t => !t.closed).map(task =>
+                    <Row style={{ marginTop: '10px' }}>
+                        <Col>
+                            <Input type="text" placeholder={t('new.task')}
+                                   onKeyPress={this.onAddNewTask} autoFocus={isBrowser}
+                                   innerRef={input => this.taskNameInput = input}/>
+                        </Col>
+                    </Row>
+                    {initialized ? <Fragment>
+                        <TasksSubtitle numberOfTasks={tasks.length} onToggleTasks={() => console.log('TODO')}/>
+                        <div>
+                            {tasks.map(task =>
                                 <Task key={task.id} id={task.id} name={task.name} description={task.description}
                                       dueDate={task.dueDate} onTaskUpdate={this.onTaskUpdate} saveTask={this.saveTask}/>
                             )}
                         </div>
-                    </div>
+                    </Fragment> : <SpinnerView/>}
                 </div>
-            )
-        } else {
-            return <SpinnerView/>
-        }
+            </Fragment>
+        )
     }
 }
 

@@ -15,7 +15,11 @@ i18n.use(LanguageDetector).init({
                 'task.description': 'Additional Details',
                 'my.tasks': 'My Tasks',
                 'contactUs': 'Contact us',
-                'privacyPolicy': 'Privacy Policy'
+                'privacyPolicy': 'Privacy Policy',
+                'numberOfTasks': '{{count}} task',
+                'numberOfTasks_plural': '{{count}} tasks',
+                'showOpenTasks': 'Show open',
+                'showClosedTasks': 'Show closed'
             }
         },
         ru: {
@@ -30,7 +34,12 @@ i18n.use(LanguageDetector).init({
                 'task.description': 'Дополнительные подробности',
                 'my.tasks': 'Мои задачи',
                 'contactUs': 'Связаться с нами',
-                'privacyPolicy': 'Политика конфиденциальности'
+                'privacyPolicy': 'Политика конфиденциальности',
+                'numberOfTasks_0': '{{count}} задача',
+                'numberOfTasks_1': '{{count}} задачи',
+                'numberOfTasks_2': '{{count}} задач',
+                'showOpenTasks': 'Показать открытые',
+                'showClosedTasks': 'Показать закрытые'
             }
         },
         zh: {
@@ -45,7 +54,10 @@ i18n.use(LanguageDetector).init({
                 'task.description': '更多細節',
                 'my.tasks': '待辦事項',
                 'contactUs': 'Contact us',
-                'privacyPolicy': 'Privacy Policy'
+                'privacyPolicy': 'Privacy Policy',
+                'numberOfTasks': '{{count}} 個待辦事項',
+                'showOpenTasks': '顯示進行中事項',
+                'showClosedTasks': '顯示已完成事項'
             }
         }
     },
