@@ -4,16 +4,8 @@ import { Col, Row } from 'reactstrap'
 
 class TasksSubtitle extends PureComponent {
 
-    state = { closed: false }
-
-    componentWillReceiveProps(nextProps) {
-        const { closed } = nextProps
-        this.setState({ closed })
-    }
-
     render() {
-        const { numberOfTasks, t } = this.props
-        const { closed } = this.state
+        const { numberOfTasks, closed, t } = this.props
         return (
             <Row style={{ padding: '10px 4px', textTransform: 'uppercase' }}>
                 <Col xs={4} style={{ color: '#8E8E93' }}>{t('numberOfTasks', { count: numberOfTasks })}</Col>
@@ -26,8 +18,7 @@ class TasksSubtitle extends PureComponent {
 
     toggleTasks = () => {
         const { onToggleOpenClosedTasks } = this.props
-        const { closed } = this.state
-        this.setState({ closed: !closed })
+        const { closed } = this.props
         onToggleOpenClosedTasks(!closed)
     }
 }
