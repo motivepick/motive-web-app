@@ -6,6 +6,11 @@ class TasksSubtitle extends PureComponent {
 
     state = { closed: false }
 
+    componentWillReceiveProps(nextProps) {
+        const { closed } = nextProps
+        this.setState({ closed })
+    }
+
     render() {
         const { numberOfTasks, t } = this.props
         const { closed } = this.state
@@ -20,10 +25,10 @@ class TasksSubtitle extends PureComponent {
     }
 
     toggleTasks = () => {
-        const { onToggleTasks } = this.props
+        const { onToggleOpenClosedTasks } = this.props
         const { closed } = this.state
         this.setState({ closed: !closed })
-        onToggleTasks()
+        onToggleOpenClosedTasks(!closed)
     }
 }
 

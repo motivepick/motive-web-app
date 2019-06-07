@@ -4,8 +4,8 @@ import { BrowserRouter } from 'react-router-dom'
 import { CookiesProvider } from 'react-cookie'
 import { Provider } from 'react-redux'
 import { applyMiddleware, createStore } from 'redux'
-import promise from 'redux-promise'
 import { I18nextProvider } from 'react-i18next'
+import thunkMiddleware from 'redux-thunk'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import moment from 'moment'
 import 'moment/locale/ru'
@@ -17,8 +17,7 @@ import rootReducer from './reducers'
 import i18n from './i18n'
 import Routes from './routes'
 
-const enhancer = applyMiddleware(promise)
-const store = createStore(rootReducer, enhancer)
+const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
 const setUpLocale = () => {
     moment.updateLocale('en', {

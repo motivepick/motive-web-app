@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Col, Form, FormGroup, Input, Row } from 'reactstrap'
+import { Button, Col, Form, FormGroup, Row } from 'reactstrap'
 import moment from 'moment'
 import './Task.css'
 import { handleDueDateOf } from '../utils/taskUtils'
 import { translate } from 'react-i18next'
+import { CustomInput } from './CustomInput'
 
 class Task extends PureComponent {
 
@@ -13,14 +14,13 @@ class Task extends PureComponent {
         name: PropTypes.string.isRequired,
         description: PropTypes.string,
         dueDate: PropTypes.string,
-        onTaskUpdate: PropTypes.func.isRequired,
         saveTask: PropTypes.func.isRequired
     }
 
     state = { opened: false }
 
     render() {
-        const { t } = this.props
+        const { name, description, t } = this.props
         const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
         return (
             <Row className="task-wrapper">
@@ -46,14 +46,10 @@ class Task extends PureComponent {
                             <Col>
                                 <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
                                     <FormGroup>
-                                        <Input type="text" value={this.props.name} onChange={this.handleNameChange} onBlur={this.saveName}
-                                               onKeyPress={target => target.charCode === 13 && this.saveName()}/>
+                                        <CustomInput type="text" value={name} saveOnEnter onSave={this.saveName}/>
                                     </FormGroup>
                                     <FormGroup style={{ marginBottom: '0' }}>
-                                        <Input type="textarea" value={this.props.description}
-                                               onChange={this.handleDescriptionChange}
-                                               onBlur={this.saveDescription}
-                                               placeholder={t('task.description')}/>
+                                        <CustomInput type="textarea" placeholder={t('task.description')} value={description} onSave={this.saveDescription}/>
                                     </FormGroup>
                                 </Form>
                             </Col>
@@ -64,11 +60,9 @@ class Task extends PureComponent {
         )
     }
 
-    handleTaskClose = async() => {
-        const taskId = this.props.id
-
-        await this.props.onTaskUpdate(taskId, 'closed', true)
-        this.props.saveTask(taskId)
+    handleTaskClose = async () => {
+        const { id, onTaskClose } = this.props
+        onTaskClose(id)
     }
 
     handleTaskClick = () => {
@@ -76,31 +70,14 @@ class Task extends PureComponent {
         this.setState({ opened: !opened })
     }
 
-    handleNameChange = ({ target }) => {
-        const taskId = this.props.id
-        this.props.onTaskUpdate(taskId, 'name', target.value)
-    }
-
-    handleDescriptionChange = ({ target }) => {
-        const taskId = this.props.id
-        this.props.onTaskUpdate(taskId, 'description', target.value)
-    }
-
-    saveName = async() => {
-        const name = this.props.name
+    saveName = (name) => {
         const task = handleDueDateOf({ name: name ? name.trim() : '' })
-
-        const taskId = this.props.id
-        await this.props.onTaskUpdate(taskId, 'name', task.name.trim())
-        await this.props.onTaskUpdate(taskId, 'dueDate', task.dueDate || this.props.dueDate)
-        this.props.saveTask(taskId)
+        this.props.saveTask(this.props.id, task)
     }
 
-    saveDescription = async() => {
-        const taskId = this.props.id
-        const description = this.props.description
-        await this.props.onTaskUpdate(taskId, 'description', description ? description.trim() : '')
-        this.props.saveTask(taskId)
+    saveDescription = (description) => {
+        const task = { description }
+        this.props.saveTask(this.props.id, task)
     }
 
     static classOf(dueDate) {
