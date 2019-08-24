@@ -46,7 +46,7 @@ class Task extends PureComponent {
                             <Col>
                                 <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
                                     <FormGroup>
-                                        <CustomInput type="text" value={name} saveOnEnter onSave={this.saveName}/>
+                                        <CustomInput type="text" value={name} dueDate={dueDate} saveOnEnter onSave={this.saveName}/>
                                     </FormGroup>
                                     <FormGroup style={{ marginBottom: '0' }}>
                                         <CustomInput type="textarea" placeholder={t('task.description')} value={description} onSave={this.saveDescription}/>
@@ -61,8 +61,8 @@ class Task extends PureComponent {
     }
 
     handleTaskClose = async () => {
-        const { id, onTaskClose } = this.props
-        onTaskClose(id)
+        const { id, closed, onTaskClose } = this.props
+        onTaskClose(id, !closed)
     }
 
     handleTaskClick = () => {

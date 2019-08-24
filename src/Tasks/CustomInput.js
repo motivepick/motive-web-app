@@ -1,9 +1,13 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { Input } from 'reactstrap'
 
-export class CustomInput extends PureComponent {
+export class CustomInput extends Component {
 
     state = { value: this.props.value }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({ value: nextProps.value })
+    }
 
     render() {
         const { type, placeholder, saveOnEnter, onSave } = this.props

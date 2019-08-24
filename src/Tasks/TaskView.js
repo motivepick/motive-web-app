@@ -28,7 +28,6 @@ class TaskView extends PureComponent {
 
     render() {
         const { tasks, initialized, closed, updateTask, toggleOpenClosedTasks, t } = this.props
-        console.log('CLOSED', closed)
         return (
             <Fragment>
                 <Navigation history={this.props.history}/>
@@ -45,7 +44,7 @@ class TaskView extends PureComponent {
                         <div>
                             {tasks.map(task =>
                                 <Task key={task.id} id={task.id} name={task.name} description={task.description}
-                                      dueDate={task.dueDate} onTaskClose={this.onTaskClose} saveTask={updateTask}/>
+                                      dueDate={task.dueDate} closed={task.closed} onTaskClose={this.onTaskClose} saveTask={updateTask}/>
                             )}
                         </div>
                     </Fragment> : <SpinnerView/>}
@@ -71,9 +70,9 @@ class TaskView extends PureComponent {
         }
     }
 
-    onTaskClose = (id) => {
+    onTaskClose = (id, newValueOfTaskIsClosed) => {
         const { closeOrUndoCloseTask } = this.props
-        closeOrUndoCloseTask(id, true)
+        closeOrUndoCloseTask(id, newValueOfTaskIsClosed)
     }
 }
 
@@ -91,8 +90,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         dispatch(updateTaskAction(await updateTask(id, task)))
     },
 
-    closeOrUndoCloseTask: (id: number, newStateOfTaskIsClosed: boolean) => async (dispatch) => {
-        if (newStateOfTaskIsClosed) {
+    closeOrUndoCloseTask: (id: number, newValueOfTaskIsClosed: boolean) => async (dispatch) => {
+        if (newValueOfTaskIsClosed) {
             dispatch(closeTaskAction(await closeTask(id)))
         } else {
             dispatch(undoCloseTaskAction(await undoCloseTask(id)))
