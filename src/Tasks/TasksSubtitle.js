@@ -7,9 +7,9 @@ class TasksSubtitle extends PureComponent {
     render() {
         const { numberOfTasks, closed, t } = this.props
         return (
-            <Row style={{ padding: '10px 4px', textTransform: 'uppercase' }}>
-                <Col xs={4} style={{ color: '#8E8E93' }}>{t('numberOfTasks', { count: numberOfTasks })}</Col>
-                <Col xs={8} style={{ color: '#EC445A' }} className={'text-right'}>
+            <Row style={{ padding: '10px 4px', textTransform: 'uppercase', fontSize: '80%' }}>
+                <Col xs={5} style={{ color: '#8E8E93' }}>{t('numberOfTasks', { count: numberOfTasks })}</Col>
+                <Col xs={7} style={{ color: '#EC445A' }} className={'text-right'}>
                     <a onClick={this.toggleTasks} style={{ cursor: 'pointer' }}>{t(closed ? 'showOpenTasks' : 'showClosedTasks')}</a>
                 </Col>
             </Row>
