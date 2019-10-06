@@ -27,7 +27,8 @@
     "redux-thunk": "^2.3.0",
     "superagent": "3.8.3",
     "url-search-params-polyfill": "4.0.1",
-    "uuid": "3.3.2"
+    "uuid": "3.3.2",
+    "history": "latest"
   },
   "scripts": {
     "start": "react-scripts start",

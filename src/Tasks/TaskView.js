@@ -18,6 +18,7 @@ import {
     updateUserTasksAction
 } from '../actions/tasksActions'
 import { closeTask, createTask, searchUserTasks, undoCloseTask, updateTask } from '../services/taskService'
+import { handleServerException } from '../utils/exceptionHandler'
 
 class TaskView extends PureComponent {
 
@@ -79,27 +80,47 @@ class TaskView extends PureComponent {
 const mapDispatchToProps = (dispatch) => bindActionCreators({
 
     updateUserTasks: () => async (dispatch) => {
-        dispatch(updateUserTasksAction(await searchUserTasks()))
+        try {
+            dispatch(updateUserTasksAction(await searchUserTasks()))
+        } catch (e) {
+            handleServerException(e)
+        }
     },
 
     createTask: task => async (dispatch) => {
-        dispatch(createTaskAction(await createTask(task)))
+        try {
+            dispatch(createTaskAction(await createTask(task)))
+        } catch (e) {
+            handleServerException(e)
+        }
     },
 
     updateTask: (id: number, task) => async (dispatch) => {
-        dispatch(updateTaskAction(await updateTask(id, task)))
+        try {
+            dispatch(updateTaskAction(await updateTask(id, task)))
+        } catch (e) {
+            handleServerException(e)
+        }
     },
 
     closeOrUndoCloseTask: (id: number, newValueOfTaskIsClosed: boolean) => async (dispatch) => {
-        if (newValueOfTaskIsClosed) {
-            dispatch(closeTaskAction(await closeTask(id)))
-        } else {
-            dispatch(undoCloseTaskAction(await undoCloseTask(id)))
+        try {
+            if (newValueOfTaskIsClosed) {
+                dispatch(closeTaskAction(await closeTask(id)))
+            } else {
+                dispatch(undoCloseTaskAction(await undoCloseTask(id)))
+            }
+        } catch (e) {
+            handleServerException(e)
         }
     },
 
     toggleOpenClosedTasks: (closed: boolean) => (dispatch) => {
-        dispatch(toggleOpenClosedTasksAction(closed))
+        try {
+            dispatch(toggleOpenClosedTasksAction(closed))
+        } catch (e) {
+            handleServerException(e)
+        }
     },
 
     showError: () => () => {

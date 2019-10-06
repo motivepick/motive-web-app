@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
+import { Router } from 'react-router-dom'
+import createBrowserHistory from 'history/createBrowserHistory'
 import { CookiesProvider } from 'react-cookie'
 import { Provider } from 'react-redux'
 import { applyMiddleware, createStore } from 'redux'
@@ -58,13 +59,15 @@ const setUpLocale = () => {
 
 setUpLocale()
 
+export const history = createBrowserHistory()
+
 ReactDOM.render(
     <CookiesProvider>
         <Provider store={store}>
             <I18nextProvider i18n={i18n}>
-                <BrowserRouter>
+                <Router history={history}>
                     <Routes/>
-                </BrowserRouter>
+                </Router>
             </I18nextProvider>
         </Provider>
     </CookiesProvider>, document.getElementById('root'))
