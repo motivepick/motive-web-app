@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Redirect, Route } from 'react-router-dom'
-import { withCookies } from 'react-cookie'
+import { Route } from 'react-router-dom'
 import { Container } from 'reactstrap'
 import { translate } from 'react-i18next'
 
@@ -16,11 +15,10 @@ class Routes extends PureComponent {
             <Container>
                 <Route exact={true} path="/" component={TaskView}/>
                 <Route path="/login" component={LoginView}/>
-                <Route path="/login-success" render={() => <Redirect to="/"/>}/>
                 <Route path="/privacy" component={PrivacyView}/>
             </Container>
         )
     }
 }
 
-export default withCookies(translate('translations')(Routes))
+export default translate('translations')(Routes)
