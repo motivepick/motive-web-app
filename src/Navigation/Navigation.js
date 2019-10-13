@@ -3,7 +3,8 @@ import { DropdownItem, DropdownMenu, DropdownToggle, i, Nav, Navbar, NavbarBrand
 import logo from '../logo.png'
 import { translate } from 'react-i18next'
 import { withCookies } from 'react-cookie'
-import { API_URL, COOKIE_DOMAIN, COOKIE_PATH } from '../const'
+import { logout } from '../services/logoutService'
+import { API_URL } from '../const'
 
 class Navigation extends PureComponent {
 
@@ -47,10 +48,9 @@ class Navigation extends PureComponent {
         window.location.href = `${API_URL}/oauth2/authorization/facebook`
     }
 
-    handleLogout = () => {
-        const { cookies, history } = this.props
-        cookies.remove('SESSION', { domain: COOKIE_DOMAIN, path: COOKIE_PATH })
-        history.push('/login')
+    handleLogout = async () => {
+        await logout()
+        this.props.history.push('/login')
     }
 }
 
