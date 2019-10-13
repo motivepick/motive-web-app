@@ -3,8 +3,7 @@ import { DropdownItem, DropdownMenu, DropdownToggle, i, Nav, Navbar, NavbarBrand
 import logo from '../logo.png'
 import { translate } from 'react-i18next'
 import { withCookies } from 'react-cookie'
-import { logout } from '../services/logoutService'
-import { API_URL } from '../const'
+import { API_URL, COOKIE_DOMAIN, COOKIE_PATH } from '../const'
 
 class Navigation extends PureComponent {
 
@@ -48,9 +47,11 @@ class Navigation extends PureComponent {
         window.location.href = `${API_URL}/oauth2/authorization/facebook`
     }
 
+    // TODO: fix cookie removal on logout and do not remove them via JavaScript
     handleLogout = async () => {
-        await logout()
-        this.props.history.push('/login')
+        const { cookies, history } = this.props
+        cookies.remove('MOTIVE_SESSION', { domain: COOKIE_DOMAIN, path: COOKIE_PATH })
+        history.push('/login')
     }
 }
 
