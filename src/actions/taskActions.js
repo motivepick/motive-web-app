@@ -1,4 +1,3 @@
-export const SET_TASK = 'SET_TASK'
 export const CHANGE_TASK_DESCRIPTION = 'CHANGE_TASK_DESCRIPTION'
 export const UPDATE_USER_TASKS = 'UPDATE_USER_TASKS'
 export const CREATE_TASK = 'CREATE_TASK'
@@ -8,8 +7,6 @@ export const TOGGLE_OPEN_CLOSED_TASKS = 'TOGGLE_OPEN_CLOSED_TASKS'
 export const UPDATE_TASK = 'UPDATE_TASK'
 export const DELETE_TASK = 'DELETE_TASK'
 export const RESET = 'RESET'
-
-export const setTaskAction = task => ({ type: SET_TASK, payload: task })
 
 export const changeTaskDescriptionAction = description => ({ type: CHANGE_TASK_DESCRIPTION, payload: description })
 

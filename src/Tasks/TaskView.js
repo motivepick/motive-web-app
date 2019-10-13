@@ -16,22 +16,25 @@ import {
     undoCloseTaskAction,
     updateTaskAction,
     updateUserTasksAction
-} from '../actions/tasksActions'
+} from '../actions/taskActions'
 import { closeTask, createTask, searchUserTasks, undoCloseTask, updateTask } from '../services/taskService'
 import { handleServerException } from '../utils/exceptionHandler'
+import { fetchUser } from '../services/userService'
+import { updateUserAction } from '../actions/userActions'
 
 class TaskView extends PureComponent {
 
     componentDidMount() {
-        const { updateUserTasks } = this.props
+        const { updateUser, updateUserTasks } = this.props
+        updateUser()
         updateUserTasks()
     }
 
     render() {
-        const { tasks, initialized, closed, updateTask, toggleOpenClosedTasks, t } = this.props
+        const { user, tasks, initialized, closed, updateTask, toggleOpenClosedTasks, t } = this.props
         return (
             <Fragment>
-                <Navigation history={this.props.history}/>
+                <Navigation history={this.props.history} user={user}/>
                 <div>
                     <Row style={{ marginTop: '10px' }}>
                         <Col>
@@ -78,6 +81,14 @@ class TaskView extends PureComponent {
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
+
+    updateUser: () => async (dispatch) => {
+        try {
+            dispatch(updateUserAction(await fetchUser()))
+        } catch (e) {
+            handleServerException(e)
+        }
+    },
 
     updateUserTasks: () => async (dispatch) => {
         try {
@@ -128,6 +139,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 }, dispatch)
 
 const mapStateToProps = state => ({
+    user: state.user.user,
     tasks: state.tasks.closed ? state.tasks.tasks.filter(t => t.closed) : state.tasks.tasks.filter(t => !t.closed),
     initialized: state.tasks.initialized,
     closed: state.tasks.closed

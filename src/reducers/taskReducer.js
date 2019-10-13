@@ -4,12 +4,11 @@ import {
     CREATE_TASK,
     DELETE_TASK,
     RESET,
-    SET_TASK,
     TOGGLE_OPEN_CLOSED_TASKS,
     UNDO_CLOSE_TASK,
     UPDATE_TASK,
     UPDATE_USER_TASKS
-} from '../actions/tasksActions'
+} from '../actions/taskActions'
 
 const INITIAL_STATE = {
     task: {},
@@ -20,9 +19,7 @@ const INITIAL_STATE = {
 
 export default function (state = INITIAL_STATE, action) {
     const { type, payload } = action
-    if (type === SET_TASK) {
-        return { ...state, task: payload }
-    } else if (type === CHANGE_TASK_DESCRIPTION) {
+    if (type === CHANGE_TASK_DESCRIPTION) {
         const task = { ...state.task, description: payload }
         return { ...state, task }
     } else if (type === CREATE_TASK) {

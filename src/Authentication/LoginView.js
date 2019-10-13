@@ -29,13 +29,20 @@ class LoginView extends PureComponent {
                     </Row>
                     <Row style={{ marginTop: '30px', marginBottom: '10px' }}>
                         <Col className="text-center">
-                            <Button color={'primary'} href={`${API_URL}/oauth2/authorization/vk`} style={{ margin: '0 5px 10px 0' }}>
+                            <Button color="primary" href={`${API_URL}/oauth2/authorization/vk`} style={{ margin: '0 5px 10px 0' }}>
                                 <i className="fa fa-vk" style={{ marginRight: '1em' }}/>
                                 {t('login.vk')}
                             </Button>
-                            <Button color={'secondary'} href={`${API_URL}/oauth2/authorization/facebook`} style={{ margin: '0 0 10px 5px' }}>
+                            <Button color="secondary" href={`${API_URL}/oauth2/authorization/facebook`} style={{ margin: '0 0 10px 5px' }}>
                                 <i className="fa fa-facebook-square" style={{ marginRight: '1em' }}/>
                                 {t('login.facebook')}
+                            </Button>
+                        </Col>
+                    </Row>
+                    <Row style={{ marginTop: '10px', marginBottom: '10px' }}>
+                        <Col className="text-center">
+                            <Button color="link" href={`${API_URL}/temporary/login`} style={{ margin: '0 5px 10px 0' }}>
+                                {t('tryWithoutLogin')}
                             </Button>
                         </Col>
                     </Row>
