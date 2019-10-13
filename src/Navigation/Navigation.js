@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { DropdownItem, DropdownMenu, DropdownToggle, Nav, Navbar, NavbarBrand, UncontrolledDropdown } from 'reactstrap'
+import { DropdownItem, DropdownMenu, DropdownToggle, i, Nav, Navbar, NavbarBrand, UncontrolledDropdown } from 'reactstrap'
 import logo from '../logo.png'
 import { translate } from 'react-i18next'
 import { withCookies } from 'react-cookie'
@@ -16,11 +16,22 @@ class Navigation extends PureComponent {
                 </NavbarBrand>
                 <Nav className="ml-auto" navbar>
                     <UncontrolledDropdown>
-                        <DropdownToggle nav>{user.temporary ? 'Temporary User' : user.name}</DropdownToggle>
+                        <DropdownToggle nav>
+                            <i className="fa fa-bars"/>
+                        </DropdownToggle>
                         <DropdownMenu right>
-                            {user.temporary && <DropdownItem onClick={this.handleVkLogin}>{t('login.vk')}</DropdownItem>}
-                            {user.temporary && <DropdownItem onClick={this.handleFacebookLogin}>{t('login.facebook')}</DropdownItem>}
-                            <DropdownItem onClick={this.handleLogout}>{user.temporary ? t('deleteTasksAndLogout') : t('logout')}</DropdownItem>
+                            {user.temporary &&
+                            <DropdownItem onClick={this.handleVkLogin}>
+                                <i className="fa fa-vk" style={{ marginRight: '0.1em' }}/> {t('login.vk')}
+                            </DropdownItem>}
+                            {user.temporary &&
+                            <DropdownItem onClick={this.handleFacebookLogin}>
+                                <i className="fa fa-facebook-square" style={{ marginRight: '0.1em' }}/> {t('login.facebook')}
+                            </DropdownItem>}
+                            <DropdownItem className={user.temporary ? 'text-danger' : ''} onClick={this.handleLogout}>
+                                <i className="fa fa-sign-out" style={{ marginRight: '0.3em' }}/>
+                                {user.temporary ? t('deleteTasksAndLogout') : t('logout')}
+                            </DropdownItem>
                         </DropdownMenu>
                     </UncontrolledDropdown>
                 </Nav>
