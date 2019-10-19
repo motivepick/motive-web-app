@@ -6,6 +6,7 @@ import './Task.css'
 import { handleDueDateOf } from '../utils/taskUtils'
 import { translate } from 'react-i18next'
 import { CustomInput } from './CustomInput'
+import { format } from '../utils/dateFormat'
 
 class Task extends PureComponent {
 
@@ -39,7 +40,7 @@ class Task extends PureComponent {
                             {dueDate &&
                             <div onClick={this.handleTaskClick} className={`task-name ${Task.classOf(dueDate)}`}
                                  style={{ flexGrow: '0', flexBasis: '1', paddingTop: '.32rem' }}>
-                                <small>{Task.format(dueDate)}</small>
+                                <small>{format(dueDate)}</small>
                             </div>}
                         </div>
                         {this.state.opened && <Row>
@@ -93,10 +94,6 @@ class Task extends PureComponent {
         } else {
             return ''
         }
-    }
-
-    static format(dueDate) {
-        return dueDate.local().calendar()
     }
 }
 

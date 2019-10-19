@@ -25,3 +25,8 @@ export const updateTask = async (taskId, task) => {
     const response = await request.put(`${API_URL}/tasks/${taskId}`).send(task).withCredentials()
     return response.body
 }
+
+export const searchSchedule = async () => {
+    const response = await request.get(`${API_URL}/schedule`).withCredentials()
+    return response.body
+}

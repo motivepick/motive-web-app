@@ -15,19 +15,20 @@ import {
     toggleOpenClosedTasksAction,
     undoCloseTaskAction,
     updateTaskAction,
-    updateUserTasksAction
+    updateTasksAction
 } from '../actions/taskActions'
 import { closeTask, createTask, searchUserTasks, undoCloseTask, updateTask } from '../services/taskService'
 import { handleServerException } from '../utils/exceptionHandler'
 import { fetchUser } from '../services/userService'
 import { updateUserAction } from '../actions/userActions'
+import Footer from '../component/Footer'
 
 class TaskView extends PureComponent {
 
     componentDidMount() {
-        const { updateUser, updateUserTasks } = this.props
+        const { updateUser, updateTasks } = this.props
         updateUser()
-        updateUserTasks()
+        updateTasks()
     }
 
     render() {
@@ -38,9 +39,8 @@ class TaskView extends PureComponent {
                 <div>
                     <Row style={{ marginTop: '10px' }}>
                         <Col>
-                            <Input type="text" placeholder={t('new.task')}
-                                   onKeyPress={this.onAddNewTask} autoFocus={isBrowser}
-                                   innerRef={input => this.taskNameInput = input}/>
+                            <Input type="text" placeholder={t('new.task')} onKeyPress={this.onAddNewTask} autoFocus={isBrowser}
+                                innerRef={input => this.taskNameInput = input}/>
                         </Col>
                     </Row>
                     {initialized ? <Fragment>
@@ -48,11 +48,12 @@ class TaskView extends PureComponent {
                         <div>
                             {tasks.map(task =>
                                 <Task key={task.id} id={task.id} name={task.name} description={task.description}
-                                      dueDate={task.dueDate} closed={task.closed} onTaskClose={this.onTaskClose} saveTask={updateTask}/>
+                                    dueDate={task.dueDate} closed={task.closed} onTaskClose={this.onTaskClose} saveTask={updateTask}/>
                             )}
                         </div>
                     </Fragment> : <SpinnerView/>}
                 </div>
+                <Footer/>
             </Fragment>
         )
     }
@@ -90,9 +91,9 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         }
     },
 
-    updateUserTasks: () => async (dispatch) => {
+    updateTasks: () => async (dispatch) => {
         try {
-            dispatch(updateUserTasksAction(await searchUserTasks()))
+            dispatch(updateTasksAction(await searchUserTasks()))
         } catch (e) {
             handleServerException(e)
         }
@@ -132,9 +133,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         } catch (e) {
             handleServerException(e)
         }
-    },
-
-    showError: () => () => {
     }
 }, dispatch)
 

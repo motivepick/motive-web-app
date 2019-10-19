@@ -22,7 +22,9 @@ i18n.use(LanguageDetector).init({
                 'showOpenTasks': 'Show open',
                 'showClosedTasks': 'Show closed',
                 'allTasks': 'Tasks',
-                'schedule': 'Schedule'
+                'schedule': 'Schedule',
+                'futureTasks': 'Future Tasks',
+                'overdueTasks': 'Overdue Tasks'
             }
         },
         ru: {
@@ -45,7 +47,9 @@ i18n.use(LanguageDetector).init({
                 'showOpenTasks': 'Показать открытые',
                 'showClosedTasks': 'Показать закрытые',
                 'allTasks': 'Задачи',
-                'schedule': 'Расписание'
+                'schedule': 'Расписание',
+                'futureTasks': 'Будущие задачи',
+                'overdueTasks': 'Просроченные задачи'
             }
         },
         zh: {
@@ -66,7 +70,9 @@ i18n.use(LanguageDetector).init({
                 'showOpenTasks': '顯示進行中事項',
                 'showClosedTasks': '顯示已完成事項',
                 'allTasks': 'Tasks',
-                'schedule': 'Schedule'
+                'schedule': 'Schedule',
+                'futureTasks': 'Future Tasks',
+                'overdueTasks': 'Overdue Tasks'
             }
         }
     },

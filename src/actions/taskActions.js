@@ -1,11 +1,11 @@
-export const UPDATE_USER_TASKS = 'UPDATE_USER_TASKS'
+export const UPDATE_TASKS = 'UPDATE_TASKS'
 export const CREATE_TASK = 'CREATE_TASK'
 export const CLOSE_TASK = 'CLOSE_TASK'
 export const UNDO_CLOSE_TASK = 'UNDO_CLOSE_TASK'
 export const TOGGLE_OPEN_CLOSED_TASKS = 'TOGGLE_OPEN_CLOSED_TASKS'
 export const UPDATE_TASK = 'UPDATE_TASK'
 
-export const updateUserTasksAction = tasks => ({ type: UPDATE_USER_TASKS, payload: tasks })
+export const updateTasksAction = tasks => ({ type: UPDATE_TASKS, payload: tasks })
 
 export const createTaskAction = task => ({ type: CREATE_TASK, payload: task })
 

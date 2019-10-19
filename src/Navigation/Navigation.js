@@ -18,10 +18,14 @@ class Navigation extends PureComponent {
                     <ul className="navbar-nav mr-auto">
                         {/* TODO: make active work again */}
                         <li className="nav-item">
-                            <Link className="nav-link" to='/'>{t('allTasks')}</Link>
+                            <Link className="nav-link" to='/'>
+                                {t('allTasks')}
+                            </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to='/schedule'>{t('schedule')}</Link>
+                            <Link className="nav-link" to='/schedule'>
+                                {t('schedule')}
+                            </Link>
                         </li>
                     </ul>
                     <ul className="navbar-nav ml-auto">
