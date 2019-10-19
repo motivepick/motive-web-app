@@ -20,7 +20,9 @@ i18n.use(LanguageDetector).init({
                 'numberOfTasks': '{{count}} task',
                 'numberOfTasks_plural': '{{count}} tasks',
                 'showOpenTasks': 'Show open',
-                'showClosedTasks': 'Show closed'
+                'showClosedTasks': 'Show closed',
+                'allTasks': 'Tasks',
+                'schedule': 'Schedule'
             }
         },
         ru: {
@@ -41,7 +43,9 @@ i18n.use(LanguageDetector).init({
                 'numberOfTasks_1': '{{count}} задачи',
                 'numberOfTasks_2': '{{count}} задач',
                 'showOpenTasks': 'Показать открытые',
-                'showClosedTasks': 'Показать закрытые'
+                'showClosedTasks': 'Показать закрытые',
+                'allTasks': 'Задачи',
+                'schedule': 'Расписание'
             }
         },
         zh: {
@@ -60,7 +64,9 @@ i18n.use(LanguageDetector).init({
                 'privacyPolicy': 'Privacy Policy',
                 'numberOfTasks': '{{count}} 個待辦事項',
                 'showOpenTasks': '顯示進行中事項',
-                'showClosedTasks': '顯示已完成事項'
+                'showClosedTasks': '顯示已完成事項',
+                'allTasks': 'Tasks',
+                'schedule': 'Schedule'
             }
         }
     },

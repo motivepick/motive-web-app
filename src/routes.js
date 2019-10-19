@@ -7,6 +7,7 @@ import './App.css'
 import TaskView from './Tasks/TaskView'
 import LoginView from './Authentication/LoginView'
 import PrivacyView from './PrivacyView'
+import ScheduleView from './Schedule/ScheduleView'
 
 class Routes extends PureComponent {
 
@@ -14,6 +15,7 @@ class Routes extends PureComponent {
         return (
             <Container>
                 <Route exact={true} path="/" component={TaskView}/>
+                <Route exact={true} path="/schedule" component={ScheduleView}/>
                 <Route path="/login" component={LoginView}/>
                 <Route path="/privacy" component={PrivacyView}/>
             </Container>
