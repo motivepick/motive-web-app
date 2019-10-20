@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Input } from 'reactstrap'
+import Textarea from 'react-textarea-autosize'
 
 export class CustomInput extends Component {
 
@@ -10,11 +11,13 @@ export class CustomInput extends Component {
     }
 
     render() {
-        const { type, placeholder, saveOnEnter, onSave } = this.props
+        const { type, placeholder, onSave } = this.props
         const { value } = this.state
         return (
-            <Input type={type} placeholder={placeholder} value={value} onChange={this.handleValueChange} onBlur={() => onSave(value)}
-                   onKeyPress={target => saveOnEnter && target.charCode === 13 && this.blurAndSave(value)} innerRef={input => this.taskNameInput = input}/>
+            type === 'textarea' ? <Textarea placeholder={placeholder} value={value} onChange={this.handleValueChange} minRows="3" maxRows="15"
+                    onBlur={() => onSave(value)} innerRef={input => this.taskNameInput = input} className="form-control"/> :
+                <Input type={type} placeholder={placeholder} value={value} onChange={this.handleValueChange} onBlur={() => onSave(value)}
+                    onKeyPress={target => target.charCode === 13 && this.blurAndSave(value)} innerRef={input => this.taskNameInput = input}/>
         )
     }
 

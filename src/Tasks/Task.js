@@ -34,12 +34,12 @@ class Task extends PureComponent {
                                 </Button>
                             </div>
                             <div onClick={this.handleTaskClick} className="task-name"
-                                 style={{ flexGrow: '1', flexBasis: '0', paddingTop: '.40rem' }}>
+                                style={{ flexGrow: '1', flexBasis: '0', paddingTop: '.40rem' }}>
                                 {this.props.name}
                             </div>
                             {dueDate &&
                             <div onClick={this.handleTaskClick} className={`task-name ${Task.classOf(dueDate)}`}
-                                 style={{ flexGrow: '0', flexBasis: '1', paddingTop: '.32rem' }}>
+                                style={{ flexGrow: '0', flexBasis: '1', paddingTop: '.32rem' }}>
                                 <small>{format(dueDate)}</small>
                             </div>}
                         </div>
@@ -47,7 +47,7 @@ class Task extends PureComponent {
                             <Col>
                                 <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
                                     <FormGroup>
-                                        <CustomInput type="text" value={name} dueDate={dueDate} saveOnEnter onSave={this.saveName}/>
+                                        <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName}/>
                                     </FormGroup>
                                     <FormGroup style={{ marginBottom: '0' }}>
                                         <CustomInput type="textarea" placeholder={t('task.description')} value={description} onSave={this.saveDescription}/>
