@@ -3,13 +3,12 @@ import { connect } from 'react-redux'
 import Navigation from '../Navigation/Navigation'
 import { translate } from 'react-i18next'
 import { bindActionCreators } from 'redux'
-import { closeTaskAction, undoCloseTaskAction, updateTaskAction } from '../actions/taskActions'
-import { closeTask, searchSchedule, undoCloseTask, updateTask } from '../services/taskService'
+import { closeTask, searchSchedule, updateTask } from '../services/taskService'
 import { handleServerException } from '../utils/exceptionHandler'
 import { fetchUser } from '../services/userService'
 import { setUserAction } from '../actions/userActions'
 import Footer from '../component/Footer'
-import { setScheduleAction } from '../actions/scheduleActions'
+import { closeScheduleTaskAction, setScheduleAction, updateScheduleTaskAction } from '../actions/scheduleActions'
 import ScheduleHeader from '../component/ScheduleHeader'
 import Task from '../Tasks/Task'
 import SpinnerView from '../SpinnerView'
@@ -23,7 +22,7 @@ class ScheduleView extends PureComponent {
     }
 
     render() {
-        const { user, schedule, initialized, t } = this.props
+        const { user, schedule, initialized, updateScheduleTask, t } = this.props
         const { week } = schedule
         return (
             <Fragment>
@@ -36,7 +35,7 @@ class ScheduleView extends PureComponent {
                                 <div>
                                     {week[day].map(task =>
                                         <Task key={task.id} id={task.id} name={task.name} description={task.description}
-                                            dueDate={task.dueDate} closed={task.closed} onTaskClose={this.onTaskClose} saveTask={updateTask}/>
+                                            dueDate={task.dueDate} closed={task.closed} onTaskClose={this.onTaskClose} saveTask={updateScheduleTask}/>
                                     )}
                                 </div>
                             </Fragment>
@@ -47,7 +46,7 @@ class ScheduleView extends PureComponent {
                         <div>
                             {schedule.future.map(task =>
                                 <Task key={task.id} id={task.id} name={task.name} description={task.description}
-                                    dueDate={task.dueDate} closed={task.closed} onTaskClose={this.onTaskClose} saveTask={updateTask}/>
+                                    dueDate={task.dueDate} closed={task.closed} onTaskClose={this.onTaskClose} saveTask={updateScheduleTask}/>
                             )}
                         </div>
                     </Fragment>}
@@ -56,7 +55,7 @@ class ScheduleView extends PureComponent {
                         <div>
                             {schedule.overdue.map(task =>
                                 <Task key={task.id} id={task.id} name={task.name} description={task.description}
-                                    dueDate={task.dueDate} closed={task.closed} onTaskClose={this.onTaskClose} saveTask={updateTask}/>
+                                    dueDate={task.dueDate} closed={task.closed} onTaskClose={this.onTaskClose} saveTask={updateScheduleTask}/>
                             )}
                         </div>
                     </Fragment>}
@@ -66,9 +65,9 @@ class ScheduleView extends PureComponent {
         )
     }
 
-    onTaskClose = (id, newValueOfTaskIsClosed) => {
-        const { closeOrUndoCloseTask } = this.props
-        closeOrUndoCloseTask(id, newValueOfTaskIsClosed)
+    onTaskClose = (id) => {
+        const { closeScheduleTask } = this.props
+        closeScheduleTask(id)
     }
 }
 
@@ -90,21 +89,17 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         }
     },
 
-    updateTask: (id: number, task) => async (dispatch) => {
+    updateScheduleTask: (id: number, task) => async (dispatch) => {
         try {
-            dispatch(updateTaskAction(await updateTask(id, task)))
+            dispatch(updateScheduleTaskAction(await updateTask(id, task)))
         } catch (e) {
             handleServerException(e)
         }
     },
 
-    closeOrUndoCloseTask: (id: number, newValueOfTaskIsClosed: boolean) => async (dispatch) => {
+    closeScheduleTask: (id: number) => async (dispatch) => {
         try {
-            if (newValueOfTaskIsClosed) {
-                dispatch(closeTaskAction(await closeTask(id)))
-            } else {
-                dispatch(undoCloseTaskAction(await undoCloseTask(id)))
-            }
+            dispatch(closeScheduleTaskAction(await closeTask(id)))
         } catch (e) {
             handleServerException(e)
         }
