@@ -1,3 +1,3 @@
-export const UPDATE_SCHEDULE = 'UPDATE_SCHEDULE'
+export const SET_SCHEDULE = 'SET_SCHEDULE'
 
-export const updateScheduleAction = schedule => ({ type: UPDATE_SCHEDULE, payload: schedule })
+export const setScheduleAction = schedule => ({ type: SET_SCHEDULE, payload: schedule })

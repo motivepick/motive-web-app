@@ -7,27 +7,28 @@ import { closeTaskAction, undoCloseTaskAction, updateTaskAction } from '../actio
 import { closeTask, searchSchedule, undoCloseTask, updateTask } from '../services/taskService'
 import { handleServerException } from '../utils/exceptionHandler'
 import { fetchUser } from '../services/userService'
-import { updateUserAction } from '../actions/userActions'
+import { setUserAction } from '../actions/userActions'
 import Footer from '../component/Footer'
-import { updateScheduleAction } from '../actions/scheduleActions'
+import { setScheduleAction } from '../actions/scheduleActions'
 import ScheduleHeader from '../component/ScheduleHeader'
 import Task from '../Tasks/Task'
+import SpinnerView from '../SpinnerView'
 
 class ScheduleView extends PureComponent {
 
     componentDidMount() {
-        const { updateUser, updateSchedule } = this.props
-        updateUser()
-        updateSchedule()
+        const { setUser, setSchedule } = this.props
+        setUser()
+        setSchedule()
     }
 
     render() {
-        const { user, schedule, t } = this.props
+        const { user, schedule, initialized, t } = this.props
         const { week } = schedule
         return (
             <Fragment>
                 <Navigation history={this.props.history} user={user}/>
-                <div>
+                {initialized ? <div>
                     {Object.keys(week).filter(day => week[day].length > 0).map(day => {
                         return (
                             <Fragment key={day}>
@@ -59,7 +60,7 @@ class ScheduleView extends PureComponent {
                             )}
                         </div>
                     </Fragment>}
-                </div>
+                </div> : <SpinnerView/>}
                 <Footer/>
             </Fragment>
         )
@@ -73,17 +74,17 @@ class ScheduleView extends PureComponent {
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
 
-    updateUser: () => async (dispatch) => {
+    setUser: () => async (dispatch) => {
         try {
-            dispatch(updateUserAction(await fetchUser()))
+            dispatch(setUserAction(await fetchUser()))
         } catch (e) {
             handleServerException(e)
         }
     },
 
-    updateSchedule: () => async (dispatch) => {
+    setSchedule: () => async (dispatch) => {
         try {
-            dispatch(updateScheduleAction(await searchSchedule()))
+            dispatch(setScheduleAction(await searchSchedule()))
         } catch (e) {
             handleServerException(e)
         }
@@ -112,10 +113,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 
 const mapStateToProps = state => ({
     user: state.user.user,
-    tasks: state.tasks.closed ? state.tasks.tasks.filter(t => t.closed) : state.tasks.tasks.filter(t => !t.closed),
-    initialized: state.tasks.initialized,
-    closed: state.tasks.closed,
-    schedule: state.schedule.schedule
+    schedule: state.schedule.schedule,
+    initialized: state.schedule.initialized
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(translate('translations')(ScheduleView))

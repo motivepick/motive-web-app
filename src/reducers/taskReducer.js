@@ -1,4 +1,4 @@
-import { CLOSE_TASK, CREATE_TASK, TOGGLE_OPEN_CLOSED_TASKS, UNDO_CLOSE_TASK, UPDATE_TASK, UPDATE_TASKS } from '../actions/taskActions'
+import { CLOSE_TASK, CREATE_TASK, SET_TASKS, TOGGLE_OPEN_CLOSED_TASKS, UNDO_CLOSE_TASK, UPDATE_TASK } from '../actions/taskActions'
 
 const INITIAL_STATE = {
     task: {},
@@ -11,7 +11,7 @@ export default function (state = INITIAL_STATE, action) {
     const { type, payload } = action
     if (type === CREATE_TASK) {
         return { ...state, tasks: [payload, ...state.tasks] }
-    } else if (type === UPDATE_TASKS) {
+    } else if (type === SET_TASKS) {
         return { ...state, tasks: payload, initialized: true }
     } else if (type === CLOSE_TASK) {
         const { id, closingDate } = payload

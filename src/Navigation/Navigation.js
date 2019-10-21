@@ -15,7 +15,7 @@ class Navigation extends PureComponent {
                     <img src={logo} width="30" height="30" className="d-inline-block align-top" alt="Motive Logo"/>
                 </NavbarBrand>
                 <div className="collapse navbar-collapse">
-                    <ul className="navbar-nav mr-auto" style={{ display: 'none' }}>
+                    <ul className="navbar-nav mr-auto">
                         {/* TODO: make active work again */}
                         <li className="nav-item">
                             <Link className="nav-link" to='/'>

@@ -9,26 +9,19 @@ import SpinnerView from '../SpinnerView'
 import { isBrowser } from 'react-device-detect'
 import TasksSubtitle from './TasksSubtitle'
 import { bindActionCreators } from 'redux'
-import {
-    closeTaskAction,
-    createTaskAction,
-    toggleOpenClosedTasksAction,
-    undoCloseTaskAction,
-    updateTaskAction,
-    updateTasksAction
-} from '../actions/taskActions'
+import { closeTaskAction, createTaskAction, setTasksAction, toggleOpenClosedTasksAction, undoCloseTaskAction, updateTaskAction } from '../actions/taskActions'
 import { closeTask, createTask, searchUserTasks, undoCloseTask, updateTask } from '../services/taskService'
 import { handleServerException } from '../utils/exceptionHandler'
 import { fetchUser } from '../services/userService'
-import { updateUserAction } from '../actions/userActions'
+import { setUserAction } from '../actions/userActions'
 import Footer from '../component/Footer'
 
 class TaskView extends PureComponent {
 
     componentDidMount() {
-        const { updateUser, updateTasks } = this.props
-        updateUser()
-        updateTasks()
+        const { setUser, setTasks } = this.props
+        setUser()
+        setTasks()
     }
 
     render() {
@@ -83,17 +76,17 @@ class TaskView extends PureComponent {
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
 
-    updateUser: () => async (dispatch) => {
+    setUser: () => async (dispatch) => {
         try {
-            dispatch(updateUserAction(await fetchUser()))
+            dispatch(setUserAction(await fetchUser()))
         } catch (e) {
             handleServerException(e)
         }
     },
 
-    updateTasks: () => async (dispatch) => {
+    setTasks: () => async (dispatch) => {
         try {
-            dispatch(updateTasksAction(await searchUserTasks()))
+            dispatch(setTasksAction(await searchUserTasks()))
         } catch (e) {
             handleServerException(e)
         }

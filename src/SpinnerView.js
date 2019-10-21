@@ -10,7 +10,9 @@ class SpinnerView extends PureComponent {
             <div>
                 <Row style={{ marginTop: '150px', marginBottom: '10px' }}>
                     <Col className="text-center">
-                        <small>{t('loading')}</small>
+                        <div className="spinner-grow text-secondary" role="status">
+                            <span className="sr-only">{t('loading')}</span>
+                        </div>
                     </Col>
                 </Row>
             </div>
