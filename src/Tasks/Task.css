@@ -40,3 +40,28 @@
 .incomplete-circle {
     border: .1rem solid #000;
 }
+
+.check-mark {
+    display: inline-block;
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+    transform: rotate(45deg);
+}
+
+.check-mark-stem-closed {
+    position: absolute;
+    width: 3px;
+    height: 9px;
+    background-color: #8E8E93;
+    left: 11px;
+    top: 6px;
+}
+
+.check-mark-kick-closed {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background-color: #8E8E93;
+    left: 8px;
+    top: 12px;
+}

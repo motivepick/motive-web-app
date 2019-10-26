@@ -7,6 +7,7 @@ import { handleDueDateOf } from '../utils/taskUtils'
 import { translate } from 'react-i18next'
 import { CustomInput } from './CustomInput'
 import { format } from '../utils/dateFormat'
+import { CheckMark } from '../component/CheckMark'
 
 class Task extends PureComponent {
 
@@ -30,7 +31,7 @@ class Task extends PureComponent {
                         <div style={{ cursor: 'pointer', display: 'flex' }} className="task-name">
                             <div style={{ flexGrow: '0', flexBasis: '0' }}>
                                 <Button color="link" onClick={this.handleTaskClose}>
-                                    <div className={`circle ${closed ? 'complete-circle' : 'incomplete-circle'}`}/>
+                                    <CheckMark closed={closed}/>
                                 </Button>
                             </div>
                             <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`}
