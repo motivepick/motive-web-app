@@ -11,6 +11,10 @@
     padding-right: .4rem;
 }
 
+.task-name .closed {
+    color: #8E8E93
+}
+
 .task-wrapper:first-child .task {
     border-top-left-radius: .25rem;
     border-top-right-radius: .25rem;
@@ -29,10 +33,10 @@
     -webkit-border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
 }
 
-.completeCircle {
-    border: .1rem solid #bbb;
+.complete-circle {
+    border: .1rem solid #8E8E93;
 }
 
-.incompleteCircle {
+.incomplete-circle {
     border: .1rem solid #000;
 }

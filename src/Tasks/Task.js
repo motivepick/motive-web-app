@@ -21,7 +21,7 @@ class Task extends PureComponent {
     state = { opened: false }
 
     render() {
-        const { name, description, t } = this.props
+        const { name, description, closed, t } = this.props
         const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
         return (
             <Row className="task-wrapper">
@@ -30,15 +30,15 @@ class Task extends PureComponent {
                         <div style={{ cursor: 'pointer', display: 'flex' }} className="task-name">
                             <div style={{ flexGrow: '0', flexBasis: '0' }}>
                                 <Button color="link" onClick={this.handleTaskClose}>
-                                    <div className={'circle incompleteCircle'}/>
+                                    <div className={`circle ${closed ? 'complete-circle' : 'incomplete-circle'}`}/>
                                 </Button>
                             </div>
-                            <div onClick={this.handleTaskClick} className="task-name"
+                            <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`}
                                 style={{ flexGrow: '1', flexBasis: '0', paddingTop: '.40rem' }}>
-                                {this.props.name}
+                                {closed ? <del>{this.props.name}</del> : this.props.name}
                             </div>
                             {dueDate &&
-                            <div onClick={this.handleTaskClick} className={`task-name ${Task.classOf(dueDate)}`}
+                            <div onClick={this.handleTaskClick} className={`task-name ${Task.classOf(dueDate, closed)}`}
                                 style={{ flexGrow: '0', flexBasis: '1', paddingTop: '.32rem' }}>
                                 <small>{format(dueDate)}</small>
                             </div>}
@@ -81,8 +81,10 @@ class Task extends PureComponent {
         this.props.saveTask(this.props.id, task)
     }
 
-    static classOf(dueDate) {
-        if (dueDate) {
+    static classOf(dueDate, closed) {
+        if (closed) {
+            return 'closed'
+        } else if (dueDate) {
             const now = new Date()
             if (dueDate.isBefore(now, 'day')) {
                 return 'text-danger'
