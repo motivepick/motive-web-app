@@ -1,6 +1,7 @@
 .task {
-    border: 1px solid rgba(0, 0, 0, .125);
-    margin-bottom: -1px;
+    border-right: 1px solid #ced4da;
+    border-left: 1px solid #ced4da;
+    border-top: 1px solid #ced4da;
     padding: .4rem .2rem;
 }
 
@@ -23,6 +24,7 @@
 .task-wrapper:last-child .task {
     border-bottom-right-radius: .25rem;
     border-bottom-left-radius: .25rem;
+    border-bottom: 1px solid #ced4da;
 }
 
 .circle {
