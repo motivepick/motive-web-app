@@ -1,5 +1,5 @@
 import request from 'superagent'
-import { API_URL } from '../const'
+import { API_URL } from '../config'
 
 export const searchUserTasks = async () => {
     const response = await request.get(`${API_URL}/tasks`).withCredentials()

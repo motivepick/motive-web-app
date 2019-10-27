@@ -25,6 +25,8 @@ export const handleDueDateOf = (task) => {
         return { ...task, name: nameWithoutLastWord(task.name, lastWord), dueDate: moment().endOf('day') }
     } else if (R.contains(lastWord, ['tomorrow', 'завтра'])) {
         return { ...task, name: nameWithoutLastWord(task.name, lastWord), dueDate: moment().add(1, 'days').endOf('day') }
+    } else if (R.contains(lastWord, ['послезавтра'])) {
+        return { ...task, name: nameWithoutLastWord(task.name, lastWord), dueDate: moment().add(2, 'days').endOf('day') }
     } else {
         if (R.contains(lastWord, ALL_DAYS_OF_WEEK) && R.contains(wordBeforeLast, ['on', 'в', 'во'])) {
             const dayOfWeek = R.toPairs(DAYS_OF_WEEK).find(entry => entry[1].includes(lastWord))[0]

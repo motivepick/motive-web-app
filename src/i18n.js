@@ -1,5 +1,6 @@
 import i18n from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
+import { I18N_DEBUG } from './config'
 
 i18n.use(LanguageDetector).init({
     resources: {
@@ -77,7 +78,7 @@ i18n.use(LanguageDetector).init({
         }
     },
     fallbackLng: 'en',
-    debug: true,
+    debug: I18N_DEBUG,
 
     ns: ['translations'],
     defaultNS: 'translations',

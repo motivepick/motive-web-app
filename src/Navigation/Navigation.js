@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { DropdownItem, DropdownMenu, DropdownToggle, i, NavbarBrand, UncontrolledDropdown } from 'reactstrap'
 import logo from '../logo.png'
 import { translate } from 'react-i18next'
-import { API_URL } from '../const'
+import { API_URL } from '../config'
 import { Link } from 'react-router-dom'
 
 class Navigation extends PureComponent {
