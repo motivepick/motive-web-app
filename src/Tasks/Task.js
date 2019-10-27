@@ -19,10 +19,11 @@ class Task extends PureComponent {
         saveTask: PropTypes.func.isRequired
     }
 
-    state = { opened: false }
+    state = { closed: this.props.closed, detailsShown: false }
 
     render() {
-        const { name, description, closed, t } = this.props
+        const { name, description, t } = this.props
+        const { closed } = this.state
         const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
         return (
             <Row className="task-wrapper">
@@ -44,7 +45,7 @@ class Task extends PureComponent {
                                 <small>{format(dueDate)}</small>
                             </div>}
                         </div>
-                        {this.state.opened && <Row>
+                        {this.state.detailsShown && <Row>
                             <Col>
                                 <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
                                     <FormGroup>
@@ -63,13 +64,15 @@ class Task extends PureComponent {
     }
 
     handleTaskClose = async () => {
-        const { id, closed, onTaskClose } = this.props
+        const { id, onTaskClose } = this.props
+        const { closed } = this.state
+        this.setState({ closed: !closed })
         onTaskClose(id, !closed)
     }
 
     handleTaskClick = () => {
-        const { opened } = this.state
-        this.setState({ opened: !opened })
+        const { detailsShown } = this.state
+        this.setState({ detailsShown: !detailsShown })
     }
 
     saveName = (name) => {
