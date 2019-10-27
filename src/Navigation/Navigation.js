@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { DropdownItem, DropdownMenu, DropdownToggle, i, NavbarBrand, UncontrolledDropdown } from 'reactstrap'
 import logo from '../logo.png'
 import { translate } from 'react-i18next'
-import { API_URL } from '../config'
+import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../config'
 import { Link } from 'react-router-dom'
 
 class Navigation extends PureComponent {
@@ -55,11 +55,11 @@ class Navigation extends PureComponent {
     }
 
     handleVkLogin = () => {
-        window.location.href = `${API_URL}/oauth2/authorization/vk`
+        window.location.href = VK_AUTH_URL
     }
 
     handleFacebookLogin = () => {
-        window.location.href = `${API_URL}/oauth2/authorization/facebook`
+        window.location.href = FACEBOOK_AUTH_URL
     }
 
     handleLogout = async () => {

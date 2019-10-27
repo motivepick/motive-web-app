@@ -23,7 +23,7 @@ class ScheduleView extends PureComponent {
     }
 
     render() {
-        const { user, schedule, initialized, updateScheduleTask, t } = this.props
+        const { user, schedule, initialized, closeScheduleTask, updateScheduleTask, t } = this.props
         const { week } = schedule
         return (
             <Fragment>
@@ -36,7 +36,7 @@ class ScheduleView extends PureComponent {
                                 <div>
                                     {week[day].map(task =>
                                         <Task key={task.id} id={task.id} name={task.name} description={task.description}
-                                            dueDate={task.dueDate} closed={task.closed} onTaskClose={this.onTaskClose} saveTask={updateScheduleTask}/>
+                                            dueDate={task.dueDate} closed={task.closed} onTaskClose={closeScheduleTask} saveTask={updateScheduleTask}/>
                                     )}
                                 </div>
                             </Fragment>
@@ -47,7 +47,7 @@ class ScheduleView extends PureComponent {
                         <div>
                             {schedule.future.map(task =>
                                 <Task key={task.id} id={task.id} name={task.name} description={task.description}
-                                    dueDate={task.dueDate} closed={task.closed} onTaskClose={this.onTaskClose} saveTask={updateScheduleTask}/>
+                                    dueDate={task.dueDate} closed={task.closed} onTaskClose={closeScheduleTask} saveTask={updateScheduleTask}/>
                             )}
                         </div>
                     </Fragment>}
@@ -56,7 +56,7 @@ class ScheduleView extends PureComponent {
                         <div>
                             {schedule.overdue.map(task =>
                                 <Task key={task.id} id={task.id} name={task.name} description={task.description}
-                                    dueDate={task.dueDate} closed={task.closed} onTaskClose={this.onTaskClose} saveTask={updateScheduleTask}/>
+                                    dueDate={task.dueDate} closed={task.closed} onTaskClose={closeScheduleTask} saveTask={updateScheduleTask}/>
                             )}
                         </div>
                     </Fragment>}
@@ -64,11 +64,6 @@ class ScheduleView extends PureComponent {
                 <Footer/>
             </Fragment>
         )
-    }
-
-    onTaskClose = (id) => {
-        const { closeScheduleTask } = this.props
-        closeScheduleTask(id)
     }
 }
 
@@ -100,8 +95,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 
     closeScheduleTask: (id: number) => async (dispatch) => {
         try {
-            Promise.all([closeTask(id), delay(DELAY_MS)])
-                .then(values => dispatch(closeScheduleTaskAction(values[0])))
+            const values = await Promise.all([closeTask(id), delay(DELAY_MS)])
+            dispatch(closeScheduleTaskAction(values[0]))
         } catch (e) {
             handleServerException(e)
         }

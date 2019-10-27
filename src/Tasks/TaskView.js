@@ -26,7 +26,7 @@ class TaskView extends PureComponent {
     }
 
     render() {
-        const { user, tasks, initialized, closed, updateTask, toggleOpenClosedTasks, t } = this.props
+        const { user, tasks, initialized, closed, closeOrUndoCloseTask, updateTask, toggleOpenClosedTasks, t } = this.props
         return (
             <Fragment>
                 <Navigation history={this.props.history} user={user}/>
@@ -42,7 +42,7 @@ class TaskView extends PureComponent {
                         <div>
                             {tasks.map(task =>
                                 <Task key={task.id} id={task.id} name={task.name} description={task.description}
-                                    dueDate={task.dueDate} closed={task.closed} onTaskClose={this.onTaskClose} saveTask={updateTask}/>
+                                    dueDate={task.dueDate} closed={task.closed} onTaskClose={closeOrUndoCloseTask} saveTask={updateTask}/>
                             )}
                         </div>
                     </Fragment> : <SpinnerView/>}
@@ -67,11 +67,6 @@ class TaskView extends PureComponent {
                 this.taskNameInput.focus()
             }
         }
-    }
-
-    onTaskClose = (id, newValueOfTaskIsClosed) => {
-        const { closeOrUndoCloseTask } = this.props
-        closeOrUndoCloseTask(id, newValueOfTaskIsClosed)
     }
 }
 
@@ -113,8 +108,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         try {
             const service = newValueOfTaskIsClosed ? closeTask : undoCloseTask
             const action = newValueOfTaskIsClosed ? closeTaskAction : undoCloseTaskAction
-            Promise.all([service(id), delay(DELAY_MS)])
-                .then(values => dispatch(action(values[0])))
+            const values = await Promise.all([service(id), delay(DELAY_MS)])
+            dispatch(action(values[0]))
         } catch (e) {
             handleServerException(e)
         }
