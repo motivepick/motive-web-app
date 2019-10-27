@@ -12,6 +12,7 @@ import { closeScheduleTaskAction, setScheduleAction, updateScheduleTaskAction } 
 import ScheduleHeader from '../component/ScheduleHeader'
 import Task from '../Tasks/Task'
 import SpinnerView from '../SpinnerView'
+import { delay, DELAY_MS } from '../utils/delay'
 
 class ScheduleView extends PureComponent {
 
@@ -99,7 +100,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 
     closeScheduleTask: (id: number) => async (dispatch) => {
         try {
-            dispatch(closeScheduleTaskAction(await closeTask(id)))
+            Promise.all([closeTask(id), delay(DELAY_MS)])
+                .then(values => dispatch(closeScheduleTaskAction(values[0])))
         } catch (e) {
             handleServerException(e)
         }

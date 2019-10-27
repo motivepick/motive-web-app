@@ -15,6 +15,7 @@ import { handleServerException } from '../utils/exceptionHandler'
 import { fetchUser } from '../services/userService'
 import { setUserAction } from '../actions/userActions'
 import Footer from '../component/Footer'
+import { delay, DELAY_MS } from '../utils/delay'
 
 class TaskView extends PureComponent {
 
@@ -110,11 +111,10 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 
     closeOrUndoCloseTask: (id: number, newValueOfTaskIsClosed: boolean) => async (dispatch) => {
         try {
-            if (newValueOfTaskIsClosed) {
-                dispatch(closeTaskAction(await closeTask(id)))
-            } else {
-                dispatch(undoCloseTaskAction(await undoCloseTask(id)))
-            }
+            const service = newValueOfTaskIsClosed ? closeTask : undoCloseTask
+            const action = newValueOfTaskIsClosed ? closeTaskAction : undoCloseTaskAction
+            Promise.all([service(id), delay(DELAY_MS)])
+                .then(values => dispatch(action(values[0])))
         } catch (e) {
             handleServerException(e)
         }
