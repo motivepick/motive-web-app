@@ -4,11 +4,12 @@ import logo from '../logo.png'
 import { translate } from 'react-i18next'
 import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../config'
 import { Link } from 'react-router-dom'
+import { history } from '../index'
 
 class Navigation extends PureComponent {
 
     render() {
-        const { user, t } = this.props
+        const { user, onAllTaskClick, t } = this.props
         return (
             <nav className="navbar navbar-expand navbar-light bg-light">
                 <NavbarBrand href="/">
@@ -18,12 +19,12 @@ class Navigation extends PureComponent {
                     <ul className="navbar-nav mr-auto">
                         {/* TODO: make active work again */}
                         <li className="nav-item">
-                            <Link className="nav-link" to='/'>
+                            <a className="nav-link" onClick={onAllTaskClick ? onAllTaskClick : this.handleAllTaskClick} href="javascript:void(0)">
                                 {t('allTasks')}
-                            </Link>
+                            </a>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to='/schedule'>
+                            <Link className="nav-link" to="/schedule">
                                 {t('schedule')}
                             </Link>
                         </li>
@@ -52,6 +53,10 @@ class Navigation extends PureComponent {
                 </div>
             </nav>
         )
+    }
+
+    handleAllTaskClick = () => {
+        history.push('/')
     }
 
     handleVkLogin = () => {

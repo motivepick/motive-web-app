@@ -16,6 +16,7 @@ import { fetchUser } from '../services/userService'
 import { setUserAction } from '../actions/userActions'
 import Footer from '../component/Footer'
 import { delay, DELAY_MS } from '../utils/delay'
+import { history } from '../index'
 
 class TaskView extends PureComponent {
 
@@ -29,7 +30,7 @@ class TaskView extends PureComponent {
         const { user, tasks, initialized, closed, closeOrUndoCloseTask, updateTask, toggleOpenClosedTasks, t } = this.props
         return (
             <Fragment>
-                <Navigation history={this.props.history} user={user}/>
+                <Navigation history={this.props.history} user={user} onAllTaskClick={this.handleAllTaskClick}/>
                 <div>
                     <Row style={{ marginTop: '10px' }}>
                         <Col>
@@ -66,6 +67,16 @@ class TaskView extends PureComponent {
                 input.disabled = false
                 this.taskNameInput.focus()
             }
+        }
+    }
+
+    handleAllTaskClick = () => {
+        const { location, toggleOpenClosedTasks } = this.props
+        const { pathname } = location
+        if (pathname === '/') {
+            toggleOpenClosedTasks(false)
+        } else {
+            history.push('/')
         }
     }
 }
@@ -116,11 +127,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     },
 
     toggleOpenClosedTasks: (closed: boolean) => (dispatch) => {
-        try {
-            dispatch(toggleOpenClosedTasksAction(closed))
-        } catch (e) {
-            handleServerException(e)
-        }
+        dispatch(toggleOpenClosedTasksAction(closed))
     }
 }, dispatch)
 
