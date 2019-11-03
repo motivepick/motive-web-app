@@ -19,7 +19,7 @@ class Navigation extends PureComponent {
                     <ul className="navbar-nav mr-auto">
                         {/* TODO: make active work again */}
                         <li className="nav-item">
-                            <a className="nav-link" onClick={onAllTaskClick || this.handleAllTaskClick} href="javascript:void(0)">
+                            <a className="nav-link" onClick={onAllTaskClick || this.handleAllTaskClick} style={{ cursor: 'pointer' }}>
                                 {t('allTasks')}
                             </a>
                         </li>
