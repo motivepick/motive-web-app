@@ -8,6 +8,7 @@ import { translate } from 'react-i18next'
 import { CustomInput } from './CustomInput'
 import { format } from '../utils/dateFormat'
 import { CheckMark } from '../component/CheckMark'
+import { Draggable } from 'react-beautiful-dnd'
 
 class Task extends PureComponent {
 
@@ -22,44 +23,49 @@ class Task extends PureComponent {
     state = { closed: this.props.closed, detailsShown: false }
 
     render() {
-        const { name, description, t } = this.props
+        const { id, index, name, description, t } = this.props
         const { closed } = this.state
         const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
         return (
-            <Row className="task-wrapper">
-                <Col>
-                    <div className="task">
-                        <div style={{ cursor: 'pointer', display: 'flex' }} className="task-name">
-                            <div style={{ flexGrow: '0', flexBasis: '0' }}>
-                                <Button color="link" onClick={this.handleTaskClose}>
-                                    <CheckMark closed={closed}/>
-                                </Button>
+            <Draggable draggableId={id.toString()} index={index}>
+                {(provided) => (
+                    <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className="row task-wrapper">
+                        <Col>
+                            <div className="task">
+                                <div style={{ cursor: 'pointer', display: 'flex' }} className="task-name">
+                                    <div style={{ flexGrow: '0', flexBasis: '0' }}>
+                                        <Button color="link" onClick={this.handleTaskClose}>
+                                            <CheckMark closed={closed}/>
+                                        </Button>
+                                    </div>
+                                    <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`}
+                                        style={{ flexGrow: '1', flexBasis: '0', paddingTop: '.40rem' }}>
+                                        {closed ? <del>{this.props.name}</del> : this.props.name}
+                                    </div>
+                                    {dueDate &&
+                                    <div onClick={this.handleTaskClick} className={`task-name ${Task.classOf(dueDate, closed)}`}
+                                        style={{ flexGrow: '0', flexBasis: '1', paddingTop: '.32rem' }}>
+                                        <small>{format(dueDate)}</small>
+                                    </div>}
+                                </div>
+                                {this.state.detailsShown && <Row>
+                                    <Col>
+                                        <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
+                                            <FormGroup>
+                                                <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName}/>
+                                            </FormGroup>
+                                            <FormGroup style={{ marginBottom: '0' }}>
+                                                <CustomInput type="textarea" placeholder={t('task.description')} value={description}
+                                                    onSave={this.saveDescription}/>
+                                            </FormGroup>
+                                        </Form>
+                                    </Col>
+                                </Row>}
                             </div>
-                            <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`}
-                                style={{ flexGrow: '1', flexBasis: '0', paddingTop: '.40rem' }}>
-                                {closed ? <del>{this.props.name}</del> : this.props.name}
-                            </div>
-                            {dueDate &&
-                            <div onClick={this.handleTaskClick} className={`task-name ${Task.classOf(dueDate, closed)}`}
-                                style={{ flexGrow: '0', flexBasis: '1', paddingTop: '.32rem' }}>
-                                <small>{format(dueDate)}</small>
-                            </div>}
-                        </div>
-                        {this.state.detailsShown && <Row>
-                            <Col>
-                                <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
-                                    <FormGroup>
-                                        <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName}/>
-                                    </FormGroup>
-                                    <FormGroup style={{ marginBottom: '0' }}>
-                                        <CustomInput type="textarea" placeholder={t('task.description')} value={description} onSave={this.saveDescription}/>
-                                    </FormGroup>
-                                </Form>
-                            </Col>
-                        </Row>}
+                        </Col>
                     </div>
-                </Col>
-            </Row>
+                )}
+            </Draggable>
         )
     }
 

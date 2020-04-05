@@ -9,7 +9,15 @@ import SpinnerView from '../SpinnerView'
 import { isBrowser } from 'react-device-detect'
 import TasksSubtitle from '../component/TasksSubtitle'
 import { bindActionCreators } from 'redux'
-import { closeTaskAction, createTaskAction, setTasksAction, toggleOpenClosedTasksAction, undoCloseTaskAction, updateTaskAction } from '../actions/taskActions'
+import {
+    closeTaskAction,
+    createTaskAction,
+    setTasksAction,
+    toggleOpenClosedTasksAction,
+    undoCloseTaskAction,
+    updateTaskAction,
+    updateTaskPositionIndexAction
+} from '../actions/taskActions'
 import { closeTask, createTask, searchUserTasks, undoCloseTask, updateTask } from '../services/taskService'
 import { handleServerException } from '../utils/exceptionHandler'
 import { fetchUser } from '../services/userService'
@@ -17,6 +25,7 @@ import { setUserAction } from '../actions/userActions'
 import Footer from '../component/Footer'
 import { delay, DELAY_MS } from '../utils/delay'
 import { history } from '../index'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 
 class TaskView extends PureComponent {
 
@@ -29,7 +38,7 @@ class TaskView extends PureComponent {
     render() {
         const { user, tasks, initialized, closed, closeOrUndoCloseTask, updateTask, toggleOpenClosedTasks, t } = this.props
         return (
-            <Fragment>
+            <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
                 <Navigation history={this.props.history} user={user} onAllTaskClick={this.handleAllTaskClick}/>
                 <div>
                     <Row style={{ marginTop: '10px' }}>
@@ -41,16 +50,35 @@ class TaskView extends PureComponent {
                     {initialized ? <Fragment>
                         <TasksSubtitle numberOfTasks={tasks.length} closed={closed} onToggleOpenClosedTasks={toggleOpenClosedTasks}/>
                         <div>
-                            {tasks.map(task =>
-                                <Task key={task.id} id={task.id} name={task.name} description={task.description}
-                                    dueDate={task.dueDate} closed={task.closed} onTaskClose={closeOrUndoCloseTask} saveTask={updateTask}/>
-                            )}
+                            <Droppable droppableId="tasks">
+                                {provided => (
+                                    <div {...provided.droppableProps} ref={provided.innerRef}>
+                                        {tasks.map((task, index) =>
+                                            <Task key={task.id} index={index} id={task.id} name={task.name} description={task.description}
+                                                dueDate={task.dueDate} closed={task.closed} onTaskClose={closeOrUndoCloseTask} saveTask={updateTask}/>
+                                        )}
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
                         </div>
                     </Fragment> : <SpinnerView/>}
                 </div>
                 <Footer/>
-            </Fragment>
+            </DragDropContext>
         )
+    }
+
+    userReallyChangedOrder = (source, destination) => {
+        return destination && (source.droppableId !== destination.droppableId || source.index !== destination.index)
+    }
+
+    updateTaskPositionIndex = (result) => {
+        const { updateTaskIndex } = this.props
+        const { source, destination, draggableId } = result
+        if (this.userReallyChangedOrder(source, destination)) {
+            updateTaskIndex(source.index, destination.index, draggableId)
+        }
     }
 
     onAddNewTask = async (e) => {
@@ -97,6 +125,10 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         } catch (e) {
             handleServerException(e)
         }
+    },
+
+    updateTaskIndex: (sourceIndex, destinationIndex, draggableId) => (dispatch) => {
+        dispatch(updateTaskPositionIndexAction(sourceIndex, destinationIndex, draggableId))
     },
 
     createTask: task => async (dispatch) => {

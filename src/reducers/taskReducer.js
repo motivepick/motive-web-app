@@ -1,4 +1,4 @@
-import { CLOSE_TASK, CREATE_TASK, SET_TASKS, TOGGLE_OPEN_CLOSED_TASKS, UNDO_CLOSE_TASK, UPDATE_TASK } from '../actions/taskActions'
+import { CLOSE_TASK, CREATE_TASK, SET_TASKS, TOGGLE_OPEN_CLOSED_TASKS, UNDO_CLOSE_TASK, UPDATE_TASK, UPDATE_TASK_POSITION_INDEX } from '../actions/taskActions'
 
 const INITIAL_STATE = {
     task: {},
@@ -11,6 +11,17 @@ export default function (state = INITIAL_STATE, action) {
     const { type, payload } = action
     if (type === CREATE_TASK) {
         return { ...state, tasks: [payload, ...state.tasks] }
+    } else if (type === UPDATE_TASK_POSITION_INDEX) {
+        const tasks = state.closed ? state.tasks.filter(t => t.closed) : state.tasks.filter(t => !t.closed)
+        const { sourceIndex, destinationIndex, draggableId } = payload
+        const sourceId = tasks[sourceIndex].id
+        const destinationId = tasks[destinationIndex].id
+        const realSourceIndex = state.tasks.findIndex(t => t.id === sourceId)
+        const realDestinationIndex = state.tasks.findIndex(t => t.id === destinationId)
+        const updatedTasks = [...state.tasks]
+        updatedTasks.splice(realSourceIndex, 1)
+        updatedTasks.splice(realDestinationIndex, 0, state.tasks.find(t => t.id.toString() === draggableId))
+        return { ...state, tasks: updatedTasks }
     } else if (type === SET_TASKS) {
         return { ...state, tasks: payload, initialized: true }
     } else if (type === CLOSE_TASK) {

@@ -14,6 +14,7 @@
     "prop-types": "15.6.2",
     "ramda": "0.25.0",
     "react": "16.10.2",
+    "react-beautiful-dnd": "13.0.0",
     "react-device-detect": "1.6.1",
     "react-dom": "16.10.2",
     "react-fontawesome": "1.6.1",
@@ -25,7 +26,7 @@
     "reactstrap": "8.1.1",
     "redux": "4.0.0",
     "redux-promise": "0.6.0",
-    "redux-thunk": "^2.3.0",
+    "redux-thunk": "2.3.0",
     "superagent": "3.8.3",
     "url-search-params-polyfill": "4.0.1",
     "uuid": "3.3.2"

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { DropdownItem, DropdownMenu, DropdownToggle, i, NavbarBrand, UncontrolledDropdown } from 'reactstrap'
+import { DropdownItem, DropdownMenu, DropdownToggle, NavbarBrand, UncontrolledDropdown } from 'reactstrap'
 import logo from '../logo.png'
 import { translate } from 'react-i18next'
 import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../config'
@@ -11,7 +11,7 @@ class Navigation extends PureComponent {
     render() {
         const { user, onAllTaskClick, t } = this.props
         return (
-            <nav className="navbar navbar-expand navbar-light bg-light">
+            <nav className="navbar navbar-expand navbar-light bg-light" style={{ borderRadius: '.25rem' }}>
                 <NavbarBrand href="/">
                     <img src={logo} width="30" height="30" className="d-inline-block align-top" alt="Motive Logo"/>
                 </NavbarBrand>

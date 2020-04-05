@@ -1,7 +1,7 @@
 .task {
-    border-right: 1px solid #ced4da;
-    border-left: 1px solid #ced4da;
-    border-top: 1px solid #ced4da;
+    background-color: #f8f9fa;
+    border-radius: .25rem;
+    margin-bottom: 5px;
     padding: .4rem .2rem;
 }
 
@@ -16,20 +16,10 @@
     color: #8E8E93
 }
 
-.task-wrapper:first-child .task {
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
-}
-
-.task-wrapper:last-child .task {
-    border-bottom-right-radius: .25rem;
-    border-bottom-left-radius: .25rem;
-    border-bottom: 1px solid #ced4da;
-}
-
 .circle {
     width: 1.5rem;
     height: 1.5rem;
+    background-color: white;
     border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
     -moz-border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
     -webkit-border-radius: 1.5rem 1.5rem 1.5rem 1.5rem;
