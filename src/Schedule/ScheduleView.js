@@ -8,12 +8,13 @@ import { handleServerException } from '../utils/exceptionHandler'
 import { fetchUser } from '../services/userService'
 import { setUserAction } from '../actions/userActions'
 import Footer from '../component/Footer'
-import { closeScheduleTaskAction, setScheduleAction, updateScheduleTaskAction } from '../actions/scheduleActions'
+import { closeScheduleTaskAction, setScheduleAction, updateScheduleTaskAction, updateScheduleTaskPositionIndexAction } from '../actions/scheduleActions'
 import ScheduleHeader from '../component/ScheduleHeader'
 import Task from '../Tasks/Task'
 import SpinnerView from '../SpinnerView'
 import { delay, DELAY_MS } from '../utils/delay'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { userReallyChangedOrder } from '../utils/dragAndDropUtils'
 
 class ScheduleView extends PureComponent {
 
@@ -25,19 +26,18 @@ class ScheduleView extends PureComponent {
 
     render() {
         const { user, schedule, initialized, closeScheduleTask, updateScheduleTask, t } = this.props
-        const { week } = schedule
         return (
-            <DragDropContext onDragEnd={() => {}}>
+            <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
                 <Navigation history={this.props.history} user={user}/>
                 {initialized ? <div>
-                    {Object.keys(week).filter(day => week[day].length > 0).map(day => {
+                    {Object.keys(schedule).filter(day => !['future', 'overdue'].includes(day) && schedule[day].length > 0).map(day => {
                         return (
                             <Fragment key={day}>
                                 <ScheduleHeader date={day}/>
-                                <Droppable droppableId={`week-${day}`}>
+                                <Droppable droppableId={day}>
                                     {provided => (
                                         <div {...provided.droppableProps} ref={provided.innerRef}>
-                                            {week[day].map((task, index) =>
+                                            {schedule[day].map((task, index) =>
                                                 <Task key={task.id} index={index} id={task.id} name={task.name} description={task.description}
                                                     dueDate={task.dueDate} closed={task.closed} onTaskClose={closeScheduleTask} saveTask={updateScheduleTask}/>
                                             )}
@@ -50,7 +50,7 @@ class ScheduleView extends PureComponent {
                     })}
                     {schedule.future.length > 0 && <Fragment>
                         <ScheduleHeader value={t('futureTasks')}/>
-                        <Droppable droppableId="futureTasks">
+                        <Droppable droppableId="future">
                             {provided => (
                                 <div {...provided.droppableProps} ref={provided.innerRef}>
                                     {schedule.future.map((task, index) =>
@@ -64,7 +64,7 @@ class ScheduleView extends PureComponent {
                     </Fragment>}
                     {schedule.overdue.length > 0 && <Fragment>
                         <ScheduleHeader value={t('overdueTasks')}/>
-                        <Droppable droppableId="overdueTasks">
+                        <Droppable droppableId="overdue">
                             {provided => (
                                 <div {...provided.droppableProps} ref={provided.innerRef}>
                                     {schedule.overdue.map((task, index) =>
@@ -80,6 +80,14 @@ class ScheduleView extends PureComponent {
                 <Footer/>
             </DragDropContext>
         )
+    }
+
+    updateTaskPositionIndex = (result) => {
+        const { updateScheduleTaskIndex } = this.props
+        const { source, destination } = result
+        if (userReallyChangedOrder(source, destination)) {
+            updateScheduleTaskIndex(source.droppableId, source.index, destination.droppableId, destination.index)
+        }
     }
 }
 
@@ -99,6 +107,10 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         } catch (e) {
             handleServerException(e)
         }
+    },
+
+    updateScheduleTaskIndex: (sourceDroppableId, sourceIndex, destinationDroppableId, destinationIndex) => (dispatch) => {
+        dispatch(updateScheduleTaskPositionIndexAction(sourceDroppableId, sourceIndex, destinationDroppableId, destinationIndex))
     },
 
     updateScheduleTask: (id: number, task) => async (dispatch) => {

@@ -26,6 +26,7 @@ import Footer from '../component/Footer'
 import { delay, DELAY_MS } from '../utils/delay'
 import { history } from '../index'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { userReallyChangedOrder } from '../utils/dragAndDropUtils'
 
 class TaskView extends PureComponent {
 
@@ -69,15 +70,11 @@ class TaskView extends PureComponent {
         )
     }
 
-    userReallyChangedOrder = (source, destination) => {
-        return destination && (source.droppableId !== destination.droppableId || source.index !== destination.index)
-    }
-
     updateTaskPositionIndex = (result) => {
         const { updateTaskIndex } = this.props
-        const { source, destination, draggableId } = result
-        if (this.userReallyChangedOrder(source, destination)) {
-            updateTaskIndex(source.index, destination.index, draggableId)
+        const { source, destination } = result
+        if (userReallyChangedOrder(source, destination)) {
+            updateTaskIndex(source.index, destination.index)
         }
     }
 
@@ -127,8 +124,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         }
     },
 
-    updateTaskIndex: (sourceIndex, destinationIndex, draggableId) => (dispatch) => {
-        dispatch(updateTaskPositionIndexAction(sourceIndex, destinationIndex, draggableId))
+    updateTaskIndex: (sourceIndex, destinationIndex) => (dispatch) => {
+        dispatch(updateTaskPositionIndexAction(sourceIndex, destinationIndex))
     },
 
     createTask: task => async (dispatch) => {

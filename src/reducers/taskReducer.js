@@ -13,14 +13,14 @@ export default function (state = INITIAL_STATE, action) {
         return { ...state, tasks: [payload, ...state.tasks] }
     } else if (type === UPDATE_TASK_POSITION_INDEX) {
         const tasks = state.closed ? state.tasks.filter(t => t.closed) : state.tasks.filter(t => !t.closed)
-        const { sourceIndex, destinationIndex, draggableId } = payload
+        const { sourceIndex, destinationIndex } = payload
         const sourceId = tasks[sourceIndex].id
         const destinationId = tasks[destinationIndex].id
         const realSourceIndex = state.tasks.findIndex(t => t.id === sourceId)
         const realDestinationIndex = state.tasks.findIndex(t => t.id === destinationId)
         const updatedTasks = [...state.tasks]
         updatedTasks.splice(realSourceIndex, 1)
-        updatedTasks.splice(realDestinationIndex, 0, state.tasks.find(t => t.id.toString() === draggableId))
+        updatedTasks.splice(realDestinationIndex, 0, state.tasks.find(t => t.id === sourceId))
         return { ...state, tasks: updatedTasks }
     } else if (type === SET_TASKS) {
         return { ...state, tasks: payload, initialized: true }

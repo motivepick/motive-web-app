@@ -28,5 +28,8 @@ export const updateTask = async (taskId, task) => {
 
 export const searchSchedule = async () => {
     const response = await request.get(`${API_URL}/schedule`).withCredentials()
-    return response.body
+    const schedule = response.body
+    Object.keys(schedule.week).forEach(day => schedule[day] = schedule.week[day]) // TODO: get rid of week on the server
+    delete schedule.week
+    return schedule
 }

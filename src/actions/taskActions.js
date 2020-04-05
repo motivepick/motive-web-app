@@ -8,9 +8,9 @@ export const UPDATE_TASK = 'UPDATE_TASK'
 
 export const setTasksAction = tasks => ({ type: SET_TASKS, payload: tasks })
 
-export const updateTaskPositionIndexAction = (sourceIndex, destinationIndex, draggableId) => ({
+export const updateTaskPositionIndexAction = (sourceIndex, destinationIndex) => ({
     type: UPDATE_TASK_POSITION_INDEX,
-    payload: { sourceIndex, destinationIndex, draggableId }
+    payload: { sourceIndex, destinationIndex }
 })
 
 export const createTaskAction = task => ({ type: CREATE_TASK, payload: task })

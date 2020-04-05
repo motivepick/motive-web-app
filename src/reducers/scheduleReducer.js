@@ -1,22 +1,22 @@
-import { CLOSE_SCHEDULE_TASK, SET_SCHEDULE, UPDATE_SCHEDULE_TASK } from '../actions/scheduleActions'
+import { CLOSE_SCHEDULE_TASK, SET_SCHEDULE, UPDATE_SCHEDULE_TASK, UPDATE_SCHEDULE_TASK_POSITION_INDEX } from '../actions/scheduleActions'
 
 const INITIAL_STATE = {
-    schedule: { week: {}, overdue: [], future: [] },
+    schedule: { overdue: [], future: [] },
     initialized: false
 }
 
-const closeInList = (tasks, id) => tasks.filter(t => t.id !== id)
+const copyOfListWithoutTask = (tasks, id) => tasks.filter(t => t.id !== id)
 
-const closeInWeek = (week, id) => {
+const copyOfScheduleWithoutTask = (schedule, id) => {
     const result = {}
-    Object.keys(week).forEach(day => {
-        const tasks = week[day]
-        result[day] = closeInList(tasks, id)
+    Object.keys(schedule).forEach(day => {
+        const tasks = schedule[day]
+        result[day] = copyOfListWithoutTask(tasks, id)
     })
     return result
 }
 
-const updateInList = (tasks, payload) => {
+const copyOfListWithUpdatedTask = (tasks, payload) => {
     const result = []
     for (const task of tasks) {
         result.push(task.id === payload.id ? { ...task, ...payload } : task)
@@ -24,11 +24,11 @@ const updateInList = (tasks, payload) => {
     return result
 }
 
-const updateInWeek = (week, payload) => {
+const copyOfScheduleWithUpdatedTask = (schedule, payload) => {
     const result = {}
-    Object.keys(week).forEach(day => {
-        const tasks = week[day]
-        result[day] = updateInList(tasks, payload)
+    Object.keys(schedule).forEach(day => {
+        const tasks = schedule[day]
+        result[day] = copyOfListWithUpdatedTask(tasks, payload)
     })
     return result
 }
@@ -37,26 +37,24 @@ export default function (state = INITIAL_STATE, action) {
     const { type, payload } = action
     if (type === SET_SCHEDULE) {
         return { ...state, schedule: payload, initialized: true }
+    } else if (type === UPDATE_SCHEDULE_TASK_POSITION_INDEX) {
+        const { sourceDroppableId, sourceIndex, destinationDroppableId, destinationIndex } = payload
+        const updatedSourceList = state.schedule[sourceDroppableId]
+        const updatedDestinationList = state.schedule[destinationDroppableId]
+        const task = updatedSourceList[sourceIndex]
+        updatedSourceList.splice(sourceIndex, 1)
+        updatedDestinationList.splice(destinationIndex, 0, task)
+        return { ...state, [sourceDroppableId]: updatedSourceList, [destinationDroppableId]: updatedDestinationList }
     } else if (type === CLOSE_SCHEDULE_TASK) {
         const { id } = payload
         return {
             ...state,
-            schedule: {
-                ...state.schedule,
-                week: closeInWeek(state.schedule.week, id),
-                overdue: closeInList(state.schedule.overdue, id),
-                future: closeInList(state.schedule.future, id)
-            }
+            schedule: copyOfScheduleWithoutTask(state.schedule, id)
         }
     } else if (type === UPDATE_SCHEDULE_TASK) {
         return {
             ...state,
-            schedule: {
-                ...state.schedule,
-                week: updateInWeek(state.schedule.week, payload),
-                overdue: updateInList(state.schedule.overdue, payload),
-                future: updateInList(state.schedule.future, payload)
-            }
+            schedule: copyOfScheduleWithUpdatedTask(state.schedule, payload)
         }
     } else {
         return state
