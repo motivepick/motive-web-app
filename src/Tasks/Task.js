@@ -31,20 +31,16 @@ class Task extends PureComponent {
                 {(provided) => (
                     <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className="row task-wrapper">
                         <Col>
-                            <div className="task">
-                                <div style={{ cursor: 'pointer', display: 'flex' }} className="task-name">
-                                    <div style={{ flexGrow: '0', flexBasis: '0' }}>
-                                        <Button color="link" onClick={this.handleTaskClose}>
-                                            <CheckMark closed={closed}/>
-                                        </Button>
-                                    </div>
-                                    <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`}
-                                        style={{ flexGrow: '1', flexBasis: '0', paddingTop: '.40rem' }}>
+                            <div className="task" style={{ display: 'flex' }}>
+                                <Button color="link" onClick={this.handleTaskClose}>
+                                    <CheckMark closed={closed}/>
+                                </Button>
+                                <div style={{ cursor: 'pointer' }} className="task-name">
+                                    <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`}>
                                         {closed ? <del>{this.props.name}</del> : this.props.name}
                                     </div>
                                     {dueDate &&
-                                    <div onClick={this.handleTaskClick} className={`task-name ${Task.classOf(dueDate, closed)}`}
-                                        style={{ flexGrow: '0', flexBasis: '1', paddingTop: '.32rem' }}>
+                                    <div onClick={this.handleTaskClick} className={Task.classOf(dueDate, closed)}>
                                         <small>{format(dueDate)}</small>
                                     </div>}
                                 </div>
