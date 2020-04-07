@@ -23,4 +23,4 @@ class TasksSubtitle extends PureComponent {
     }
 }
 
-export default translate('translations')(TasksSubtitle)
+export default translate()(TasksSubtitle)

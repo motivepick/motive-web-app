@@ -109,4 +109,4 @@ class Task extends PureComponent {
     }
 }
 
-export default translate('translations')(Task)
+export default translate()(Task)

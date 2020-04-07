@@ -69,4 +69,4 @@ class LoginView extends PureComponent {
     }
 }
 
-export default translate('translations')(LoginView)
+export default translate()(LoginView)

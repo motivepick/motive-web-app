@@ -72,4 +72,4 @@ class Navigation extends PureComponent {
     }
 }
 
-export default translate('translations')(Navigation)
+export default translate()(Navigation)

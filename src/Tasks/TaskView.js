@@ -167,4 +167,4 @@ const mapStateToProps = state => ({
     closed: state.tasks.closed
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate('translations')(TaskView))
+export default connect(mapStateToProps, mapDispatchToProps)(translate()(TaskView))

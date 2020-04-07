@@ -137,4 +137,4 @@ const mapStateToProps = state => ({
     initialized: state.schedule.initialized
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate('translations')(ScheduleView))
+export default connect(mapStateToProps, mapDispatchToProps)(translate()(ScheduleView))

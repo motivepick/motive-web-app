@@ -20,4 +20,4 @@ class SpinnerView extends PureComponent {
     }
 }
 
-export default translate('translations')(SpinnerView)
+export default translate()(SpinnerView)

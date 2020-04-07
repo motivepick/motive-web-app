@@ -155,4 +155,4 @@ class PrivacyView extends PureComponent {
     }
 }
 
-export default translate('translations')(PrivacyView)
+export default translate()(PrivacyView)
