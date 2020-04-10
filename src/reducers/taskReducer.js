@@ -12,10 +12,7 @@ export default function (state = INITIAL_STATE, action) {
     if (type === CREATE_TASK) {
         return { ...state, tasks: [payload, ...state.tasks] }
     } else if (type === UPDATE_TASK_POSITION_INDEX) {
-        const tasks = state.closed ? state.tasks.filter(t => t.closed) : state.tasks.filter(t => !t.closed)
-        const { sourceIndex, destinationIndex } = payload
-        const sourceId = tasks[sourceIndex].id
-        const destinationId = tasks[destinationIndex].id
+        const { sourceId, destinationId } = payload
         const realSourceIndex = state.tasks.findIndex(t => t.id === sourceId)
         const realDestinationIndex = state.tasks.findIndex(t => t.id === destinationId)
         const updatedTasks = [...state.tasks]

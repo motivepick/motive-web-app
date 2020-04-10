@@ -1,9 +1,16 @@
 import request from 'superagent'
 import { API_URL } from '../config'
 
+const DO_NOTHING = () => {
+}
+
 export const searchUserTasks = async () => {
     const response = await request.get(`${API_URL}/tasks`).withCredentials()
     return response.body
+}
+
+export const updateTasksOrderAsync = update => {
+    request.post(`${API_URL}/orders`).send(update).withCredentials().then(DO_NOTHING)
 }
 
 export const createTask = async task => {
@@ -20,7 +27,6 @@ export const undoCloseTask = async id => {
     const response = await request.put(`${API_URL}/tasks/${id}/undo-closing`).withCredentials()
     return response.body
 }
-
 export const updateTask = async (taskId, task) => {
     const response = await request.put(`${API_URL}/tasks/${taskId}`).send(task).withCredentials()
     return response.body

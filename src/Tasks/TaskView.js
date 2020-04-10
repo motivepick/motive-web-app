@@ -18,7 +18,7 @@ import {
     updateTaskAction,
     updateTaskPositionIndexAction
 } from '../actions/taskActions'
-import { closeTask, createTask, searchUserTasks, undoCloseTask, updateTask } from '../services/taskService'
+import { closeTask, createTask, searchUserTasks, undoCloseTask, updateTask, updateTasksOrderAsync } from '../services/taskService'
 import { handleServerException } from '../utils/exceptionHandler'
 import { fetchUser } from '../services/userService'
 import { setUserAction } from '../actions/userActions'
@@ -124,8 +124,13 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         }
     },
 
-    updateTaskIndex: (sourceIndex, destinationIndex) => (dispatch) => {
-        dispatch(updateTaskPositionIndexAction(sourceIndex, destinationIndex))
+    updateTaskIndex: (sourceIndex, destinationIndex) => async (dispatch, getState) => {
+        const state = getState()
+        const tasks = state.tasks.closed ? state.tasks.tasks.filter(t => t.closed) : state.tasks.tasks.filter(t => !t.closed)
+        const sourceId = tasks[sourceIndex].id
+        const destinationId = tasks[destinationIndex].id
+        updateTasksOrderAsync({ sourceId, destinationId })
+        dispatch(updateTaskPositionIndexAction(sourceId, destinationId))
     },
 
     createTask: task => async (dispatch) => {
