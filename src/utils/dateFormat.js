@@ -1,1 +1,1 @@
-export const format = (date) => date.local().calendar()
+export const format = (date) => date.local().calendar().toLowerCase()
