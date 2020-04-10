@@ -8,6 +8,7 @@ import { translate } from 'react-i18next'
 import { CustomInput } from './CustomInput'
 import { format } from '../utils/dateFormat'
 import { CheckMark } from '../component/CheckMark'
+import WithLinks from '../component/WithLinks'
 
 class ScheduleTask extends PureComponent {
 
@@ -35,7 +36,7 @@ class ScheduleTask extends PureComponent {
                             </Button>
                             <div style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyItems: 'flex-start' }} className="task-name">
                                 <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`} style={{ paddingRight: 12 }}>
-                                    {closed ? <del>{this.props.name}</del> : this.props.name}
+                                    {closed ? <del><WithLinks>{this.props.name}</WithLinks></del> : <WithLinks>{this.props.name}</WithLinks>}
                                 </div>
                                 {dueDate && <small onClick={this.handleTaskClick} className={ScheduleTask.classOf(dueDate, closed)}>{format(dueDate)}</small>}
                             </div>
@@ -67,9 +68,11 @@ class ScheduleTask extends PureComponent {
         onTaskClose(id, !closed)
     }
 
-    handleTaskClick = () => {
-        const { detailsShown } = this.state
-        this.setState({ detailsShown: !detailsShown })
+    handleTaskClick = ({ target }) => {
+        if (target.tagName.toLowerCase() !== 'a') {
+            const { detailsShown } = this.state
+            this.setState({ detailsShown: !detailsShown })
+        }
     }
 
     saveName = (name) => {
