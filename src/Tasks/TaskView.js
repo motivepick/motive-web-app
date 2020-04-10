@@ -2,6 +2,7 @@ import React, { Fragment, PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { Col, Input, Row } from 'reactstrap'
 import Task from './Task'
+import notasks from '../images/no-tasks-eng.png'
 import Navigation from '../Navigation/Navigation'
 import { translate } from 'react-i18next'
 import { handleDueDateOf } from '../utils/taskUtils'
@@ -40,32 +41,35 @@ class TaskView extends PureComponent {
         const { user, tasks, initialized, closed, closeOrUndoCloseTask, updateTask, toggleOpenClosedTasks, t } = this.props
         return (
             <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
-                <Navigation history={this.props.history} user={user} onAllTaskClick={this.handleAllTaskClick}/>
+                <Navigation history={this.props.history} user={user} onAllTaskClick={this.handleAllTaskClick} />
                 <div>
                     <Row style={{ marginTop: '10px' }}>
                         <Col>
                             <Input type="text" placeholder={t('new.task')} onKeyPress={this.onAddNewTask} autoFocus={isBrowser}
-                                innerRef={input => this.taskNameInput = input}/>
+                                innerRef={input => this.taskNameInput = input} />
                         </Col>
                     </Row>
                     {initialized ? <Fragment>
-                        <TasksSubtitle numberOfTasks={tasks.length} closed={closed} onToggleOpenClosedTasks={toggleOpenClosedTasks}/>
+                        <TasksSubtitle numberOfTasks={tasks.length} closed={closed} onToggleOpenClosedTasks={toggleOpenClosedTasks} />
+                        {tasks.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                            <img src={notasks} width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!" />
+                        </div>}
                         <div>
                             <Droppable droppableId="tasks">
                                 {provided => (
                                     <div {...provided.droppableProps} ref={provided.innerRef}>
                                         {tasks.map((task, index) =>
                                             <Task key={task.id} index={index} id={task.id} name={task.name} description={task.description}
-                                                dueDate={task.dueDate} closed={task.closed} onTaskClose={closeOrUndoCloseTask} saveTask={updateTask}/>
+                                                dueDate={task.dueDate} closed={task.closed} onTaskClose={closeOrUndoCloseTask} saveTask={updateTask} />
                                         )}
                                         {provided.placeholder}
                                     </div>
                                 )}
                             </Droppable>
                         </div>
-                    </Fragment> : <SpinnerView/>}
+                    </Fragment> : <SpinnerView />}
                 </div>
-                <Footer/>
+                <Footer />
             </DragDropContext>
         )
     }
