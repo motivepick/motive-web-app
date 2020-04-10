@@ -32,7 +32,7 @@ class Task extends PureComponent {
                     <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className="row task-wrapper">
                         <Col>
                             <div className="task">
-                                <div className="short" style={{ display: 'flex', alignItems: 'center' }}>
+                                <div className="short" style={{ display: 'flex', alignItems: 'center', height: '2.5em' }}>
                                     <Button color="link" onClick={this.handleTaskClose}>
                                         <CheckMark closed={closed} />
                                     </Button>
