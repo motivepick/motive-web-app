@@ -32,31 +32,27 @@ class Task extends PureComponent {
                     <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className="row task-wrapper">
                         <Col>
                             <div className="task">
-                                <div style={{ cursor: 'pointer', display: 'flex' }} className="task-name">
-                                    <div style={{ flexGrow: '0', flexBasis: '0' }}>
-                                        <Button color="link" onClick={this.handleTaskClose}>
-                                            <CheckMark closed={closed}/>
-                                        </Button>
+                                <div className="short" style={{ display: 'flex', alignItems: 'center' }}>
+                                    <Button color="link" onClick={this.handleTaskClose}>
+                                        <CheckMark closed={closed} />
+                                    </Button>
+                                    <div style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyItems: 'flex-start' }} className="task-name">
+                                        <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`} style={{ paddingRight: 12 }}>
+                                            {closed ? <del>{this.props.name}</del> : this.props.name}
+                                        </div>
+                                        {dueDate && <small onClick={this.handleTaskClick} className={Task.classOf(dueDate, closed)}>{format(dueDate)}</small>}
                                     </div>
-                                    <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`}
-                                        style={{ flexGrow: '1', flexBasis: '0', paddingTop: '.40rem' }}>
-                                        {closed ? <del>{this.props.name}</del> : this.props.name}
-                                    </div>
-                                    {dueDate &&
-                                    <div onClick={this.handleTaskClick} className={`task-name ${Task.classOf(dueDate, closed)}`}
-                                        style={{ flexGrow: '0', flexBasis: '1', paddingTop: '.32rem' }}>
-                                        <small>{format(dueDate)}</small>
-                                    </div>}
                                 </div>
-                                {this.state.detailsShown && <Row>
+
+                                {this.state.detailsShown && <Row className="detailed">
                                     <Col>
                                         <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
                                             <FormGroup>
-                                                <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName}/>
+                                                <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName} />
                                             </FormGroup>
                                             <FormGroup style={{ marginBottom: '0' }}>
                                                 <CustomInput type="textarea" placeholder={t('task.description')} value={description}
-                                                    onSave={this.saveDescription}/>
+                                                    onSave={this.saveDescription} />
                                             </FormGroup>
                                         </Form>
                                     </Col>
