@@ -4,11 +4,11 @@ import { API_URL } from '../config'
 const DO_NOTHING = () => {
 }
 
-export const searchUserTasks = async (list, page, size) => {
+export const searchUserTasks = async (list, offset, limit) => {
     const response = await request
         .get(`${API_URL}/task-lists/${list}`)
-        .query({ page })
-        .query({ size })
+        .query({ offset })
+        .query({ limit })
         .withCredentials()
     return response.body
 }

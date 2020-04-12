@@ -28,15 +28,15 @@ import { delay, DELAY_MS } from '../utils/delay'
 import { history } from '../index'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { userReallyChangedOrder } from '../utils/dragAndDropUtils'
-import { DEFAULT_PAGE_SIZE } from '../config'
+import { DEFAULT_LIMIT, TASK_LIST } from '../const'
 
 class TaskView extends PureComponent {
 
     componentDidMount() {
         const { setUser, setTasks } = this.props
         setUser()
-        setTasks('INBOX')
-        setTasks('CLOSED')
+        setTasks(TASK_LIST.INBOX)
+        setTasks(TASK_LIST.CLOSED)
     }
 
     render() {
@@ -63,7 +63,7 @@ class TaskView extends PureComponent {
                                     <div {...provided.droppableProps} ref={provided.innerRef}>
                                         {list.content.map((task, index) =>
                                             <Task key={task.id} index={index} id={task.id} name={task.name} description={task.description}
-                                                dueDate={task.dueDate} closed={currentList === 'CLOSED'} onTaskClose={closeOrUndoCloseTask}
+                                                dueDate={task.dueDate} closed={currentList === TASK_LIST.CLOSED} onTaskClose={closeOrUndoCloseTask}
                                                 saveTask={updateTask}/>
                                         )}
                                         {provided.placeholder}
@@ -71,7 +71,7 @@ class TaskView extends PureComponent {
                                 )}
                             </Droppable>
                         </div>
-                        {!list.last && <Button onClick={() => setTasks(currentList)}>Load More</Button>}
+                        {list.content.length < list.totalElements && <Button onClick={() => setTasks(currentList)}>Load More</Button>}
                     </Fragment> : <SpinnerView/>}
                 </div>
                 <Footer/>
@@ -127,9 +127,9 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 
     setTasks: (list) => async (dispatch, getState) => {
         const state = getState()
-        const { number } = state.tasks[list]
+        const offset = state.tasks[list].content.length
         try {
-            dispatch(setTasksAction(list, await searchUserTasks(list, number + 1, DEFAULT_PAGE_SIZE)))
+            dispatch(setTasksAction(list, await searchUserTasks(list, offset, DEFAULT_LIMIT)))
         } catch (e) {
             handleServerException(e)
         }
@@ -160,8 +160,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         const state = getState()
         const { currentList } = state.tasks
         try {
-            const service = currentList === 'INBOX' ? closeTask : undoCloseTask
-            const action = currentList === 'INBOX' ? closeTaskAction : undoCloseTaskAction
+            const service = currentList === TASK_LIST.INBOX ? closeTask : undoCloseTask
+            const action = currentList === TASK_LIST.INBOX ? closeTaskAction : undoCloseTaskAction
             const values = await Promise.all([service(id), delay(DELAY_MS)])
             dispatch(action(values[0]))
         } catch (e) {
@@ -172,15 +172,15 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     toggleOpenClosedTasks: () => (dispatch, getState) => {
         const state = getState()
         const { currentList } = state.tasks
-        dispatch(setCurrentListAction(currentList === 'INBOX' ? 'CLOSED' : 'INBOX'))
+        dispatch(setCurrentListAction(currentList === TASK_LIST.INBOX ? TASK_LIST.CLOSED : TASK_LIST.INBOX))
     }
 }, dispatch)
 
 const mapStateToProps = state => ({
     user: state.user.user,
     currentList: state.tasks.currentList,
-    INBOX: state.tasks.INBOX,
-    CLOSED: state.tasks.CLOSED,
+    [TASK_LIST.INBOX]: state.tasks[TASK_LIST.INBOX],
+    [TASK_LIST.CLOSED]: state.tasks[TASK_LIST.CLOSED],
     initialized: state.tasks.initialized
 })
 
