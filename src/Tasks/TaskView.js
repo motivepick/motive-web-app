@@ -1,6 +1,6 @@
 import React, { Fragment, PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { Col, Input, Row } from 'reactstrap'
+import { Button, Col, Input, Row } from 'reactstrap'
 import Task from './Task'
 import notasks from '../images/no-tasks-eng.png'
 import Navigation from '../Navigation/Navigation'
@@ -28,6 +28,7 @@ import { delay, DELAY_MS } from '../utils/delay'
 import { history } from '../index'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { userReallyChangedOrder } from '../utils/dragAndDropUtils'
+import { DEFAULT_PAGE_SIZE } from '../config'
 
 class TaskView extends PureComponent {
 
@@ -38,7 +39,7 @@ class TaskView extends PureComponent {
     }
 
     render() {
-        const { user, tasks, initialized, closed, closeOrUndoCloseTask, updateTask, toggleOpenClosedTasks, t } = this.props
+        const { user, tasks, initialized, closed, setTasks, closeOrUndoCloseTask, updateTask, toggleOpenClosedTasks, t } = this.props
         return (
             <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
                 <Navigation history={this.props.history} user={user} onAllTaskClick={this.handleAllTaskClick} />
@@ -50,7 +51,7 @@ class TaskView extends PureComponent {
                         </Col>
                     </Row>
                     {initialized ? <Fragment>
-                        <TasksSubtitle numberOfTasks={tasks.length} closed={closed} onToggleOpenClosedTasks={toggleOpenClosedTasks} />
+                        <TasksSubtitle numberOfTasks={tasks.content.length} closed={closed} onToggleOpenClosedTasks={toggleOpenClosedTasks} />
                         {tasks.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                             <img src={notasks} width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!" />
                         </div>}
@@ -58,7 +59,7 @@ class TaskView extends PureComponent {
                             <Droppable droppableId="tasks">
                                 {provided => (
                                     <div {...provided.droppableProps} ref={provided.innerRef}>
-                                        {tasks.map((task, index) =>
+                                        {tasks.content.map((task, index) =>
                                             <Task key={task.id} index={index} id={task.id} name={task.name} description={task.description}
                                                 dueDate={task.dueDate} closed={task.closed} onTaskClose={closeOrUndoCloseTask} saveTask={updateTask} />
                                         )}
@@ -67,7 +68,8 @@ class TaskView extends PureComponent {
                                 )}
                             </Droppable>
                         </div>
-                    </Fragment> : <SpinnerView />}
+                        {!tasks.last && <Button onClick={() => setTasks()}>Load More</Button>}
+                    </Fragment> : <SpinnerView/>}
                 </div>
                 <Footer />
             </DragDropContext>
@@ -78,6 +80,7 @@ class TaskView extends PureComponent {
         const { updateTaskIndex } = this.props
         const { source, destination } = result
         if (userReallyChangedOrder(source, destination)) {
+            console.log('Moved: ', source.index, destination.index)
             updateTaskIndex(source.index, destination.index)
         }
     }
@@ -120,21 +123,19 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         }
     },
 
-    setTasks: () => async (dispatch) => {
+    setTasks: () => async (dispatch, getState) => {
+        const state = getState()
+        const { number } = state.tasks.tasks
         try {
-            dispatch(setTasksAction(await searchUserTasks()))
+            dispatch(setTasksAction(await searchUserTasks(number + 1, DEFAULT_PAGE_SIZE)))
         } catch (e) {
             handleServerException(e)
         }
     },
 
-    updateTaskIndex: (sourceIndex, destinationIndex) => async (dispatch, getState) => {
-        const state = getState()
-        const tasks = state.tasks.closed ? state.tasks.tasks.filter(t => t.closed) : state.tasks.tasks.filter(t => !t.closed)
-        const sourceId = tasks[sourceIndex].id
-        const destinationId = tasks[destinationIndex].id
-        updateTasksOrderAsync({ sourceId, destinationId })
-        dispatch(updateTaskPositionIndexAction(sourceId, destinationId))
+    updateTaskIndex: (sourceIndex, destinationIndex) => async (dispatch) => {
+        updateTasksOrderAsync({ sourceListType: 'INBOX', sourceIndex, destinationListType: 'INBOX', destinationIndex }) // TODO
+        dispatch(updateTaskPositionIndexAction(sourceIndex, destinationIndex))
     },
 
     createTask: task => async (dispatch) => {
@@ -171,7 +172,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 
 const mapStateToProps = state => ({
     user: state.user.user,
-    tasks: state.tasks.closed ? state.tasks.tasks.filter(t => t.closed) : state.tasks.tasks.filter(t => !t.closed),
+    tasks: state.tasks.tasks,
     initialized: state.tasks.initialized,
     closed: state.tasks.closed
 })

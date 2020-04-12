@@ -39,7 +39,7 @@ class Task extends PureComponent {
                                     </Button>
                                     <div style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyItems: 'flex-start' }} className="task-name">
                                         <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`} style={{ paddingRight: 12 }}>
-                                            {closed ? <del><WithLinks>{this.props.name}</WithLinks></del> : <WithLinks>{this.props.name}</WithLinks>}
+                                            {id} {closed ? <del><WithLinks>{this.props.name}</WithLinks></del> : <WithLinks>{this.props.name}</WithLinks>}
                                         </div>
                                         {dueDate && <small onClick={this.handleTaskClick} className={Task.classOf(dueDate, closed)}>{format(dueDate)}</small>}
                                     </div>

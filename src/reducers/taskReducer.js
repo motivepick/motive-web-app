@@ -2,9 +2,20 @@ import { CLOSE_TASK, CREATE_TASK, SET_TASKS, TOGGLE_OPEN_CLOSED_TASKS, UNDO_CLOS
 
 const INITIAL_STATE = {
     task: {},
-    tasks: [],
+    tasks: {
+        content: [],
+        number: -1
+    },
     initialized: false,
     closed: false
+}
+
+const moveTask = (tasks, sourceIndex, destinationIndex) => {
+    const task = tasks[sourceIndex]
+    const updatedTasks = [...tasks]
+    updatedTasks.splice(sourceIndex, 1)
+    updatedTasks.splice(destinationIndex, 0, task)
+    return updatedTasks
 }
 
 export default function (state = INITIAL_STATE, action) {
@@ -12,15 +23,15 @@ export default function (state = INITIAL_STATE, action) {
     if (type === CREATE_TASK) {
         return { ...state, tasks: [payload, ...state.tasks] }
     } else if (type === UPDATE_TASK_POSITION_INDEX) {
-        const { sourceId, destinationId } = payload
-        const realSourceIndex = state.tasks.findIndex(t => t.id === sourceId)
-        const realDestinationIndex = state.tasks.findIndex(t => t.id === destinationId)
-        const updatedTasks = [...state.tasks]
-        updatedTasks.splice(realSourceIndex, 1)
-        updatedTasks.splice(realDestinationIndex, 0, state.tasks.find(t => t.id === sourceId))
-        return { ...state, tasks: updatedTasks }
+        const { sourceIndex, destinationIndex } = payload
+        return { ...state, tasks: { ...state.tasks, content: moveTask(state.tasks.content, sourceIndex, destinationIndex) } }
     } else if (type === SET_TASKS) {
-        return { ...state, tasks: payload, initialized: true }
+        const { content, last, number } = payload
+        return {
+            ...state,
+            tasks: { ...state.tasks, content: [...state.tasks.content, ...content], last, number },
+            initialized: true
+        }
     } else if (type === CLOSE_TASK) {
         const { id, closingDate } = payload
         return { ...state, tasks: state.tasks.map(t => t.id === id ? { ...t, closed: true, closingDate } : t) }
