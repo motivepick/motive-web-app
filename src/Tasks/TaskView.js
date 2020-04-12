@@ -29,14 +29,15 @@ import { history } from '../index'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { userReallyChangedOrder } from '../utils/dragAndDropUtils'
 import { DEFAULT_LIMIT, TASK_LIST } from '../const'
+import { selectCurrentList, selectInitialized, selectTaskList } from '../selectors/taskSelectors'
+import { selectUser } from '../selectors/userSelectors'
 
 class TaskView extends PureComponent {
 
     componentDidMount() {
-        const { setUser, setTasks } = this.props
-        setUser()
-        setTasks(TASK_LIST.INBOX)
-        setTasks(TASK_LIST.CLOSED)
+        this.setUserIfEmpty()
+        this.setTasksIfEmpty(TASK_LIST.INBOX)
+        this.setTasksIfEmpty(TASK_LIST.CLOSED)
     }
 
     render() {
@@ -77,6 +78,23 @@ class TaskView extends PureComponent {
                 <Footer/>
             </DragDropContext>
         )
+    }
+
+    // TODO: move upper in the DOM to avoid the check
+    setUserIfEmpty = () => {
+        if (!this.props.user.accountId) {
+            const { setUser } = this.props
+            setUser()
+        }
+    }
+
+    // TODO: move upper in the DOM to avoid the check
+    setTasksIfEmpty = (list) => {
+        const taskList = this.props[list]
+        if (taskList.content.length === 0) {
+            const { setTasks } = this.props
+            setTasks(list)
+        }
     }
 
     updateTaskPositionIndex = (result) => {
@@ -126,8 +144,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     },
 
     setTasks: (list) => async (dispatch, getState) => {
-        const state = getState()
-        const offset = state.tasks[list].content.length
+        const offset = selectTaskList(getState(), list).content.length
         try {
             dispatch(setTasksAction(list, await searchUserTasks(list, offset, DEFAULT_LIMIT)))
         } catch (e) {
@@ -157,8 +174,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     },
 
     closeOrUndoCloseTask: (id: number) => async (dispatch, getState) => {
-        const state = getState()
-        const { currentList } = state.tasks
+        const currentList = selectCurrentList(getState())
         try {
             const service = currentList === TASK_LIST.INBOX ? closeTask : undoCloseTask
             const action = currentList === TASK_LIST.INBOX ? closeTaskAction : undoCloseTaskAction
@@ -170,18 +186,16 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     },
 
     toggleOpenClosedTasks: () => (dispatch, getState) => {
-        const state = getState()
-        const { currentList } = state.tasks
-        dispatch(setCurrentListAction(currentList === TASK_LIST.INBOX ? TASK_LIST.CLOSED : TASK_LIST.INBOX))
+        dispatch(setCurrentListAction(selectCurrentList(getState()) === TASK_LIST.INBOX ? TASK_LIST.CLOSED : TASK_LIST.INBOX))
     }
 }, dispatch)
 
 const mapStateToProps = state => ({
-    user: state.user.user,
-    currentList: state.tasks.currentList,
-    [TASK_LIST.INBOX]: state.tasks[TASK_LIST.INBOX],
-    [TASK_LIST.CLOSED]: state.tasks[TASK_LIST.CLOSED],
-    initialized: state.tasks.initialized
+    user: selectUser(state),
+    currentList: selectCurrentList(state),
+    [TASK_LIST.INBOX]: selectTaskList(state, TASK_LIST.INBOX),
+    [TASK_LIST.CLOSED]: selectTaskList(state, TASK_LIST.CLOSED),
+    initialized: selectInitialized(state)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(translate()(TaskView))

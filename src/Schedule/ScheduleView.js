@@ -15,6 +15,8 @@ import { delay, DELAY_MS } from '../utils/delay'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { userReallyChangedOrder } from '../utils/dragAndDropUtils'
 import ScheduleTask from '../Tasks/ScheduleTask'
+import { selectUser } from '../selectors/userSelectors'
+import { selectInitialized, selectSchedule } from '../selectors/scheduleSelectors'
 
 class ScheduleView extends PureComponent {
 
@@ -132,9 +134,9 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 }, dispatch)
 
 const mapStateToProps = state => ({
-    user: state.user.user,
-    schedule: state.schedule.schedule,
-    initialized: state.schedule.initialized
+    user: selectUser(state),
+    schedule: selectSchedule(state),
+    initialized: selectInitialized(state)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(translate()(ScheduleView))
