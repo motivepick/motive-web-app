@@ -35,9 +35,10 @@ class Task extends PureComponent {
                             <div className="task">
                                 <div className="short" style={{ display: 'flex', alignItems: 'center', height: '2.5em' }}>
                                     <Button color="link" onClick={this.handleTaskClose}>
-                                        <CheckMark closed={closed} />
+                                        <CheckMark closed={closed}/>
                                     </Button>
-                                    <div style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyItems: 'flex-start' }} className="task-name">
+                                    <div style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyItems: 'flex-start' }}
+                                        className="task-name">
                                         <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`} style={{ paddingRight: 12 }}>
                                             {id} {closed ? <del><WithLinks>{this.props.name}</WithLinks></del> : <WithLinks>{this.props.name}</WithLinks>}
                                         </div>
@@ -49,11 +50,11 @@ class Task extends PureComponent {
                                     <Col>
                                         <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
                                             <FormGroup>
-                                                <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName} />
+                                                <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName}/>
                                             </FormGroup>
                                             <FormGroup style={{ marginBottom: '0' }}>
                                                 <CustomInput type="textarea" placeholder={t('task.description')} value={description}
-                                                    onSave={this.saveDescription} />
+                                                    onSave={this.saveDescription}/>
                                             </FormGroup>
                                         </Form>
                                     </Col>
@@ -70,7 +71,7 @@ class Task extends PureComponent {
         const { id, onTaskClose } = this.props
         const { closed } = this.state
         this.setState({ closed: !closed })
-        onTaskClose(id, !closed)
+        onTaskClose(id)
     }
 
     handleTaskClick = ({ target }) => {

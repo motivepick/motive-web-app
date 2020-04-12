@@ -65,7 +65,7 @@ class ScheduleTask extends PureComponent {
         const { id, onTaskClose } = this.props
         const { closed } = this.state
         this.setState({ closed: !closed })
-        onTaskClose(id, !closed)
+        onTaskClose(id)
     }
 
     handleTaskClick = ({ target }) => {

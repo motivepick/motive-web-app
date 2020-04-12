@@ -3,14 +3,14 @@ export const UPDATE_TASK_POSITION_INDEX = 'UPDATE_TASK_POSITION_INDEX'
 export const CREATE_TASK = 'CREATE_TASK'
 export const CLOSE_TASK = 'CLOSE_TASK'
 export const UNDO_CLOSE_TASK = 'UNDO_CLOSE_TASK'
-export const TOGGLE_OPEN_CLOSED_TASKS = 'TOGGLE_OPEN_CLOSED_TASKS'
+export const SET_CURRENT_LIST = 'SET_CURRENT_LIST'
 export const UPDATE_TASK = 'UPDATE_TASK'
 
-export const setTasksAction = tasks => ({ type: SET_TASKS, payload: tasks })
+export const setTasksAction = (list, tasks) => ({ type: SET_TASKS, payload: { list, tasks } })
 
-export const updateTaskPositionIndexAction = (sourceIndex, destinationIndex) => ({
+export const updateTaskPositionIndexAction = (sourceListType, sourceIndex, destinationListType, destinationIndex) => ({
     type: UPDATE_TASK_POSITION_INDEX,
-    payload: { sourceIndex, destinationIndex }
+    payload: { sourceListType, sourceIndex, destinationListType, destinationIndex }
 })
 
 export const createTaskAction = task => ({ type: CREATE_TASK, payload: task })
@@ -19,6 +19,6 @@ export const closeTaskAction = task => ({ type: CLOSE_TASK, payload: task })
 
 export const undoCloseTaskAction = task => ({ type: UNDO_CLOSE_TASK, payload: task })
 
-export const toggleOpenClosedTasksAction = closed => ({ type: TOGGLE_OPEN_CLOSED_TASKS, payload: closed })
+export const setCurrentListAction = currentList => ({ type: SET_CURRENT_LIST, payload: currentList })
 
 export const updateTaskAction = task => ({ type: UPDATE_TASK, payload: task })
