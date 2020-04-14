@@ -41,7 +41,7 @@ class TaskView extends PureComponent {
     }
 
     render() {
-        const { user, currentList, initialized, setTasks, closeOrUndoCloseTask, updateTask, toggleOpenClosedTasks, t } = this.props
+        const { user, currentList, initialized, setTasks, closeOrUndoCloseTask, updateTask, toggleCurrentTaskList, t } = this.props
         const list = this.props[currentList]
         return (
             <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
@@ -54,7 +54,7 @@ class TaskView extends PureComponent {
                         </Col>
                     </Row>
                     {initialized ? <Fragment>
-                        <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={toggleOpenClosedTasks}/>
+                        <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={toggleCurrentTaskList}/>
                         {list.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                             <img src={notasks} width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
                         </div>}
@@ -108,11 +108,11 @@ class TaskView extends PureComponent {
     onAddNewTask = async (e) => {
         const input = e.target
         if (e.key === 'Enter' && input.value.trim() !== '') {
-            const { createTask } = this.props
+            const { setCurrentTaskListToInbox, createTask } = this.props
             const task = handleDueDateOf({ name: input.value.trim() })
             input.disabled = true
             try {
-                this.props.toggleOpenClosedTasks()
+                setCurrentTaskListToInbox()
                 await createTask(task)
                 input.value = ''
             } finally {
@@ -123,10 +123,10 @@ class TaskView extends PureComponent {
     }
 
     handleAllTaskClick = () => {
-        const { location, toggleOpenClosedTasks } = this.props
+        const { location, setCurrentTaskListToInbox } = this.props
         const { pathname } = location
         if (pathname === '/') {
-            toggleOpenClosedTasks()
+            setCurrentTaskListToInbox()
         } else {
             history.push('/')
         }
@@ -185,7 +185,11 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         }
     },
 
-    toggleOpenClosedTasks: () => (dispatch, getState) => {
+    setCurrentTaskListToInbox: () => dispatch => {
+        dispatch(setCurrentListAction(TASK_LIST.INBOX))
+    },
+
+    toggleCurrentTaskList: () => (dispatch, getState) => {
         dispatch(setCurrentListAction(selectCurrentList(getState()) === TASK_LIST.INBOX ? TASK_LIST.CLOSED : TASK_LIST.INBOX))
     }
 }, dispatch)

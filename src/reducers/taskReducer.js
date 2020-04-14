@@ -34,7 +34,14 @@ const moveTask = (sourceList, sourceIndex, destinationList, destinationIndex) =>
 export default function (state = INITIAL_STATE, action) {
     const { type, payload } = action
     if (type === CREATE_TASK) {
-        return { ...state, tasks: [payload, ...state.tasks] }
+        return {
+            ...state,
+            [TASK_LIST.INBOX]: {
+                ...state[TASK_LIST.INBOX],
+                content: [payload, ...state[TASK_LIST.INBOX].content],
+                totalElements: state[TASK_LIST.INBOX].totalElements + 1
+            }
+        }
     } else if (type === UPDATE_TASK_POSITION_INDEX) {
         const { sourceListType, sourceIndex, destinationIndex } = payload
         return {
