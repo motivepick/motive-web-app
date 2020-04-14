@@ -1,4 +1,5 @@
 import { CLOSE_SCHEDULE_TASK, SET_SCHEDULE, UPDATE_SCHEDULE_TASK, UPDATE_SCHEDULE_TASK_POSITION_INDEX } from '../actions/scheduleActions'
+import { copyOfListWithUpdatedTask } from '../utils/lists'
 
 const INITIAL_STATE = {
     schedule: { overdue: [], future: [] },
@@ -13,14 +14,6 @@ const copyOfScheduleWithoutTask = (schedule, id) => {
         const tasks = schedule[day]
         result[day] = copyOfListWithoutTask(tasks, id)
     })
-    return result
-}
-
-const copyOfListWithUpdatedTask = (tasks, payload) => {
-    const result = []
-    for (const task of tasks) {
-        result.push(task.id === payload.id ? { ...task, ...payload } : task)
-    }
     return result
 }
 

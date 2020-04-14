@@ -9,7 +9,7 @@ import { history } from '../index'
 class Navigation extends PureComponent {
 
     render() {
-        const { user, onAllTaskClick, t } = this.props
+        const { user, onAllTasksClick, t } = this.props
         return (
             <nav className="navbar navbar-expand navbar-light bg-light" style={{ borderRadius: '.25rem' }}>
                 <NavbarBrand href="/">
@@ -19,7 +19,7 @@ class Navigation extends PureComponent {
                     <ul className="navbar-nav mr-auto">
                         {/* TODO: make active work again */}
                         <li className="nav-item">
-                            <a className="nav-link" onClick={onAllTaskClick || this.handleAllTaskClick} style={{ cursor: 'pointer' }}>
+                            <a className="nav-link" onClick={onAllTasksClick || this.handleAllTasksClick} style={{ cursor: 'pointer' }}>
                                 {t('allTasks')}
                             </a>
                         </li>
@@ -55,7 +55,7 @@ class Navigation extends PureComponent {
         )
     }
 
-    handleAllTaskClick = () => {
+    handleAllTasksClick = () => {
         history.push('/')
     }
 

@@ -45,7 +45,7 @@ class TaskView extends PureComponent {
         const list = this.props[currentList]
         return (
             <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
-                <Navigation history={this.props.history} user={user} onAllTaskClick={this.handleAllTaskClick}/>
+                <Navigation history={this.props.history} user={user} onAllTasksClick={this.handleAllTasksClick}/>
                 <div>
                     <Row style={{ marginTop: '10px' }}>
                         <Col>
@@ -122,7 +122,7 @@ class TaskView extends PureComponent {
         }
     }
 
-    handleAllTaskClick = () => {
+    handleAllTasksClick = () => {
         const { location, setCurrentTaskListToInbox } = this.props
         const { pathname } = location
         if (pathname === '/') {

@@ -1,5 +1,6 @@
 import { CLOSE_TASK, CREATE_TASK, SET_CURRENT_LIST, SET_TASKS, UNDO_CLOSE_TASK, UPDATE_TASK, UPDATE_TASK_POSITION_INDEX } from '../actions/taskActions'
 import { TASK_LIST } from '../const'
+import { copyOfListWithUpdatedTask } from '../utils/lists'
 
 const emptyTaskList = () => ({
     content: [],
@@ -95,11 +96,15 @@ export default function (state = INITIAL_STATE, action) {
     } else if (type === SET_CURRENT_LIST) {
         return { ...state, currentList: payload }
     } else if (type === UPDATE_TASK) {
-        const tasks = []
-        for (const task of state.tasks) {
-            tasks.push(task.id === payload.id ? { ...task, ...payload } : task)
+        const { currentList } = state
+        return {
+            ...state,
+            [currentList]: {
+                ...state[currentList],
+                content: copyOfListWithUpdatedTask(state[currentList].content, payload)
+            },
+            task: { ...state.task, ...payload }
         }
-        return { ...state, tasks, task: { ...state.task, ...payload } }
     } else {
         return state
     }
