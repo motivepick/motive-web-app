@@ -31,6 +31,7 @@ import { userReallyChangedOrder } from '../utils/dragAndDropUtils'
 import { DEFAULT_LIMIT, TASK_LIST } from '../const'
 import { selectCurrentList, selectInitialized, selectTaskList } from '../selectors/taskSelectors'
 import { selectUser } from '../selectors/userSelectors'
+import InfiniteScroll from 'react-infinite-scroller'
 
 class TaskView extends PureComponent {
 
@@ -62,11 +63,14 @@ class TaskView extends PureComponent {
                             <Droppable droppableId={currentList}>
                                 {provided => (
                                     <div {...provided.droppableProps} ref={provided.innerRef}>
-                                        {list.content.map((task, index) =>
-                                            <Task key={task.id} index={index} id={task.id} name={task.name} description={task.description}
-                                                dueDate={task.dueDate} closed={currentList === TASK_LIST.CLOSED} onTaskClose={closeOrUndoCloseTask}
-                                                saveTask={updateTask}/>
-                                        )}
+                                        <InfiniteScroll loadMore={this.loadMoreTasks} hasMore={list.content.length < list.totalElements}
+                                            loader={<div className="loader" key={0}>Loading ...</div>}>
+                                            {list.content.map((task, index) =>
+                                                <Task key={task.id} index={index} id={task.id} name={task.name} description={task.description}
+                                                    dueDate={task.dueDate} closed={currentList === TASK_LIST.CLOSED} onTaskClose={closeOrUndoCloseTask}
+                                                    saveTask={updateTask}/>
+                                            )}
+                                        </InfiniteScroll>
                                         {provided.placeholder}
                                     </div>
                                 )}
@@ -86,6 +90,11 @@ class TaskView extends PureComponent {
             const { setUser } = this.props
             setUser()
         }
+    }
+
+    loadMoreTasks = () => {
+        const { currentList, setTasks } = this.props
+        setTasks(currentList)
     }
 
     // TODO: move upper in the DOM to avoid the check
