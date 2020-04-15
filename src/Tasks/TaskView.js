@@ -1,6 +1,6 @@
 import React, { Fragment, PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { Button, Col, Input, Row } from 'reactstrap'
+import { Col, Input, Row } from 'reactstrap'
 import Task from './Task'
 import notasks from '../images/no-tasks-eng.png'
 import Navigation from '../Navigation/Navigation'
@@ -31,7 +31,6 @@ import { userReallyChangedOrder } from '../utils/dragAndDropUtils'
 import { DEFAULT_LIMIT, TASK_LIST } from '../const'
 import { selectCurrentList, selectInitialized, selectTaskList } from '../selectors/taskSelectors'
 import { selectUser } from '../selectors/userSelectors'
-import InfiniteScroll from 'react-infinite-scroller'
 
 class TaskView extends PureComponent {
 
@@ -39,10 +38,15 @@ class TaskView extends PureComponent {
         this.setUserIfEmpty()
         this.setTasksIfEmpty(TASK_LIST.INBOX)
         this.setTasksIfEmpty(TASK_LIST.CLOSED)
+        window.addEventListener('scroll', this.handleScroll)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.handleScroll)
     }
 
     render() {
-        const { user, currentList, initialized, setTasks, closeOrUndoCloseTask, updateTask, toggleCurrentTaskList, t } = this.props
+        const { user, currentList, initialized, closeOrUndoCloseTask, updateTask, toggleCurrentTaskList, t } = this.props
         const list = this.props[currentList]
         return (
             <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
@@ -63,25 +67,36 @@ class TaskView extends PureComponent {
                             <Droppable droppableId={currentList}>
                                 {provided => (
                                     <div {...provided.droppableProps} ref={provided.innerRef}>
-                                        <InfiniteScroll loadMore={this.loadMoreTasks} hasMore={list.content.length < list.totalElements}
-                                            loader={<div className="loader" key={0}>Loading ...</div>}>
-                                            {list.content.map((task, index) =>
-                                                <Task key={task.id} index={index} id={task.id} name={task.name} description={task.description}
-                                                    dueDate={task.dueDate} closed={currentList === TASK_LIST.CLOSED} onTaskClose={closeOrUndoCloseTask}
-                                                    saveTask={updateTask}/>
-                                            )}
-                                        </InfiniteScroll>
+                                        {list.content.map((task, index) =>
+                                            <Task key={task.id} index={index} id={task.id} name={task.name} description={task.description}
+                                                dueDate={task.dueDate} closed={currentList === TASK_LIST.CLOSED} onTaskClose={closeOrUndoCloseTask}
+                                                saveTask={updateTask}/>
+                                        )}
                                         {provided.placeholder}
                                     </div>
                                 )}
                             </Droppable>
                         </div>
-                        {list.content.length < list.totalElements && <Button onClick={() => setTasks(currentList)}>Load More</Button>}
                     </Fragment> : <SpinnerView/>}
                 </div>
                 <Footer/>
             </DragDropContext>
         )
+    }
+
+    handleScroll = () => {
+        const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight
+        const body = document.body
+        const html = document.documentElement
+        const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)
+        const windowBottom = windowHeight + window.pageYOffset
+        if (windowBottom >= docHeight) {
+            const { currentList, setTasks } = this.props
+            const list = this.props[currentList]
+            if (list.content.length < list.totalElements) {
+                setTasks(currentList)
+            }
+        }
     }
 
     // TODO: move upper in the DOM to avoid the check
@@ -90,11 +105,6 @@ class TaskView extends PureComponent {
             const { setUser } = this.props
             setUser()
         }
-    }
-
-    loadMoreTasks = () => {
-        const { currentList, setTasks } = this.props
-        setTasks(currentList)
     }
 
     // TODO: move upper in the DOM to avoid the check
