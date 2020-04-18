@@ -34,6 +34,8 @@ import { selectUser } from '../selectors/userSelectors'
 
 class TaskView extends PureComponent {
 
+    state = { scrolling: false }
+
     componentDidMount() {
         this.setUserIfEmpty()
         this.setTasksIfEmpty(TASK_LIST.INBOX)
@@ -85,16 +87,20 @@ class TaskView extends PureComponent {
     }
 
     handleScroll = () => {
+        const { scrolling } = this.state
         const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight
         const body = document.body
         const html = document.documentElement
         const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)
         const windowBottom = windowHeight + window.pageYOffset
-        if (windowBottom >= docHeight) {
+        if (!scrolling && windowBottom >= docHeight - 600) {
             const { currentList, setTasks } = this.props
             const list = this.props[currentList]
             if (list.content.length < list.totalElements) {
-                setTasks(currentList)
+                this.setState({ scrolling: true }, async () => {
+                    await setTasks(currentList)
+                    this.setState({ scrolling: false })
+                })
             }
         }
     }
