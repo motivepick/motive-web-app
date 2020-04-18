@@ -1,4 +1,4 @@
-export const DEFAULT_LIMIT: number = 20
+export const DEFAULT_LIMIT: number = 40
 
 export const TASK_LIST = {
     INBOX: 'INBOX',
