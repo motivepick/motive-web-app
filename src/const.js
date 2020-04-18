@@ -5,4 +5,4 @@ export const TASK_LIST = {
     CLOSED: 'CLOSED'
 }
 
-export const INFINITE_SCROLL_BOTTOM_OFFSET = 800
+export const INFINITE_SCROLL_BOTTOM_OFFSET = 900
