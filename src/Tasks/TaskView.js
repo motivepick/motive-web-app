@@ -28,13 +28,13 @@ import { delay, DELAY_MS } from '../utils/delay'
 import { history } from '../index'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { userReallyChangedOrder } from '../utils/dragAndDropUtils'
-import { DEFAULT_LIMIT, TASK_LIST } from '../const'
+import { DEFAULT_LIMIT, INFINITE_SCROLL_BOTTOM_OFFSET, TASK_LIST } from '../const'
 import { selectCurrentList, selectInitialized, selectTaskList } from '../selectors/taskSelectors'
 import { selectUser } from '../selectors/userSelectors'
 
 class TaskView extends PureComponent {
 
-    state = { scrolling: false }
+    state = { [TASK_LIST.INBOX]: false, [TASK_LIST.CLOSED]: false }
 
     componentDidMount() {
         this.setUserIfEmpty()
@@ -87,19 +87,22 @@ class TaskView extends PureComponent {
     }
 
     handleScroll = () => {
-        const { scrolling } = this.state
+        const { currentList, setTasks } = this.props
+        const scrolling = this.state[currentList]
         const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight
         const body = document.body
         const html = document.documentElement
         const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)
         const windowBottom = windowHeight + window.pageYOffset
-        if (!scrolling && windowBottom >= docHeight - 600) {
-            const { currentList, setTasks } = this.props
+        if (!scrolling && windowBottom >= docHeight - INFINITE_SCROLL_BOTTOM_OFFSET) {
             const list = this.props[currentList]
             if (list.content.length < list.totalElements) {
-                this.setState({ scrolling: true }, async () => {
-                    await setTasks(currentList)
-                    this.setState({ scrolling: false })
+                this.setState({ [currentList]: true }, async () => {
+                    try {
+                        await setTasks(currentList)
+                    } finally {
+                        this.setState({ [currentList]: false })
+                    }
                 })
             }
         }
