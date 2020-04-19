@@ -10,6 +10,7 @@ import { format } from '../utils/dateFormat'
 import { CheckMark } from '../component/CheckMark'
 import { Draggable } from 'react-beautiful-dnd'
 import WithLinks from '../component/WithLinks'
+import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../const'
 
 class Task extends PureComponent {
 
@@ -50,11 +51,11 @@ class Task extends PureComponent {
                                     <Col>
                                         <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
                                             <FormGroup>
-                                                <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName}/>
+                                                <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
                                             </FormGroup>
                                             <FormGroup style={{ marginBottom: '0' }}>
                                                 <CustomInput type="textarea" placeholder={t('task.description')} value={description}
-                                                    onSave={this.saveDescription}/>
+                                                    onSave={this.saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
                                             </FormGroup>
                                         </Form>
                                     </Col>

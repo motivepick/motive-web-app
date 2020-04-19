@@ -5,4 +5,8 @@ export const TASK_LIST = {
     CLOSED: 'CLOSED'
 }
 
-export const INFINITE_SCROLL_BOTTOM_OFFSET = 900
+export const INFINITE_SCROLL_BOTTOM_OFFSET = 1000
+
+export const TASK_NAME_LIMIT = 500
+
+export const TASK_DESCRIPTION_LIMIT = 500

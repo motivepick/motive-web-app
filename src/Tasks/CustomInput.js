@@ -11,12 +11,12 @@ export class CustomInput extends Component {
     }
 
     render() {
-        const { type, placeholder, onSave } = this.props
+        const { type, placeholder, maxLength, onSave } = this.props
         const { value } = this.state
         return (
             type === 'textarea' ? <Textarea placeholder={placeholder} value={value} onChange={this.handleValueChange} minRows="3" maxRows="15"
-                    onBlur={() => onSave(value)} innerRef={input => this.taskNameInput = input} className="form-control"/> :
-                <Input type={type} placeholder={placeholder} value={value} onChange={this.handleValueChange} onBlur={() => onSave(value)}
+                    onBlur={() => onSave(value)} innerRef={input => this.taskNameInput = input} className="form-control" maxlength={maxLength}/> :
+                <Input type={type} placeholder={placeholder} value={value} onChange={this.handleValueChange} onBlur={() => onSave(value)} maxlength={maxLength}
                     onKeyPress={target => target.charCode === 13 && this.blurAndSave(value)} innerRef={input => this.taskNameInput = input}/>
         )
     }
