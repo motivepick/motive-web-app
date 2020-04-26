@@ -1,16 +1,18 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Col, Form, FormGroup, Row } from 'reactstrap'
+import { Form, FormGroup } from 'reactstrap'
 import moment from 'moment'
-import './Task.css'
 import { handleDueDateOf } from '../utils/taskUtils'
 import { translate } from 'react-i18next'
-import { CustomInput } from './CustomInput'
-import { format } from '../utils/dateFormat'
-import { CheckMark } from '../component/check-mark'
 import { Draggable } from 'react-beautiful-dnd'
-import WithLinks from '../component/WithLinks'
 import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../const'
+
+import './Task.css'
+
+import { CustomInput } from './CustomInput'
+import { CheckMark } from '../component/task-item/task-header/check-mark'
+import { Title } from '../component/task-item/task-header/title'
+import { DueDate } from '../component/task-item/task-header/due-date'
 
 class Task extends PureComponent {
 
@@ -44,34 +46,30 @@ class Task extends PureComponent {
     }
 
     renderItem() {
-        const { id, index, name, description, t } = this.props
+        const { name, description, t } = this.props
         const { closed } = this.state
         const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
         return (
             <div className="task">
-                <div className="short">
+                <div className="task-header">
                     <CheckMark toggled={closed} onToggle={this.handleTaskClose}/>
-                    <div className="task-name">
-                        <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`}>
-                            {closed ? <del><WithLinks>{this.props.name}</WithLinks></del> : <WithLinks>{this.props.name}</WithLinks>}
-                        </div>
-                        {dueDate && <small onClick={this.handleTaskClick} className={Task.classOf(dueDate, closed)}>{format(dueDate)}</small>}
+                    <div className="task-body">
+                        <Title dimmedStyle={closed} onClick={this.handleTaskClick}>{name}</Title>
+                        <DueDate dimmedStyle={closed} onClick={this.handleTaskClick}>{dueDate}</DueDate>
                     </div>
                 </div>
 
-                {this.state.detailsShown && <Row className="detailed">
-                    <Col>
-                        <Form className="task-form" onSubmit={e => e.preventDefault()}>
-                            <FormGroup>
-                                <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
-                            </FormGroup>
-                            <FormGroup className="task-form-description">
-                                <CustomInput type="textarea" placeholder={t('task.description')} value={description}
-                                    onSave={this.saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
-                            </FormGroup>
-                        </Form>
-                    </Col>
-                </Row>}
+                {this.state.detailsShown &&
+                    <Form className="task-form" onSubmit={e => e.preventDefault()}>
+                        <FormGroup>
+                            <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
+                        </FormGroup>
+                        <FormGroup className="task-form-description">
+                            <CustomInput type="textarea" placeholder={t('task.description')} value={description}
+                                onSave={this.saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
+                        </FormGroup>
+                    </Form>
+                }
             </div>
         )
     }
@@ -98,23 +96,6 @@ class Task extends PureComponent {
     saveDescription = (description) => {
         const task = { description }
         this.props.saveTask(this.props.id, task)
-    }
-
-    static classOf(dueDate, closed) {
-        if (closed) {
-            return 'closed'
-        } else if (dueDate) {
-            const now = new Date()
-            if (dueDate.isBefore(now, 'day')) {
-                return 'text-danger'
-            } else if (dueDate.isSame(now, 'day')) {
-                return 'text-primary'
-            } else {
-                return ''
-            }
-        } else {
-            return ''
-        }
     }
 }
 

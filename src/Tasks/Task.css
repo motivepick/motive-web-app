@@ -5,7 +5,7 @@
     padding: .4rem .2rem;
 }
 
-.task-name {
+.task-body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -16,15 +16,7 @@
     justify-items: flex-start;
 }
 
-.task-name .closed {
-    color: #8E8E93;
-}
-
-.task-name .closed a {
-    color: #8E8E93;
-}
-
-.short {
+.task-header {
     display: flex;
     align-items: center;
     height: 2.5em;
