@@ -7,7 +7,7 @@ import { handleDueDateOf } from '../utils/taskUtils'
 import { translate } from 'react-i18next'
 import { CustomInput } from './CustomInput'
 import { format } from '../utils/dateFormat'
-import { CheckMarkButton } from '../component/CheckMarkButton'
+import { CheckMark } from '../component/check-mark'
 import { Draggable } from 'react-beautiful-dnd'
 import WithLinks from '../component/WithLinks'
 import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../const'
@@ -48,34 +48,31 @@ class Task extends PureComponent {
         const { closed } = this.state
         const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
         return (
-            <Col>
-                <div className="task">
-                    <div className="short" style={{ display: 'flex', alignItems: 'center', height: '2.5em' }}>
-                        <CheckMarkButton toggled={closed} onToggle={this.handleTaskClose}/>
-                        <div style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyItems: 'flex-start' }}
-                            className="task-name">
-                            <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`} style={{ paddingRight: 12 }}>
-                                {closed ? <del><WithLinks>{this.props.name}</WithLinks></del> : <WithLinks>{this.props.name}</WithLinks>}
-                            </div>
-                            {dueDate && <small onClick={this.handleTaskClick} className={Task.classOf(dueDate, closed)}>{format(dueDate)}</small>}
+            <div className="task">
+                <div className="short">
+                    <CheckMark toggled={closed} onToggle={this.handleTaskClose}/>
+                    <div className="task-name">
+                        <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`}>
+                            {closed ? <del><WithLinks>{this.props.name}</WithLinks></del> : <WithLinks>{this.props.name}</WithLinks>}
                         </div>
+                        {dueDate && <small onClick={this.handleTaskClick} className={Task.classOf(dueDate, closed)}>{format(dueDate)}</small>}
                     </div>
-
-                    {this.state.detailsShown && <Row className="detailed">
-                        <Col>
-                            <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
-                                <FormGroup>
-                                    <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
-                                </FormGroup>
-                                <FormGroup style={{ marginBottom: '0' }}>
-                                    <CustomInput type="textarea" placeholder={t('task.description')} value={description}
-                                        onSave={this.saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
-                                </FormGroup>
-                            </Form>
-                        </Col>
-                    </Row>}
                 </div>
-            </Col>
+
+                {this.state.detailsShown && <Row className="detailed">
+                    <Col>
+                        <Form className="task-form" onSubmit={e => e.preventDefault()}>
+                            <FormGroup>
+                                <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
+                            </FormGroup>
+                            <FormGroup className="task-form-description">
+                                <CustomInput type="textarea" placeholder={t('task.description')} value={description}
+                                    onSave={this.saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
+                            </FormGroup>
+                        </Form>
+                    </Col>
+                </Row>}
+            </div>
         )
     }
 
