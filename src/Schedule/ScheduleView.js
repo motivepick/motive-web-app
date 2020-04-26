@@ -14,7 +14,7 @@ import SpinnerView from '../SpinnerView'
 import { delay, DELAY_MS } from '../utils/delay'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { userReallyChangedOrder } from '../utils/dragAndDropUtils'
-import ScheduleTask from '../Tasks/ScheduleTask'
+import Task from '../Tasks/Task'
 import { selectUser } from '../selectors/userSelectors'
 import { selectInitialized, selectSchedule } from '../selectors/scheduleSelectors'
 
@@ -40,7 +40,7 @@ class ScheduleView extends PureComponent {
                                     {provided => (
                                         <div {...provided.droppableProps} ref={provided.innerRef}>
                                             {schedule[day].map(task =>
-                                                <ScheduleTask key={task.id} id={task.id} name={task.name} description={task.description}
+                                                <Task key={task.id} id={task.id} name={task.name} description={task.description}
                                                     dueDate={task.dueDate} closed={task.closed} onTaskClose={closeScheduleTask} saveTask={updateScheduleTask}/>
                                             )}
                                             {provided.placeholder}
@@ -56,7 +56,7 @@ class ScheduleView extends PureComponent {
                             {provided => (
                                 <div {...provided.droppableProps} ref={provided.innerRef}>
                                     {schedule.future.map(task =>
-                                        <ScheduleTask key={task.id} id={task.id} name={task.name} description={task.description}
+                                        <Task key={task.id} id={task.id} name={task.name} description={task.description}
                                             dueDate={task.dueDate} closed={task.closed} onTaskClose={closeScheduleTask} saveTask={updateScheduleTask}/>
                                     )}
                                     {provided.placeholder}
@@ -70,7 +70,7 @@ class ScheduleView extends PureComponent {
                             {provided => (
                                 <div {...provided.droppableProps} ref={provided.innerRef}>
                                     {schedule.overdue.map(task =>
-                                        <ScheduleTask key={task.id} id={task.id} name={task.name} description={task.description}
+                                        <Task key={task.id} id={task.id} name={task.name} description={task.description}
                                             dueDate={task.dueDate} closed={task.closed} onTaskClose={closeScheduleTask} saveTask={updateScheduleTask}/>
                                     )}
                                     {provided.placeholder}

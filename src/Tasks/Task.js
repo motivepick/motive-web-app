@@ -24,47 +24,60 @@ class Task extends PureComponent {
 
     state = { closed: this.props.closed, detailsShown: false }
 
-    render() {
+    render = () => {
+        const { isDraggable = false } = this.props
+        if (isDraggable) return this.renderDraggable()
+        return this.renderItem()
+    }
+
+    renderDraggable() {
+        const { id, index } = this.props
+        return (
+            <Draggable draggableId={id.toString()} index={index}>
+                {(provided) => (
+                    <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                        {this.renderItem()}
+                    </div>
+                )}
+            </Draggable>
+        )
+    }
+
+    renderItem() {
         const { id, index, name, description, t } = this.props
         const { closed } = this.state
         const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
         return (
-            <Draggable draggableId={id.toString()} index={index}>
-                {(provided) => (
-                    <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className="row task-wrapper">
-                        <Col>
-                            <div className="task">
-                                <div className="short" style={{ display: 'flex', alignItems: 'center', height: '2.5em' }}>
-                                    <Button color="link" onClick={this.handleTaskClose}>
-                                        <CheckMark closed={closed}/>
-                                    </Button>
-                                    <div style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyItems: 'flex-start' }}
-                                        className="task-name">
-                                        <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`} style={{ paddingRight: 12 }}>
-                                            {closed ? <del><WithLinks>{this.props.name}</WithLinks></del> : <WithLinks>{this.props.name}</WithLinks>}
-                                        </div>
-                                        {dueDate && <small onClick={this.handleTaskClick} className={Task.classOf(dueDate, closed)}>{format(dueDate)}</small>}
-                                    </div>
-                                </div>
-
-                                {this.state.detailsShown && <Row className="detailed">
-                                    <Col>
-                                        <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
-                                            <FormGroup>
-                                                <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
-                                            </FormGroup>
-                                            <FormGroup style={{ marginBottom: '0' }}>
-                                                <CustomInput type="textarea" placeholder={t('task.description')} value={description}
-                                                    onSave={this.saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
-                                            </FormGroup>
-                                        </Form>
-                                    </Col>
-                                </Row>}
+            <Col>
+                <div className="task">
+                    <div className="short" style={{ display: 'flex', alignItems: 'center', height: '2.5em' }}>
+                        <Button color="link" onClick={this.handleTaskClose}>
+                            <CheckMark closed={closed}/>
+                        </Button>
+                        <div style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', justifyItems: 'flex-start' }}
+                            className="task-name">
+                            <div onClick={this.handleTaskClick} className={`task-name ${closed ? 'closed' : ''}`} style={{ paddingRight: 12 }}>
+                                {closed ? <del><WithLinks>{this.props.name}</WithLinks></del> : <WithLinks>{this.props.name}</WithLinks>}
                             </div>
-                        </Col>
+                            {dueDate && <small onClick={this.handleTaskClick} className={Task.classOf(dueDate, closed)}>{format(dueDate)}</small>}
+                        </div>
                     </div>
-                )}
-            </Draggable>
+
+                    {this.state.detailsShown && <Row className="detailed">
+                        <Col>
+                            <Form onSubmit={e => e.preventDefault()} style={{ padding: '.65rem .6rem' }}>
+                                <FormGroup>
+                                    <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
+                                </FormGroup>
+                                <FormGroup style={{ marginBottom: '0' }}>
+                                    <CustomInput type="textarea" placeholder={t('task.description')} value={description}
+                                        onSave={this.saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
+                                </FormGroup>
+                            </Form>
+                        </Col>
+                    </Row>}
+                </div>
+            </Col>
         )
     }
 
