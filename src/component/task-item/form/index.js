@@ -1,3 +1,4 @@
+import React from 'react'
 import { Col, Form, FormGroup, Row } from 'reactstrap'
 import { CustomInput } from '../../../Tasks/CustomInput'
 import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../../const'
@@ -25,5 +26,3 @@ const TaskForm = props => {
 }
 
 export default translate()(TaskForm)
-
-
