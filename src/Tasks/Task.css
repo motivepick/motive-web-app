@@ -7,13 +7,17 @@
 
 .task-body {
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    padding-right: .4rem;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-items: flex-start;
+}
+
+.task-body > div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: .4rem;
 }
 
 .task-header {
