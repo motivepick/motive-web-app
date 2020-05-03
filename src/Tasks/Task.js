@@ -60,15 +60,15 @@ class Task extends PureComponent {
                 </div>
 
                 {this.state.detailsShown &&
-                    <Form className="task-form" onSubmit={e => e.preventDefault()}>
-                        <FormGroup>
-                            <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
-                        </FormGroup>
-                        <FormGroup className="task-form-description">
-                            <CustomInput type="textarea" placeholder={t('task.description')} value={description}
-                                onSave={this.saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
-                        </FormGroup>
-                    </Form>
+                <Form className="task-form" onSubmit={e => e.preventDefault()}>
+                    <FormGroup>
+                        <CustomInput type="text" value={name} dueDate={dueDate} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
+                    </FormGroup>
+                    <FormGroup className="task-form-description">
+                        <CustomInput type="textarea" placeholder={t('task.description')} value={description}
+                            onSave={this.saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
+                    </FormGroup>
+                </Form>
                 }
             </div>
         )
@@ -91,11 +91,13 @@ class Task extends PureComponent {
     saveName = (name) => {
         const task = handleDueDateOf({ name: name ? name.trim() : '' })
         this.props.saveTask(this.props.id, task)
+        return task.name
     }
 
     saveDescription = (description) => {
         const task = { description }
         this.props.saveTask(this.props.id, task)
+        return task.description
     }
 }
 

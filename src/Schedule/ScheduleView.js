@@ -17,6 +17,7 @@ import { userReallyChangedOrder } from '../utils/dragAndDropUtils'
 import Task from '../Tasks/Task'
 import { selectUser } from '../selectors/userSelectors'
 import { selectInitialized, selectSchedule } from '../selectors/scheduleSelectors'
+import { closeTaskAction, updateTaskAction } from '../actions/taskActions'
 
 class ScheduleView extends PureComponent {
 
@@ -117,7 +118,9 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 
     updateScheduleTask: (id: number, task) => async (dispatch) => {
         try {
-            dispatch(updateScheduleTaskAction(await updateTask(id, task)))
+            const updatedTask = await updateTask(id, task)
+            dispatch(updateScheduleTaskAction(updatedTask))
+            dispatch(updateTaskAction(updatedTask))
         } catch (e) {
             handleServerException(e)
         }
@@ -126,7 +129,9 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     closeScheduleTask: (id: number) => async (dispatch) => {
         try {
             const values = await Promise.all([closeTask(id), delay(DELAY_MS)])
-            dispatch(closeScheduleTaskAction(values[0]))
+            const closedTask = values[0]
+            dispatch(closeScheduleTaskAction(closedTask))
+            dispatch(closeTaskAction(closedTask))
         } catch (e) {
             handleServerException(e)
         }
