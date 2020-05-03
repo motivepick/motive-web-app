@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router } from 'react-router-dom'
-import createBrowserHistory from 'history/createBrowserHistory'
+import { createBrowserHistory } from 'history'
 import { Provider } from 'react-redux'
 import { applyMiddleware, createStore } from 'redux'
 import { I18nextProvider } from 'react-i18next'

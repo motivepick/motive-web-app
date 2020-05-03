@@ -4,33 +4,31 @@
   "private": true,
   "homepage": "https://motivepick.com",
   "dependencies": {
-    "bootstrap": "4.3.1",
+    "bootstrap": "4.4.1",
     "font-awesome": "4.7.0",
     "history": "latest",
     "i18next": "19.4.4",
     "i18next-browser-languagedetector": "4.1.1",
-    "immutability-helper": "2.7.1",
-    "moment": "2.22.2",
+    "moment": "2.24.0",
     "prop-types": "15.6.2",
-    "ramda": "0.25.0",
+    "ramda": "0.27.0",
     "react": "16.13.1",
     "react-beautiful-dnd": "13.0.0",
     "react-device-detect": "1.12.1",
     "react-dom": "16.13.1",
-    "react-fontawesome": "1.6.1",
+    "react-fontawesome": "1.7.1",
     "react-i18next": "11.4.0",
     "react-linkify": "1.0.0-alpha",
     "react-redux": "7.2.0",
     "react-router-dom": "5.1.2",
-    "react-scripts": "1.1.0",
-    "react-textarea-autosize": "7.1.0",
+    "react-scripts": "3.4.1",
+    "react-textarea-autosize": "7.1.2",
     "reactstrap": "8.1.1",
     "redux": "4.0.5",
-    "redux-promise": "0.6.0",
     "redux-thunk": "2.3.0",
-    "superagent": "3.8.3",
-    "url-search-params-polyfill": "4.0.1",
-    "uuid": "3.3.2"
+    "superagent": "5.2.2",
+    "url-search-params-polyfill": "8.1.0",
+    "uuid": "8.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -42,11 +40,23 @@
     "lint": "./node_modules/.bin/eslint ./src --ext .js"
   },
   "devDependencies": {
-    "eslint": "4.19.1",
-    "eslint-config-airbnb": "17.0.0",
-    "eslint-plugin-import": "2.13.0",
-    "eslint-plugin-jsx-a11y": "6.1.1",
-    "eslint-plugin-react": "7.10.0",
-    "gh-pages": "1.1.0"
+    "eslint": "6.8.0",
+    "eslint-config-airbnb": "18.1.0",
+    "eslint-plugin-import": "2.20.2",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-react": "7.19.0",
+    "gh-pages": "2.2.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
