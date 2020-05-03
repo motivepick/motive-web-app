@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { Button, Col, i, Row } from 'reactstrap'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import logo from '../logo.png'
 import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../config'
 import { Link } from 'react-router-dom'
@@ -69,4 +69,4 @@ class LoginView extends PureComponent {
     }
 }
 
-export default translate()(LoginView)
+export default withTranslation()(LoginView)

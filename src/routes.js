@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Route } from 'react-router-dom'
 import { Container } from 'reactstrap'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 
 import './App.css'
 import TaskView from './Tasks/TaskView'
@@ -23,4 +23,4 @@ class Routes extends PureComponent {
     }
 }
 
-export default translate()(Routes)
+export default withTranslation()(Routes)

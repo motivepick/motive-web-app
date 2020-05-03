@@ -1,6 +1,6 @@
 import React from 'react'
 import { Col, Row } from 'reactstrap'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 
 const SpinnerView = ({ t }) =>
     <div>
@@ -13,4 +13,4 @@ const SpinnerView = ({ t }) =>
         </Row>
     </div>
 
-export default translate()(SpinnerView)
+export default withTranslation()(SpinnerView)

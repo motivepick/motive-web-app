@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 
 import { Button, Col, Row } from 'reactstrap'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import logo from './logo.png'
 import { Link } from 'react-router-dom'
 
@@ -155,4 +155,4 @@ class PrivacyView extends PureComponent {
     }
 }
 
-export default translate()(PrivacyView)
+export default withTranslation()(PrivacyView)

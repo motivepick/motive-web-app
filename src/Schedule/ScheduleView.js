@@ -1,7 +1,7 @@
 import React, { Fragment, PureComponent } from 'react'
 import { connect } from 'react-redux'
 import Navigation from '../Navigation/Navigation'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { bindActionCreators } from 'redux'
 import { closeTask, searchSchedule, updateTask } from '../services/taskService'
 import { handleServerException } from '../utils/exceptionHandler'
@@ -144,4 +144,4 @@ const mapStateToProps = state => ({
     initialized: selectInitialized(state)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate()(ScheduleView))
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation()(ScheduleView))

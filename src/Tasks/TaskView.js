@@ -4,7 +4,7 @@ import { Col, Input, Row } from 'reactstrap'
 import Task from './Task'
 import notasks from '../images/no-tasks-eng.png'
 import Navigation from '../Navigation/Navigation'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { handleDueDateOf } from '../utils/taskUtils'
 import SpinnerView from '../SpinnerView'
 import { isBrowser } from 'react-device-detect'
@@ -230,4 +230,4 @@ const mapStateToProps = state => ({
     initialized: selectInitialized(state)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(translate()(TaskView))
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation()(TaskView))

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Form, FormGroup } from 'reactstrap'
 import moment from 'moment'
 import { handleDueDateOf } from '../utils/taskUtils'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { Draggable } from 'react-beautiful-dnd'
 import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../const'
 
@@ -101,4 +101,4 @@ class Task extends PureComponent {
     }
 }
 
-export default translate()(Task)
+export default withTranslation()(Task)

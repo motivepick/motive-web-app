@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { DropdownItem, DropdownMenu, DropdownToggle, NavbarBrand, UncontrolledDropdown } from 'reactstrap'
 import logo from '../logo.png'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../config'
 import { Link } from 'react-router-dom'
 import { history } from '../index'
@@ -72,4 +72,4 @@ class Navigation extends PureComponent {
     }
 }
 
-export default translate()(Navigation)
+export default withTranslation()(Navigation)

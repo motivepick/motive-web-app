@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { Col, Row } from 'reactstrap'
 import { TASK_LIST } from '../const'
 
@@ -20,4 +20,4 @@ class TasksSubtitle extends PureComponent {
     }
 }
 
-export default translate()(TasksSubtitle)
+export default withTranslation()(TasksSubtitle)
