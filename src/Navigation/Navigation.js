@@ -19,6 +19,7 @@ class Navigation extends PureComponent {
                     <ul className="navbar-nav mr-auto">
                         {/* TODO: make active work again */}
                         <li className="nav-item">
+                            {/* eslint-disable-next-line */}
                             <a className="nav-link" onClick={onAllTasksClick || this.handleAllTasksClick} style={{ cursor: 'pointer' }}>
                                 {t('allTasks')}
                             </a>
