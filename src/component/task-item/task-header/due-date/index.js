@@ -22,7 +22,5 @@ const classOf = (dueDate, dimmedStyle) => {
 
 export const DueDate = props => {
     const { onClick, dimmedStyle = false, children } = props
-
-    if(!children) return null
-    return <small onClick={onClick} className={classOf(children, dimmedStyle)}>{format(children)}</small>
+    return children ? <small onClick={onClick} className={classOf(children, dimmedStyle)}>{format(children)}</small> : null
 }
