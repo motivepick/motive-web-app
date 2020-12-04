@@ -30,9 +30,9 @@ export const handleDueDateOf = (task) => {
     } else {
         if (R.contains(lastWord, ALL_DAYS_OF_WEEK) && R.contains(wordBeforeLast, ['on', 'в', 'во'])) {
             const dayOfWeek = R.toPairs(DAYS_OF_WEEK).find(entry => entry[1].includes(lastWord))[0]
-            const startOfToday = moment().startOf('day')
+            const startOfTomorrow = moment().startOf('day').add(1, 'days')
             const dueDate = moment().day(dayOfWeek).endOf('day')
-            const dueDateInFuture = dueDate.isBefore(startOfToday) ? dueDate.add(1, 'weeks') : dueDate
+            const dueDateInFuture = dueDate.isBefore(startOfTomorrow) ? dueDate.add(1, 'weeks') : dueDate
             return { ...task, name: nameWithoutLastWord(nameWithoutLastWord(task.name, lastWord), wordBeforeLast), dueDate: dueDateInFuture }
         } else {
             const date = moment(lastWord, ['DD.MM.YYYY', 'DD.MM.YY'], true).endOf('day')
