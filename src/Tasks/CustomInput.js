@@ -12,7 +12,7 @@ export class CustomInput extends Component {
         return (
             type === 'textarea' ? <Textarea placeholder={placeholder} value={value || ''} onChange={this.handleValueChange} minRows={3} maxRows={15}
                     onBlur={() => onSave(value)} className="form-control" maxLength={maxLength}/> :
-                <Input type={type} placeholder={placeholder} value={value} onChange={this.handleValueChange} onBlur={() => onSave(value)} maxLength={maxLength}
+                <Input type={type} placeholder={placeholder} value={value || ''} onChange={this.handleValueChange} onBlur={() => onSave(value)} maxLength={maxLength}
                     onKeyPress={target => target.charCode === 13 && this.blurAndSave(value)} innerRef={input => this.taskNameInput = input}/>
         )
     }
