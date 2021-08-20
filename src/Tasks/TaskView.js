@@ -193,7 +193,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         }
     },
 
-    updateTask: (id: number, task) => async (dispatch) => {
+    //id: number
+    updateTask: (id, task) => async (dispatch) => {
         try {
             dispatch(updateTaskAction(await updateTask(id, task)))
         } catch (e) {
@@ -201,7 +202,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         }
     },
 
-    closeOrUndoCloseTask: (id: number) => async (dispatch, getState) => {
+    //id: number
+    closeOrUndoCloseTask: (id) => async (dispatch, getState) => {
         const currentList = selectCurrentList(getState())
         try {
             const service = currentList === TASK_LIST.INBOX ? closeTask : undoCloseTask
