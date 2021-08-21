@@ -1,14 +1,13 @@
 import { ISchedule, ITask, IUser, TaskListTypeAsLiterals } from '../models'
 
-type UserState = {
-    user?: IUser
+export type UserState = {
+    user: IUser
 }
 
-type ScheduleState = {
+export type ScheduleState = {
     schedule: ISchedule;
     initialized: boolean;
 }
-
 
 export type TaskListWithTotal = {
     content: ITask[];
@@ -25,7 +24,7 @@ type TaskState = {
     initialized: boolean;
 }
 
-type TasksState = TaskState & TaskListState
+export type TasksState = TaskState & TaskListState
 
 export type AppState = {
     user: UserState;
