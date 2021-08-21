@@ -50,6 +50,10 @@
     "react/prop-types": 0,
     "react/no-deprecated": 1,
     "no-console": 1,
-    "no-undefined": 1
+    "no-undefined": 1,
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0
   }
 }

@@ -58,7 +58,7 @@ class TaskView extends PureComponent {
                     <Row style={{ marginTop: '10px' }}>
                         <Col>
                             <Input type="text" placeholder={t('new.task')} onKeyPress={this.onAddNewTask} autoFocus={isBrowser}
-                                innerRef={input => this.taskNameInput = input}/>
+                                   innerRef={input => this.taskNameInput = input}/>
                         </Col>
                     </Row>
                     {initialized ? <Fragment>
@@ -72,8 +72,8 @@ class TaskView extends PureComponent {
                                     <div {...provided.droppableProps} ref={provided.innerRef}>
                                         {list.content.map((task, index) =>
                                             <Task isDraggable={true} key={task.id} index={index} id={task.id} name={task.name} description={task.description}
-                                                dueDate={task.dueDate} closed={currentList === TASK_LIST.CLOSED} onTaskClose={closeOrUndoCloseTask}
-                                                saveTask={updateTask}/>
+                                                  dueDate={task.dueDate} closed={currentList === TASK_LIST.CLOSED} onTaskClose={closeOrUndoCloseTask}
+                                                  saveTask={updateTask}/>
                                         )}
                                         {provided.placeholder}
                                     </div>
@@ -183,7 +183,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 
     updateTaskIndex: (sourceListType, sourceIndex, destinationListType, destinationIndex) => async (dispatch) => {
         updateTasksOrderAsync({ sourceListType, sourceIndex, destinationListType, destinationIndex })
-        dispatch(updateTaskPositionIndexAction(sourceListType, sourceIndex, destinationListType, destinationIndex))
+        dispatch(updateTaskPositionIndexAction({ sourceListType, sourceIndex, destinationListType, destinationIndex }))
     },
 
     createTask: task => async (dispatch) => {

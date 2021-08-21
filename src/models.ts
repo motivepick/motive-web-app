@@ -1,12 +1,21 @@
+import { Moment } from 'moment'
+
 export type ITask = {
     id: number;
     name: string;
     description: string | null;
-    created: string;
-    dueDate: string | null;
-    closingDate: string | null;
+    created: Moment | string;
+    dueDate: Moment | string | null;
+    closingDate: Moment | string | null;
     closed: boolean;
     visible: boolean;
+}
+
+export type ITaskPositionIndex = {
+    sourceListType: TaskListTypeAsLiterals;
+    destinationListType: TaskListTypeAsLiterals;
+    sourceIndex: number;
+    destinationIndex: number;
 }
 
 export enum TASK_LIST {
@@ -24,3 +33,14 @@ export type IUser = {
     name: string;
     temporary: boolean;
 }
+
+export type IScheduleFutureAndOverdue = {
+    future: ITask[];
+    overdue: ITask[];
+}
+
+export type IScheduleWeek = {
+    [day: string]: ITask[];
+}
+
+export type ISchedule = IScheduleFutureAndOverdue & IScheduleWeek;

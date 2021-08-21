@@ -1,12 +1,5 @@
 import { Moment } from 'moment'
-import { ITask, TaskListTypeAsLiterals } from '../models'
-
-export type IUpdateTasksOrderAsyncRequest = {
-    sourceListType: TaskListTypeAsLiterals;
-    destinationListType: TaskListTypeAsLiterals;
-    sourceIndex: number;
-    destinationIndex: number;
-}
+import { IScheduleWeek, ITask } from '../models'
 
 export type ICreateTaskRequest = {
     name: string;
@@ -46,15 +39,6 @@ export type ISearchUserTasksResponse = {
     first: boolean;
     last: boolean;
     empty: boolean;
-}
-
-export type ISearchScheduleResponse = {
-    future: ITask[];
-    overdue: ITask[];
-}
-
-export type IScheduleWeek = {
-    [day: string]: ITask[];
 }
 
 export type ISearchScheduleWeekResponse = {

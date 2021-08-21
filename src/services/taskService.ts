@@ -1,14 +1,11 @@
 import request from 'superagent'
 import { API_URL } from '../config'
-import { ITask, TaskListTypeAsLiterals } from '../models'
+import { ISchedule, IScheduleFutureAndOverdue, ITask, ITaskPositionIndex, TaskListTypeAsLiterals } from '../models'
 import {
     ICreateTaskRequest,
-    IScheduleWeek,
-    ISearchScheduleResponse,
     ISearchScheduleWeekResponse,
     ISearchUserTasksResponse,
-    IUpdateTaskRequest,
-    IUpdateTasksOrderAsyncRequest
+    IUpdateTaskRequest
 } from './taskService.model'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -23,7 +20,7 @@ export const searchUserTasks = async (list: TaskListTypeAsLiterals, offset: numb
     return response.body as ISearchUserTasksResponse
 }
 
-export const updateTasksOrderAsync = (update: IUpdateTasksOrderAsyncRequest): Promise<void> =>
+export const updateTasksOrderAsync = (update: ITaskPositionIndex): Promise<void> =>
     request
         .post(`${API_URL}/orders`)
         .send(update)
@@ -50,8 +47,8 @@ export const updateTask = async (taskId: number, task: IUpdateTaskRequest): Prom
     return response.body as ITask
 }
 
-export const searchSchedule = async (): Promise<ISearchScheduleResponse & IScheduleWeek> => {
+export const searchSchedule = async (): Promise<ISchedule> => {
     const response = await request.get(`${API_URL}/schedule`).withCredentials()
-    const serverSchedule = response.body as ISearchScheduleResponse & ISearchScheduleWeekResponse
+    const serverSchedule = response.body as IScheduleFutureAndOverdue & ISearchScheduleWeekResponse
     return Object.assign({}, { ...serverSchedule.week, future: serverSchedule.future, overdue: serverSchedule.overdue })
 }

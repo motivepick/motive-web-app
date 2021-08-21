@@ -113,7 +113,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     },
 
     updateScheduleTaskIndex: (sourceDroppableId, sourceIndex, destinationDroppableId, destinationIndex) => (dispatch) => {
-        dispatch(updateScheduleTaskPositionIndexAction(sourceDroppableId, sourceIndex, destinationDroppableId, destinationIndex))
+        dispatch(updateScheduleTaskPositionIndexAction({ sourceDroppableId : sourceDroppableId, sourceIndex : sourceIndex, destinationDroppableId : destinationDroppableId, destinationIndex : destinationIndex }))
     },
 
     // id: number
