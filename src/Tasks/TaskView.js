@@ -193,7 +193,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         }
     },
 
-    //id: number
+    // id: number
     updateTask: (id, task) => async (dispatch) => {
         try {
             dispatch(updateTaskAction(await updateTask(id, task)))
@@ -202,7 +202,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         }
     },
 
-    //id: number
+    // id: number
     closeOrUndoCloseTask: (id) => async (dispatch, getState) => {
         const currentList = selectCurrentList(getState())
         try {

@@ -65,7 +65,7 @@ class Task extends PureComponent {
                         <CustomInput type="text" value={name} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
                     </FormGroup>
                     <FormGroup>
-                        <CustomInput type="date" value={dueDate && dueDate.format("YYYY-MM-DD")} onSave={this.saveDate}/>
+                        <CustomInput type="date" value={dueDate && dueDate.format('YYYY-MM-DD')} onSave={this.saveDate}/>
                     </FormGroup>
                     <FormGroup className="task-form-description">
                         <CustomInput type="textarea" placeholder={t('task.description')} value={description}
@@ -104,7 +104,7 @@ class Task extends PureComponent {
     }
 
     saveDate = (dueDate) => {
-        const task = { dueDate: moment(dueDate, "YYYY-MM-DD").endOf('day') }
+        const task = { dueDate: moment(dueDate, 'YYYY-MM-DD').endOf('day') }
         this.props.saveTask(this.props.id, task)
         return task.dueDate
     }

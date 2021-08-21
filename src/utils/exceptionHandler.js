@@ -1,10 +1,10 @@
 import { history } from '../index'
 
-const handleServerError = () => {
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const handleServerError = () => {}
 
-const handleNoResponseFromServer = () => {
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const handleNoResponseFromServer = () => {}
 
 export const handleServerException = (e) => {
     const { response } = e

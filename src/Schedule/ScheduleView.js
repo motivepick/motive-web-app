@@ -116,7 +116,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         dispatch(updateScheduleTaskPositionIndexAction(sourceDroppableId, sourceIndex, destinationDroppableId, destinationIndex))
     },
 
-    //id: number
+    // id: number
     updateScheduleTask: (id, task) => async (dispatch) => {
         try {
             const updatedTask = await updateTask(id, task)
@@ -127,7 +127,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
         }
     },
 
-    //id: number
+    // id: number
     closeScheduleTask: (id) => async (dispatch) => {
         try {
             const values = await Promise.all([closeTask(id), delay(DELAY_MS)])
