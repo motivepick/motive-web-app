@@ -1,6 +1,6 @@
 import { CLOSE_TASK, CREATE_TASK, SET_CURRENT_LIST, SET_TASKS, UNDO_CLOSE_TASK, UPDATE_TASK, UPDATE_TASK_POSITION_INDEX } from '../actions/taskActions'
-import { TASK_LIST } from '../const'
 import { copyOfListWithUpdatedTask } from '../utils/lists'
+import { TASK_LIST } from '../models'
 
 const emptyTaskList = () => ({
     content: [],

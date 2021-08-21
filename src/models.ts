@@ -9,12 +9,14 @@ export type ITask = {
     visible: boolean;
 }
 
-export enum TaskListType {
+export enum TASK_LIST {
+    // eslint-disable-next-line no-unused-vars
     INBOX = 'INBOX',
+    // eslint-disable-next-line no-unused-vars
     CLOSED = 'CLOSED'
 }
 
-export type TaskListTypeAsLiterals = `${TaskListType}`
+export type TaskListTypeAsLiterals = `${TASK_LIST}`
 
 export type IUser = {
     id: number;

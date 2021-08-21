@@ -28,9 +28,10 @@ import { delay, DELAY_MS } from '../utils/delay'
 import { history } from '../index'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { userReallyChangedOrder } from '../utils/dragAndDropUtils'
-import { DEFAULT_LIMIT, INFINITE_SCROLL_BOTTOM_OFFSET, TASK_LIST } from '../const'
+import { DEFAULT_LIMIT, INFINITE_SCROLL_BOTTOM_OFFSET } from '../const'
 import { selectCurrentList, selectInitialized, selectTaskList } from '../selectors/taskSelectors'
 import { selectUser } from '../selectors/userSelectors'
+import { TASK_LIST } from '../models'
 
 class TaskView extends PureComponent {
 
