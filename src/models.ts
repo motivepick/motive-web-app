@@ -15,3 +15,10 @@ export enum TaskListType {
 }
 
 export type TaskListTypeAsLiterals = `${TaskListType}`
+
+export type IUser = {
+    id: number;
+    accountId: string;
+    name: string;
+    temporary: boolean;
+}
