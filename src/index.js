@@ -12,7 +12,6 @@ import 'moment/locale/ru'
 import 'moment/locale/zh-tw'
 import 'font-awesome/css/font-awesome.min.css'
 import './index.css'
-import registerServiceWorker from './registerServiceWorker'
 import rootReducer from './reducers'
 import i18n from './i18n'
 import Routes from './routes'
@@ -69,4 +68,3 @@ ReactDOM.render(
         </I18nextProvider>
     </Provider>, document.getElementById('root')
 )
-registerServiceWorker()
