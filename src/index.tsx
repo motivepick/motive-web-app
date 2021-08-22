@@ -12,9 +12,9 @@ import 'moment/locale/ru'
 import 'moment/locale/zh-tw'
 import 'font-awesome/css/font-awesome.min.css'
 import './index.css'
-import rootReducer from './reducers'
+import rootReducer from './redux/reducers'
 import i18n from './i18n'
-import Routes from './routes'
+import Routes from './components/routes'
 
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
