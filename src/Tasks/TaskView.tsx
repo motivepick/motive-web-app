@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { Fragment, PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { Col, Input, Row } from 'reactstrap'

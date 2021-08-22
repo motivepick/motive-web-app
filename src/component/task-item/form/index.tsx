@@ -9,8 +9,8 @@ import './styles.css'
 
 interface TaskFormProps extends WithTranslation {
     task?: ITask;
-    saveName?: (name: string) => void;
-    saveDescription?: (description: string) => void;
+    saveName: (name: string) => string;
+    saveDescription: (description: string) => string;
 }
 
 const TaskForm: React.FC<TaskFormProps> = props => {
@@ -20,7 +20,7 @@ const TaskForm: React.FC<TaskFormProps> = props => {
             <Col>
                 <Form className="task-form" onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()}>
                     <FormGroup>
-                        <CustomInput type="text" value={task?.name} dueDate={task?.dueDate} onSave={saveName} maxLength={TASK_NAME_LIMIT}/>
+                        <CustomInput type="text" value={task?.name} onSave={saveName} maxLength={TASK_NAME_LIMIT}/>
                     </FormGroup>
                     <FormGroup className="task-form-description">
                         <CustomInput type="textarea" placeholder={t('task.description')} value={task?.description}

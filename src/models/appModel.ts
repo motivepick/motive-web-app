@@ -11,6 +11,17 @@ export type ITask = {
     visible: boolean;
 }
 
+export type ITaskNullable = {
+    id?: number;
+    name?: string;
+    description?: string | null;
+    created?: Moment | string;
+    dueDate?: Moment | string | null;
+    closingDate?: Moment | string | null;
+    closed?: boolean;
+    visible?: boolean;
+}
+
 export type ITaskPositionIndex = {
     sourceListType: TaskListTypeAsLiterals;
     destinationListType: TaskListTypeAsLiterals;
