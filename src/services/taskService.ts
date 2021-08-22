@@ -1,11 +1,16 @@
 import request from 'superagent'
 import { API_URL } from '../config'
-import { ISchedule, IScheduleFutureAndOverdue, ITask, ITaskPositionIndex, TaskListTypeAsLiterals } from '../models/appModel'
+import {
+    ISchedule,
+    IScheduleFutureAndOverdue,
+    ITask,
+    ITaskPositionIndex,
+    TaskListTypeAsLiterals
+} from '../models/appModel'
 import {
     ICreateTaskRequest,
     ISearchScheduleWeekResponse,
-    ISearchUserTasksResponse,
-    IUpdateTaskRequest
+    ISearchUserTasksResponse
 } from '../models/redux/taskServiceModel'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -42,7 +47,7 @@ export const undoCloseTask = async (id: number): Promise<ITask> => {
     return response.body as ITask
 }
 
-export const updateTask = async (taskId: number, task: IUpdateTaskRequest): Promise<ITask> => {
+export const updateTask = async (taskId: number, task: ITask): Promise<ITask> => {
     const response = await request.put(`${API_URL}/tasks/${taskId}`).send(task).withCredentials()
     return response.body as ITask
 }

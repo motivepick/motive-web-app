@@ -1,12 +1,20 @@
+import { History } from 'history'
 import React, { PureComponent } from 'react'
-import { DropdownItem, DropdownMenu, DropdownToggle, NavbarBrand, UncontrolledDropdown } from 'reactstrap'
-import logo from '../logo.png'
-import { withTranslation } from 'react-i18next'
-import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../config'
+import { withTranslation, WithTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { DropdownItem, DropdownMenu, DropdownToggle, NavbarBrand, UncontrolledDropdown } from 'reactstrap'
+import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../config'
 import { history } from '../index'
+import logo from '../logo.png'
+import { IUser } from '../models/appModel'
 
-class Navigation extends PureComponent {
+interface NavigationProps extends WithTranslation {
+    history: History;
+    user: IUser;
+    onAllTasksClick?: () => void
+}
+
+class Navigation extends PureComponent<NavigationProps> {
 
     render() {
         const { user, onAllTasksClick, t } = this.props

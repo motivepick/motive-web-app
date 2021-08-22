@@ -1,3 +1,4 @@
+import { ResponseError } from 'superagent'
 import { history } from '../index'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -6,7 +7,7 @@ const handleServerError = () => {}
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const handleNoResponseFromServer = () => {}
 
-export const handleServerException = (e) => {
+export const handleServerException = (e: ResponseError) => {
     const { response } = e
     if (response) {
         const { status } = response

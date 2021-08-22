@@ -1,8 +1,8 @@
 import React from 'react'
+import { withTranslation, WithTranslation } from 'react-i18next'
 import { Col, Row } from 'reactstrap'
-import { withTranslation } from 'react-i18next'
 
-const SpinnerView = ({ t }) =>
+const SpinnerView: React.FC<WithTranslation> = ({ t }) =>
     <div>
         <Row style={{ marginTop: '150px', marginBottom: '10px' }}>
             <Col className="text-center">

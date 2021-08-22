@@ -1,4 +1,4 @@
-import moment, { Moment } from 'moment'
+import moment from 'moment'
 import React from 'react'
 import { withTranslation, WithTranslation } from 'react-i18next'
 import { Col, Row } from 'reactstrap'
@@ -7,7 +7,7 @@ import { format } from '../utils/dateFormat'
 
 interface ScheduleHeaderProps extends WithTranslation {
     value?: string;
-    date?: Moment;
+    date?: string;
 }
 
 const ScheduleHeader: React.FC<ScheduleHeaderProps> = ({ value, date }) =>
