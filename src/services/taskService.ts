@@ -1,12 +1,12 @@
 import request from 'superagent'
 import { API_URL } from '../config'
-import { ISchedule, IScheduleFutureAndOverdue, ITask, ITaskPositionIndex, TaskListTypeAsLiterals } from '../models'
+import { ISchedule, IScheduleFutureAndOverdue, ITask, ITaskPositionIndex, TaskListTypeAsLiterals } from '../models/appModel'
 import {
     ICreateTaskRequest,
     ISearchScheduleWeekResponse,
     ISearchUserTasksResponse,
     IUpdateTaskRequest
-} from './taskService.model'
+} from '../models/redux/taskServiceModel'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const DO_NOTHING = () => {}

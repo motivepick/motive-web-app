@@ -31,7 +31,7 @@ import { userReallyChangedOrder } from '../utils/dragAndDropUtils'
 import { DEFAULT_LIMIT, INFINITE_SCROLL_BOTTOM_OFFSET } from '../const'
 import { selectCurrentList, selectInitialized, selectTaskList } from '../selectors/taskSelectors'
 import { selectUser } from '../selectors/userSelectors'
-import { TASK_LIST } from '../models'
+import { TASK_LIST } from '../models/appModel'
 
 class TaskView extends PureComponent {
 

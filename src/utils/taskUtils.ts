@@ -1,6 +1,6 @@
 import moment from 'moment'
 import * as R from 'ramda'
-import { ITask } from '../models'
+import { ITask } from '../models/appModel'
 
 const DAYS_OF_WEEK = {
     0: ['sunday', 'воскресенье'],

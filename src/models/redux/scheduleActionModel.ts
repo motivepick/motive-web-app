@@ -1,5 +1,5 @@
-import { ISchedule, ITask } from '../models'
-import { Action } from './action.model'
+import { ISchedule, ITask } from '../appModel'
+import { Action } from './actionModel'
 
 
 export type IScheduleTaskPositionIndex = {

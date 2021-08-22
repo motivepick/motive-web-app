@@ -1,4 +1,4 @@
-import { ISchedule, ITask, IUser, TaskListTypeAsLiterals } from '../models'
+import { ISchedule, ITask, IUser, TaskListTypeAsLiterals } from '../appModel'
 
 export type UserState = {
     user: IUser
@@ -15,7 +15,8 @@ export type TaskListWithTotal = {
 }
 
 type TaskListState = {
-    [list: string]: TaskListWithTotal
+    'INBOX': TaskListWithTotal,
+    'CLOSED': TaskListWithTotal,
 }
 
 type TaskState = {

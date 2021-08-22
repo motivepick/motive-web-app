@@ -1,5 +1,5 @@
 import { Moment } from 'moment'
-import { IScheduleWeek, ITask } from '../models'
+import { IScheduleWeek, ITask } from '../appModel'
 
 export type ICreateTaskRequest = {
     name: string;

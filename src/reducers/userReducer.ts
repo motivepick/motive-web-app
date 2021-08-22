@@ -1,6 +1,7 @@
-import { SET_USER, UserAction } from '../actions/userActions'
-import { IUser } from '../models'
-import { UserState } from '../selectors/state.model'
+import { SET_USER } from '../actions/userActions'
+import { IUser } from '../models/appModel'
+import { UserState } from '../models/redux/stateModel'
+import { UserAction } from '../models/redux/userActionsModel'
 
 const INITIAL_STATE = {
     user: <IUser>{}

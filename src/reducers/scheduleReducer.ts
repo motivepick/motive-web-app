@@ -3,15 +3,15 @@ import {
     ScheduleAction,
     ScheduleTaskAction,
     ScheduleTaskPositionIndexAction
-} from '../actions/scheduleAction.model'
+} from '../models/redux/scheduleActionModel'
 import {
     CLOSE_SCHEDULE_TASK,
     SET_SCHEDULE,
     UPDATE_SCHEDULE_TASK,
     UPDATE_SCHEDULE_TASK_POSITION_INDEX
 } from '../actions/scheduleActions'
-import { ISchedule, ITask } from '../models'
-import { ScheduleState } from '../selectors/state.model'
+import { ISchedule, ITask } from '../models/appModel'
+import { ScheduleState } from '../models/redux/stateModel'
 import { copyOfListWithUpdatedTask } from '../utils/lists'
 
 const INITIAL_STATE = {

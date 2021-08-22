@@ -1,5 +1,5 @@
-import { TaskListTypeAsLiterals } from '../models'
-import { AppState, TaskListWithTotal } from './state.model'
+import { TaskListTypeAsLiterals } from '../models/appModel'
+import { AppState, TaskListWithTotal } from '../models/redux/stateModel'
 
 export const selectCurrentList = (state: AppState): TaskListTypeAsLiterals => state.tasks.currentList
 

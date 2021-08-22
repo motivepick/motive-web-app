@@ -1,6 +1,22 @@
-import { CLOSE_TASK, CREATE_TASK, SET_CURRENT_LIST, SET_TASKS, UNDO_CLOSE_TASK, UPDATE_TASK, UPDATE_TASK_POSITION_INDEX } from '../actions/taskActions'
+import {
+    CLOSE_TASK,
+    CREATE_TASK,
+    SET_CURRENT_LIST,
+    SET_TASKS,
+    UNDO_CLOSE_TASK,
+    UPDATE_TASK,
+    UPDATE_TASK_POSITION_INDEX
+} from '../actions/taskActions'
+import { ITask, ITaskPositionIndex, TASK_LIST, TaskListTypeAsLiterals } from '../models/appModel'
+import { TaskListWithTotal, TasksState } from '../models/redux/stateModel'
+import {
+    TaskAction,
+    TaskListAction,
+    TaskListTypeAction,
+    TaskPositionIndexAction
+} from '../models/redux/taskActionsModel'
+import { ISearchUserTasksResponse } from '../models/redux/taskServiceModel'
 import { copyOfListWithUpdatedTask } from '../utils/lists'
-import { TASK_LIST } from '../models'
 
 const emptyTaskList = () => ({
     content: [],
@@ -8,14 +24,14 @@ const emptyTaskList = () => ({
 })
 
 const INITIAL_STATE = {
-    task: {},
+    task: <ITask>{},
     currentList: TASK_LIST.INBOX,
-    [TASK_LIST.INBOX]: emptyTaskList(),
-    [TASK_LIST.CLOSED]: emptyTaskList(),
+    [TASK_LIST.INBOX]: emptyTaskList() as TaskListWithTotal,
+    [TASK_LIST.CLOSED]: emptyTaskList() as TaskListWithTotal,
     initialized: false
 }
 
-const moveTaskSameList = (list, sourceIndex, destinationIndex) => {
+const moveTaskSameList = (list: ITask[], sourceIndex: number, destinationIndex: number): ITask[] => {
     const task = list[sourceIndex]
     const updatedList = [...list]
     updatedList.splice(sourceIndex, 1)
@@ -23,7 +39,7 @@ const moveTaskSameList = (list, sourceIndex, destinationIndex) => {
     return updatedList
 }
 
-const moveTask = (sourceList, sourceIndex, destinationList, destinationIndex) => {
+const moveTask = (sourceList: ITask[], sourceIndex: number, destinationList: ITask[], destinationIndex: number) => {
     const task = sourceList[sourceIndex]
     const updatedSourceList = [...sourceList]
     updatedSourceList.splice(sourceIndex, 1)
@@ -32,7 +48,7 @@ const moveTask = (sourceList, sourceIndex, destinationList, destinationIndex) =>
     return { updatedSourceList, updatedDestinationList }
 }
 
-export default function (state = INITIAL_STATE, action) {
+export default function (state: TasksState = INITIAL_STATE, action: TaskAction | TaskListAction | TaskListTypeAction | TaskPositionIndexAction) {
     const { type, payload } = action
     if (type === CREATE_TASK) {
         return {
@@ -44,13 +60,16 @@ export default function (state = INITIAL_STATE, action) {
             }
         }
     } else if (type === UPDATE_TASK_POSITION_INDEX) {
-        const { sourceListType, sourceIndex, destinationIndex } = payload
+        const { sourceListType, sourceIndex, destinationIndex } = payload as ITaskPositionIndex
         return {
             ...state,
-            [sourceListType]: { ...state[sourceListType], content: moveTaskSameList(state[sourceListType].content, sourceIndex, destinationIndex) }
+            [sourceListType]: {
+                ...state[sourceListType],
+                content: moveTaskSameList(state[sourceListType].content, sourceIndex, destinationIndex)
+            }
         }
     } else if (type === SET_TASKS) {
-        const { list, tasks } = payload
+        const { list, tasks } = payload as { list: TaskListTypeAsLiterals; tasks: ISearchUserTasksResponse }
         const { content, totalElements } = tasks
         return {
             ...state,
@@ -60,7 +79,7 @@ export default function (state = INITIAL_STATE, action) {
     } else if (type === CLOSE_TASK) {
         const sourceList = state[TASK_LIST.INBOX].content
         const destinationList = state[TASK_LIST.CLOSED].content
-        const task = sourceList.findIndex(t => t.id === payload.id)
+        const task = sourceList.findIndex(t => t.id === (<ITask>payload).id)
         const { updatedSourceList, updatedDestinationList } = moveTask(sourceList, task, destinationList, 0)
         return {
             ...state,
@@ -78,7 +97,7 @@ export default function (state = INITIAL_STATE, action) {
     } else if (type === UNDO_CLOSE_TASK) {
         const sourceList = state[TASK_LIST.CLOSED].content
         const destinationList = state[TASK_LIST.INBOX].content
-        const task = sourceList.findIndex(t => t.id === payload.id)
+        const task = sourceList.findIndex(t => t.id === (<ITask>payload).id)
         const { updatedSourceList, updatedDestinationList } = moveTask(sourceList, task, destinationList, 0)
         return {
             ...state,
@@ -101,9 +120,9 @@ export default function (state = INITIAL_STATE, action) {
             ...state,
             [currentList]: {
                 ...state[currentList],
-                content: copyOfListWithUpdatedTask(state[currentList].content, payload)
+                content: copyOfListWithUpdatedTask(state[currentList].content, <ITask>payload)
             },
-            task: { ...state.task, ...payload }
+            task: { ...state.task, ...<ITask>payload }
         }
     } else {
         return state

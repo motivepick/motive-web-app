@@ -1,10 +1,10 @@
-import { ISchedule, ITask } from '../models'
+import { ISchedule, ITask } from '../models/appModel'
 import {
     IScheduleTaskPositionIndex,
     ScheduleAction,
     ScheduleTaskAction,
     ScheduleTaskPositionIndexAction
-} from './scheduleAction.model'
+} from '../models/redux/scheduleActionModel'
 
 export const SET_SCHEDULE = 'SET_SCHEDULE'
 export const UPDATE_SCHEDULE_TASK_POSITION_INDEX = 'UPDATE_SCHEDULE_TASK_POSITION_INDEX'

@@ -1,8 +1,6 @@
-import { IUser } from '../models'
-import { Action } from './action.model'
+import { IUser } from '../models/appModel'
+import { UserAction } from '../models/redux/userActionsModel'
 
 export const SET_USER = 'SET_USER'
-
-export type UserAction = Action<IUser>
 
 export const setUserAction = (user: IUser): UserAction => ({ type: SET_USER, payload: user })

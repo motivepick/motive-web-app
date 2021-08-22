@@ -1,5 +1,6 @@
-import { ITask, ITaskPositionIndex, TaskListTypeAsLiterals } from '../models'
-import { ISearchUserTasksResponse } from '../services/taskService.model'
+import { ITask, ITaskPositionIndex, TaskListTypeAsLiterals } from '../models/appModel'
+import { ISearchUserTasksResponse } from '../models/redux/taskServiceModel'
+import { TaskAction, TaskListAction, TaskListTypeAction, TaskPositionIndexAction } from '../models/redux/taskActionsModel'
 
 export const SET_TASKS = 'SET_TASKS'
 export const UPDATE_TASK_POSITION_INDEX = 'UPDATE_TASK_POSITION_INDEX'
@@ -9,16 +10,11 @@ export const UNDO_CLOSE_TASK = 'UNDO_CLOSE_TASK'
 export const SET_CURRENT_LIST = 'SET_CURRENT_LIST'
 export const UPDATE_TASK = 'UPDATE_TASK'
 
-type TaskAction = { type: string; payload: ITask; }
-type TaskListAction = { type: string; payload: { list: TaskListTypeAsLiterals; tasks: ISearchUserTasksResponse }; }
-type TaskListTypeAction = { type: string; payload: TaskListTypeAsLiterals; }
-type ScheduleTaskPositionIndexAction = { type: string; payload: ITaskPositionIndex; }
-
 export const setTasksAction = (list: TaskListTypeAsLiterals, tasks: ISearchUserTasksResponse): TaskListAction =>
     ({ type: SET_TASKS, payload: { list, tasks } })
 
 export const updateTaskPositionIndexAction =
-    (taskPositionIndex: ITaskPositionIndex): ScheduleTaskPositionIndexAction =>
+    (taskPositionIndex: ITaskPositionIndex): TaskPositionIndexAction =>
         ({
             type: UPDATE_TASK_POSITION_INDEX,
             payload: taskPositionIndex

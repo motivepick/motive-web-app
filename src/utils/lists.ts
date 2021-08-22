@@ -1,4 +1,4 @@
-import { ITask } from '../models'
+import { ITask } from '../models/appModel'
 
 export const copyOfListWithUpdatedTask = (tasks: ITask[], task: ITask): ITask[] => {
     const result: ITask[] = []

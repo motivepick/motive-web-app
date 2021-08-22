@@ -1,5 +1,5 @@
-import { ISchedule } from '../models'
-import { AppState } from './state.model'
+import { ISchedule } from '../models/appModel'
+import { AppState } from '../models/redux/stateModel'
 
 export const selectSchedule = (state: AppState): ISchedule => state.schedule.schedule
 

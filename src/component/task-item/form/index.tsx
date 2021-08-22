@@ -2,7 +2,7 @@ import React, { FormEvent } from 'react'
 import { withTranslation, WithTranslation } from 'react-i18next'
 import { Col, Form, FormGroup, Row } from 'reactstrap'
 import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../../const'
-import { ITask } from '../../../models'
+import { ITask } from '../../../models/appModel'
 import { CustomInput } from '../../../Tasks/CustomInput'
 
 import './styles.css'
