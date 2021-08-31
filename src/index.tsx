@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Router } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import { Provider } from 'react-redux'
 import { applyMiddleware, createStore } from 'redux'
@@ -62,7 +62,7 @@ export const history = createBrowserHistory()
 ReactDOM.render(
     <Provider store={store}>
         <I18nextProvider i18n={i18n}>
-            <Router history={history}>
+            <Router>
                 <Routes/>
             </Router>
         </I18nextProvider>

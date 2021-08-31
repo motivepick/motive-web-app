@@ -1,7 +1,7 @@
 import { History } from 'history'
 import React, { PureComponent } from 'react'
 import { withTranslation, WithTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { DropdownItem, DropdownMenu, DropdownToggle, NavbarBrand, UncontrolledDropdown } from 'reactstrap'
 import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../../config'
 import { history } from '../../index'
@@ -24,17 +24,15 @@ class Navigation extends PureComponent<NavigationProps> {
                 </NavbarBrand>
                 <div className="collapse navbar-collapse">
                     <ul className="navbar-nav mr-auto">
-                        {/* TODO: make active work again */}
                         <li className="nav-item">
-                            {/* eslint-disable-next-line */}
-                            <a className="nav-link" onClick={onAllTasksClick || this.handleAllTasksClick} style={{ cursor: 'pointer' }}>
+                            <NavLink className="nav-link" exact to="/"  onClick={onAllTasksClick || this.handleAllTasksClick} style={{ cursor: 'pointer' }}>
                                 {t('allTasks')}
-                            </a>
+                            </NavLink>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to="/schedule">
+                            <NavLink className="nav-link" to="/schedule">
                                 {t('schedule')}
-                            </Link>
+                            </NavLink>
                         </li>
                     </ul>
                     <ul className="navbar-nav ml-auto">
