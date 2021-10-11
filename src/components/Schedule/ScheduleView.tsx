@@ -56,16 +56,16 @@ class ScheduleView extends PureComponent<ScheduleViewProps, ScheduleViewState> {
 
     render() {
         const { user, schedule, initialized, closeScheduleTask, updateScheduleTask, t } = this.props
+        const days = Object.keys(schedule).filter(day => !['future', 'overdue'].includes(day) && schedule[day].length > 0)
         return (
             <DraggableLayout onDragEnd={this.updateTaskPositionIndex} user={user}>
                 {initialized ? <div>
-                    {Object.keys(schedule)
-                        .filter(day => !['future', 'overdue'].includes(day) && schedule[day].length > 0)
-                        .map(day => (
-                                <DroppableTaskSection key={day} droppableId={day} date={day} tasks={schedule[day]}
-                                                      onTaskClose={closeScheduleTask} saveTask={updateScheduleTask}/>
-                            )
-                        )}
+                    {
+                        days.map(day => <DroppableTaskSection key={day} droppableId={day} date={day}
+                                                              tasks={schedule[day]}
+                                                              onTaskClose={closeScheduleTask}
+                                                              saveTask={updateScheduleTask}/>)
+                    }
                     <DroppableTaskSection droppableId="future" header={t('futureTasks')} tasks={schedule.future}
                                           onTaskClose={closeScheduleTask} saveTask={updateScheduleTask}/>
                     <DroppableTaskSection droppableId="overdue" header={t('overdueTasks')} tasks={schedule.overdue}
