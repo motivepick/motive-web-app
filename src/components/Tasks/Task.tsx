@@ -15,6 +15,8 @@ interface TaskProps extends Partial<DraggableProps> {
     closed: boolean;
 }
 
+const HTML_ANCHOR_TAG = 'a'
+
 const Task: React.FC<TaskProps> = (props) => {
     const { isDraggable, id, index, name, description, saveTask } = props
     const [areDetailsShown, setAreDetailsShown] = useState(false)
@@ -27,7 +29,7 @@ const Task: React.FC<TaskProps> = (props) => {
     }
 
     const handleTaskClick = ({ target }: React.MouseEvent<HTMLElement>) => {
-        if (target.tagName.toLowerCase() !== 'a') {
+        if (target.tagName.toLowerCase() !== HTML_ANCHOR_TAG) {
             setAreDetailsShown(!areDetailsShown)
         }
     }
