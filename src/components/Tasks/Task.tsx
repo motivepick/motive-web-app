@@ -3,25 +3,18 @@ import moment from 'moment'
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 import { Draggable, DraggableProps } from 'react-beautiful-dnd'
-import { withTranslation, WithTranslation } from 'react-i18next'
-import { Form, FormGroup } from 'reactstrap'
+import { WithTranslation } from 'react-i18next'
 import { CheckMark } from '../common/task-item/task-header/check-mark'
 import { DueDate } from '../common/task-item/task-header/due-date'
 import { Title } from '../common/task-item/task-header/title'
-import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../config'
-import { ITaskNullable } from '../../models/appModel'
-import { handleDueDateOf } from '../../utils/taskUtils'
-
-import { CustomInput } from './CustomInput'
 
 import './Task.css'
+import TaskDetails from './TaskDetails'
 
 interface TaskProps extends WithTranslation, DraggableProps {
     id: number;
     name: string;
-    description?: string;
     dueDate?: string;
-    saveTask: (id: number, task: ITaskNullable) => void;
     onTaskClose: (id: number) => void;
     closed: boolean;
 }
@@ -31,9 +24,7 @@ class Task extends PureComponent<TaskProps> {
     static propTypes = {
         id: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
-        description: PropTypes.string,
-        dueDate: PropTypes.string,
-        saveTask: PropTypes.func.isRequired
+        dueDate: PropTypes.string
     }
 
     state = { closed: this.props.closed, detailsShown: false }
@@ -58,7 +49,7 @@ class Task extends PureComponent<TaskProps> {
     }
 
     renderItem() {
-        const { name, description, t } = this.props
+        const { id, name, description, saveTask } = this.props
         const { closed } = this.state
         const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
         return (
@@ -71,21 +62,7 @@ class Task extends PureComponent<TaskProps> {
                     </div>
                 </div>
 
-                {this.state.detailsShown &&
-                <Form className="task-form" onSubmit={e => e.preventDefault()}>
-                    <FormGroup>
-                        <CustomInput type="text" value={name} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
-                    </FormGroup>
-                    <FormGroup>
-                        <CustomInput type="date" value={dueDate && dueDate.format('YYYY-MM-DD')}
-                                     onSave={this.saveDate}/>
-                    </FormGroup>
-                    <FormGroup className="task-form-description">
-                        <CustomInput type="textarea" placeholder={t('task.description')} value={description}
-                                     onSave={this.saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
-                    </FormGroup>
-                </Form>
-                }
+                {this.state.detailsShown && <TaskDetails task={{ id, name, description, dueDate: this.props.dueDate }} saveTask={saveTask}/>}
             </div>
         )
     }
@@ -104,25 +81,6 @@ class Task extends PureComponent<TaskProps> {
             this.setState({ detailsShown: !detailsShown })
         }
     }
-
-    saveName = (name: string) => {
-        // @ts-ignore
-        const task = handleDueDateOf({ name: name ? name.trim() : '' })
-        this.props.saveTask(this.props.id, task)
-        return task.name
-    }
-
-    saveDescription = (description: string) => {
-        const task = { description }
-        this.props.saveTask(this.props.id, task)
-        return task.description
-    }
-
-    saveDate = (dueDate: string) => {
-        const task = { dueDate: moment(dueDate, 'YYYY-MM-DD').endOf('day') }
-        this.props.saveTask(this.props.id, task)
-        return task.dueDate
-    }
 }
 
-export default withTranslation()(Task)
+export default Task
