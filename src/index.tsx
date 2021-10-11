@@ -14,7 +14,7 @@ import 'font-awesome/css/font-awesome.min.css'
 import './index.css'
 import rootReducer from './redux/reducers'
 import i18n from './i18n'
-import Routes from './components/routes'
+import App from './components/App'
 
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
@@ -63,7 +63,7 @@ ReactDOM.render(
     <Provider store={store}>
         <I18nextProvider i18n={i18n}>
             <Router>
-                <Routes/>
+                <App />
             </Router>
         </I18nextProvider>
     </Provider>, document.getElementById('root')
