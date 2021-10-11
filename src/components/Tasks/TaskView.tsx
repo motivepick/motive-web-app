@@ -3,7 +3,6 @@ import React, { Fragment, PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { Col, Input, Row } from 'reactstrap'
 import Task from './Task'
-import Navigation from '../Navigation/Navigation'
 import { withTranslation } from 'react-i18next'
 import { handleDueDateOf } from '../../utils/taskUtils'
 import SpinnerView from '../common/Spinner'
@@ -23,15 +22,15 @@ import { closeTask, createTask, searchUserTasks, undoCloseTask, updateTask, upda
 import { handleServerException } from '../../utils/exceptionHandler'
 import { fetchUser } from '../../services/userService'
 import { setUserAction } from '../../redux/actions/userActions'
-import Footer from '../common/Footer'
 import { delay, DELAY_MS } from '../../utils/delay'
 import { history } from '../../index'
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { Droppable } from 'react-beautiful-dnd'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import { DEFAULT_LIMIT, INFINITE_SCROLL_BOTTOM_OFFSET } from '../../config'
 import { selectCurrentList, selectInitialized, selectTaskList } from '../../redux/selectors/taskSelectors'
 import { selectUser } from '../../redux/selectors/userSelectors'
 import { TASK_LIST } from '../../models/appModel'
+import DraggableLayout from '../layouts/DraggableLayout'
 
 class TaskView extends PureComponent {
 
@@ -52,8 +51,7 @@ class TaskView extends PureComponent {
         const { user, currentList, initialized, closeOrUndoCloseTask, updateTask, toggleCurrentTaskList, t } = this.props
         const list = this.props[currentList]
         return (
-            <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
-                <Navigation history={this.props.history} user={user} onAllTasksClick={this.handleAllTasksClick}/>
+            <DraggableLayout onDragEnd={this.updateTaskPositionIndex}  user={user} onAllTasksClick={this.handleAllTasksClick}>
                 <div>
                     <Row style={{ marginTop: '10px' }}>
                         <Col>
@@ -82,8 +80,7 @@ class TaskView extends PureComponent {
                         </div>
                     </Fragment> : <SpinnerView/>}
                 </div>
-                <Footer/>
-            </DragDropContext>
+            </DraggableLayout>
         )
     }
 

@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { History } from 'history'
 import React, { Fragment, MouseEventHandler, PureComponent } from 'react'
-import { DragDropContext, DraggableLocation, Droppable, DropResult } from 'react-beautiful-dnd'
+import { DraggableLocation, Droppable, DropResult } from 'react-beautiful-dnd'
 import { withTranslation, WithTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
@@ -13,12 +13,10 @@ import {
 } from '../../redux/actions/scheduleActions'
 import { closeTaskAction, updateTaskAction } from '../../redux/actions/taskActions'
 import { setUserAction } from '../../redux/actions/userActions'
-import Footer from '../common/Footer'
 import ScheduleHeader from '../common/ScheduleHeader'
 import { ISchedule, ITask, IUser } from '../../models/appModel'
 import { IScheduleTaskPositionIndex } from '../../models/redux/scheduleActionModel'
 import { AppState, ScheduleState, UserState } from '../../models/redux/stateModel'
-import Navigation from '../Navigation/Navigation'
 import { selectInitialized, selectSchedule } from '../../redux/selectors/scheduleSelectors'
 import { selectUser } from '../../redux/selectors/userSelectors'
 import { closeTask, searchSchedule, updateTask } from '../../services/taskService'
@@ -28,6 +26,7 @@ import Task from '../Tasks/Task'
 import { delay, DELAY_MS } from '../../utils/delay'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import { handleServerException } from '../../utils/exceptionHandler'
+import DraggableLayout from '../layouts/DraggableLayout'
 
 interface ScheduleViewProps extends WithTranslation {
     user: IUser;
@@ -59,31 +58,30 @@ class ScheduleView extends PureComponent<ScheduleViewProps, ScheduleViewState> {
     render() {
         const { user, schedule, initialized, closeScheduleTask, updateScheduleTask, t } = this.props
         return (
-            <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
-                <Navigation history={this.props.history} user={user}/>
+            <DraggableLayout onDragEnd={this.updateTaskPositionIndex} user={user}>
                 {initialized ? <div>
                     {Object.keys(schedule)
-                           .filter(day => !['future', 'overdue'].includes(day) && schedule[day].length > 0)
-                           .map(day =>
-                               (
-                                   <Fragment key={day}>
-                                       <ScheduleHeader date={day}/>
-                                       <Droppable droppableId={day}>
-                                           {provided => (
-                                               <div {...provided.droppableProps} ref={provided.innerRef}>
-                                                   {schedule[day].map(task =>
-                                                       <Task key={task.id} id={task.id} name={task.name}
-                                                             description={task.description}
-                                                             dueDate={task.dueDate} closed={task.closed}
-                                                             onTaskClose={closeScheduleTask}
-                                                             saveTask={updateScheduleTask}/>
-                                                   )}
-                                                   {provided.placeholder}
-                                               </div>
-                                           )}
-                                       </Droppable>
-                                   </Fragment>
-                               ))}
+                        .filter(day => !['future', 'overdue'].includes(day) && schedule[day].length > 0)
+                        .map(day =>
+                            (
+                                <Fragment key={day}>
+                                    <ScheduleHeader date={day}/>
+                                    <Droppable droppableId={day}>
+                                        {provided => (
+                                            <div {...provided.droppableProps} ref={provided.innerRef}>
+                                                {schedule[day].map(task =>
+                                                    <Task key={task.id} id={task.id} name={task.name}
+                                                          description={task.description}
+                                                          dueDate={task.dueDate} closed={task.closed}
+                                                          onTaskClose={closeScheduleTask}
+                                                          saveTask={updateScheduleTask}/>
+                                                )}
+                                                {provided.placeholder}
+                                            </div>
+                                        )}
+                                    </Droppable>
+                                </Fragment>
+                            ))}
                     {schedule.future.length > 0 && <Fragment>
                         <ScheduleHeader value={t('futureTasks')}/>
                         <Droppable droppableId="future">
@@ -115,8 +113,7 @@ class ScheduleView extends PureComponent<ScheduleViewProps, ScheduleViewState> {
                         </Droppable>
                     </Fragment>}
                 </div> : <SpinnerView/>}
-                <Footer/>
-            </DragDropContext>
+            </DraggableLayout>
         )
     }
 
