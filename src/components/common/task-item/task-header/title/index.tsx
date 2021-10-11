@@ -8,21 +8,13 @@ type TitleProps = {
     dimmedStyle: boolean;
 }
 
-const DimmedTitle: React.FC<PropsWithChildren<unknown>> = ({ children }) =>
-    <div className={'dimmed'}>
-        {<del><WithLinks>{children}</WithLinks></del>}
-    </div>
-
-const RegularTitle: React.FC<PropsWithChildren<unknown>> = ({ children }) =>
-    <div>
-        {<WithLinks>{children}</WithLinks>}
-    </div>
-
-export const Title: React.FC<PropsWithChildren<TitleProps>> = props => {
+export const Title: React.FC<TitleProps> = props => {
     const { onClick, dimmedStyle = false, children } = props
     return (
         <div onClick={onClick}>
-            {dimmedStyle ? <DimmedTitle>{children}</DimmedTitle> : <RegularTitle>{children}</RegularTitle>}
+            <div className={dimmedStyle ? 'dimmed': ''}>
+                <WithLinks>{children}</WithLinks>
+            </div>
         </div>
     )
 }

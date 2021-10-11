@@ -21,7 +21,7 @@ const Task: React.FC<TaskProps> = (props) => {
     const [isClosed, setIsClosed] = useState(props.closed)
 
     const handleTaskClose = async () => {
-        const { id, onTaskClose } = this.props
+        const { id, onTaskClose } = props
         setIsClosed(!isClosed)
         onTaskClose(id)
     }

@@ -1,7 +1,9 @@
 .dimmed {
     color: #8E8E93;
+    text-decoration: line-through;
 }
 
 .dimmed a {
     color: #8E8E93;
+    text-decoration: none;
 }
