@@ -5,27 +5,6 @@
     padding: .4rem .2rem;
 }
 
-.task-body {
-    overflow: hidden;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-items: flex-start;
-}
-
-.task-body > div {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    padding-right: .4rem;
-}
-
-.task-header {
-    display: flex;
-    align-items: center;
-    height: 2.5em;
-}
-
 .task-form {
     padding: .65rem .6rem;
 }

@@ -1,17 +1,13 @@
 // @ts-nocheck
 import moment from 'moment'
-import PropTypes from 'prop-types'
-import React, { PureComponent } from 'react'
+import React, { useState } from 'react'
 import { Draggable, DraggableProps } from 'react-beautiful-dnd'
-import { WithTranslation } from 'react-i18next'
-import { CheckMark } from '../common/task-item/task-header/check-mark'
-import { DueDate } from '../common/task-item/task-header/due-date'
-import { Title } from '../common/task-item/task-header/title'
 
 import './Task.css'
 import TaskDetails from './TaskDetails'
+import TaskHeader from '../common/task-item/task-header/TaskHeader'
 
-interface TaskProps extends WithTranslation, DraggableProps {
+interface TaskProps extends Partial<DraggableProps> {
     id: number;
     name: string;
     dueDate?: string;
@@ -19,68 +15,48 @@ interface TaskProps extends WithTranslation, DraggableProps {
     closed: boolean;
 }
 
-class Task extends PureComponent<TaskProps> {
+const Task: React.FC<TaskProps> = (props) => {
+    const { isDraggable, id, index, name, description, saveTask } = props
+    const [areDetailsShown, setAreDetailsShown] = useState(false)
+    const [isClosed, setIsClosed] = useState(props.closed)
 
-    static propTypes = {
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        dueDate: PropTypes.string
+    const handleTaskClose = async () => {
+        const { id, onTaskClose } = this.props
+        setIsClosed(!isClosed)
+        onTaskClose(id)
     }
 
-    state = { closed: this.props.closed, detailsShown: false }
-
-    render = () => {
-        const { isDraggable = false } = this.props
-        if (isDraggable) return this.renderDraggable()
-        return this.renderItem()
+    const handleTaskClick = ({ target }: React.MouseEvent<HTMLElement>) => {
+        if (target.tagName.toLowerCase() !== 'a') {
+            setAreDetailsShown(!areDetailsShown)
+        }
     }
 
-    renderDraggable() {
-        const { id, index } = this.props
+    const renderDraggable = ({ id, index }) => {
         return (
             <Draggable draggableId={id.toString()} index={index}>
                 {(provided) => (
                     <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                        {this.renderItem()}
+                        {renderItem()}
                     </div>
                 )}
             </Draggable>
         )
     }
 
-    renderItem() {
-        const { id, name, description, saveTask } = this.props
-        const { closed } = this.state
-        const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
+    const renderItem = () => {
+        const dueDate = props.dueDate ? moment(props.dueDate, moment.ISO_8601) : null
         return (
             <div className="task">
-                <div className="task-header">
-                    <CheckMark toggled={closed} onToggle={this.handleTaskClose}/>
-                    <div className="task-body">
-                        <Title dimmedStyle={closed} onClick={this.handleTaskClick}>{name}</Title>
-                        <DueDate dimmedStyle={closed} onClick={this.handleTaskClick}>{dueDate}</DueDate>
-                    </div>
-                </div>
-
-                {this.state.detailsShown && <TaskDetails task={{ id, name, description, dueDate: this.props.dueDate }} saveTask={saveTask}/>}
+                <TaskHeader task={{ name, dueDate }} isClosed={isClosed} onClick={handleTaskClick}
+                            onClose={handleTaskClose}/>
+                {areDetailsShown && <TaskDetails task={{ id, name, description, dueDate: props.dueDate }} saveTask={saveTask}/>}
             </div>
         )
     }
 
-    handleTaskClose = async () => {
-        const { id, onTaskClose } = this.props
-        const { closed } = this.state
-        this.setState({ closed: !closed })
-        onTaskClose(id)
-    }
-
-    handleTaskClick = ({ target }: React.MouseEvent<HTMLElement>) => {
-        // @ts-ignore
-        if (target.tagName.toLowerCase() !== 'a') {
-            const { detailsShown } = this.state
-            this.setState({ detailsShown: !detailsShown })
-        }
-    }
+    if (isDraggable) return renderDraggable({ id, index })
+    return renderItem()
 }
 
 export default Task
