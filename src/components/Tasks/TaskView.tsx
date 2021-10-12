@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { Fragment, PureComponent } from 'react'
 import { connect } from 'react-redux'
-import Task from '../common/task/Task'
+import Task from '../common/Task/Task'
 import { withTranslation } from 'react-i18next'
 import SpinnerView from '../common/Spinner'
 import TasksSubtitle from '../common/TasksSubtitle'

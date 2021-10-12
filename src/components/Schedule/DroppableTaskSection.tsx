@@ -2,7 +2,7 @@
 import React from 'react'
 import ScheduleHeader from '../common/ScheduleHeader'
 import { Droppable } from 'react-beautiful-dnd'
-import Task from '../common/task/Task'
+import Task from '../common/Task/Task'
 import { ITask, ITaskNullable } from '../../models/appModel'
 
 type TDroppableTaskSection = {
