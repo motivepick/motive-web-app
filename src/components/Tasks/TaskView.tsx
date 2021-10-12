@@ -2,9 +2,7 @@
 import React, { Fragment, PureComponent } from 'react'
 import { connect } from 'react-redux'
 import Task from '../common/Task/Task'
-import { withTranslation } from 'react-i18next'
 import SpinnerView from '../common/Spinner'
-import TasksSubtitle from '../common/TasksSubtitle'
 import { bindActionCreators } from 'redux'
 import {
     closeTaskAction,
@@ -27,6 +25,7 @@ import { selectUser } from '../../redux/selectors/userSelectors'
 import { TASK_LIST } from '../../models/appModel'
 import DraggableLayout from '../layouts/DraggableLayout'
 import { AddTask } from './components/AddTask'
+import TaskListControls from './TaskListControls'
 
 class TaskView extends PureComponent {
 
@@ -44,17 +43,14 @@ class TaskView extends PureComponent {
     }
 
     render() {
-        const { user, currentList, initialized, closeOrUndoCloseTask, toggleCurrentTaskList, t } = this.props
+        const { user, currentList, initialized, closeOrUndoCloseTask } = this.props
         const list = this.props[currentList]
         return (
             <DraggableLayout onDragEnd={this.updateTaskPositionIndex}  user={user} onAllTasksClick={this.handleAllTasksClick}>
                 <div>
                     <AddTask />
                     {initialized ? <Fragment>
-                        <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={toggleCurrentTaskList}/>
-                        {list.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-                            <img src='/images/no-tasks-eng.png' width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
-                        </div>}
+                        <TaskListControls />
                         <div>
                             <Droppable droppableId={currentList}>
                                 {provided => (
@@ -171,10 +167,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 
     setCurrentTaskListToInbox: () => dispatch => {
         dispatch(setCurrentListAction(TASK_LIST.INBOX))
-    },
-
-    toggleCurrentTaskList: () => (dispatch, getState) => {
-        dispatch(setCurrentListAction(selectCurrentList(getState()) === TASK_LIST.INBOX ? TASK_LIST.CLOSED : TASK_LIST.INBOX))
     }
 }, dispatch)
 
@@ -186,4 +178,4 @@ const mapStateToProps = state => ({
     initialized: selectInitialized(state)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withTranslation()(TaskView))
+export default connect(mapStateToProps, mapDispatchToProps)(TaskView)
