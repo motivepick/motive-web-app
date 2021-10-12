@@ -1,6 +1,6 @@
-import { CheckMark } from './check-mark'
-import { Title } from './title'
-import { DueDate } from './due-date'
+import { CheckMark } from './CheckMark'
+import { Title } from './Title'
+import { DueDate } from './DueDate'
 import React from 'react'
 import { ITaskNullable } from '../../../../models/appModel'
 

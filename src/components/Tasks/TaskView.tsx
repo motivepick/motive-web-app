@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { Fragment, PureComponent } from 'react'
 import { connect } from 'react-redux'
-import Task from './Task'
+import Task from '../common/task/Task'
 import { withTranslation } from 'react-i18next'
 import SpinnerView from '../common/Spinner'
 import TasksSubtitle from '../common/TasksSubtitle'
@@ -26,7 +26,7 @@ import { selectCurrentList, selectInitialized, selectTaskList } from '../../redu
 import { selectUser } from '../../redux/selectors/userSelectors'
 import { TASK_LIST } from '../../models/appModel'
 import DraggableLayout from '../layouts/DraggableLayout'
-import { AddTask } from './AddTask'
+import { AddTask } from './components/AddTask'
 
 class TaskView extends PureComponent {
 

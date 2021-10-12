@@ -19,11 +19,7 @@ const ToggledCheckMark =
 
 const UntoggledCheckMark = <div className="circle incomplete-circle"/>
 
-export const CheckMark: React.FC<CheckMarkProps> = props => {
-    const { onToggle, toggled } = props
-    return (
-        <Button color="link" onClick={onToggle}>
-            {toggled ? ToggledCheckMark : UntoggledCheckMark}
-        </Button>
-    )
-}
+export const CheckMark: React.FC<CheckMarkProps> = ({ onToggle, toggled }) =>
+    <Button color="link" onClick={onToggle}>
+        {toggled ? ToggledCheckMark : UntoggledCheckMark}
+    </Button>

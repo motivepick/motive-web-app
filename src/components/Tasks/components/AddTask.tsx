@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 import { Col, Input, Row } from 'reactstrap'
 import { isBrowser } from 'react-device-detect'
 import { useTranslation } from 'react-i18next'
-import { TASK_LIST } from '../../models/appModel'
-import { handleDueDateOf } from '../../utils/taskUtils'
-import { ICreateTaskRequest } from '../../models/redux/taskServiceModel'
-import { useTasksStore } from '../../redux'
+import { TASK_LIST } from '../../../models/appModel'
+import { handleDueDateOf } from '../../../utils/taskUtils'
+import { ICreateTaskRequest } from '../../../models/redux/taskServiceModel'
+import { useTasksStore } from '../../../redux'
 
 export const AddTask = () => {
     const { t } = useTranslation()

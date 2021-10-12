@@ -5,7 +5,7 @@ import { Draggable, DraggableProps } from 'react-beautiful-dnd'
 
 import './Task.css'
 import TaskDetails from './TaskDetails'
-import TaskHeader from '../common/task-item/task-header/TaskHeader'
+import TaskHeader from './TaskHeader/TaskHeader'
 
 interface TaskProps extends Partial<DraggableProps> {
     id: number;

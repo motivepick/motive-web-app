@@ -2,15 +2,15 @@ import moment from 'moment'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form, FormGroup } from 'reactstrap'
-import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../config'
-import { ITaskNullable } from '../../models/appModel'
-import { handleDueDateOf } from '../../utils/taskUtils'
+import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../../config'
+import { ITaskNullable } from '../../../models/appModel'
+import { handleDueDateOf } from '../../../utils/taskUtils'
 
-import { CustomInput } from './CustomInput'
+import { CustomInput } from '../CustomInput'
 
 import './Task.css'
-import { useTasksStore } from '../../redux'
-import { IUpdateTaskRequest } from '../../models/redux/taskServiceModel'
+import { useTasksStore } from '../../../redux'
+import { IUpdateTaskRequest } from '../../../models/redux/taskServiceModel'
 
 interface TaskDetailsProps {
     task: ITaskNullable;
