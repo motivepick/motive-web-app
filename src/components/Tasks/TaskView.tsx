@@ -1,24 +1,20 @@
 // @ts-nocheck
 import React, { Fragment, PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { Col, Input, Row } from 'reactstrap'
 import Task from './Task'
 import { withTranslation } from 'react-i18next'
-import { handleDueDateOf } from '../../utils/taskUtils'
 import SpinnerView from '../common/Spinner'
-import { isBrowser } from 'react-device-detect'
 import TasksSubtitle from '../common/TasksSubtitle'
 import { bindActionCreators } from 'redux'
 import {
     closeTaskAction,
-    createTaskAction,
     setCurrentListAction,
     setTasksAction,
     undoCloseTaskAction,
     updateTaskAction,
     updateTaskPositionIndexAction
 } from '../../redux/actions/taskActions'
-import { closeTask, createTask, searchUserTasks, undoCloseTask, updateTask, updateTasksOrderAsync } from '../../services/taskService'
+import { closeTask, searchUserTasks, undoCloseTask, updateTask, updateTasksOrderAsync } from '../../services/taskService'
 import { handleServerException } from '../../utils/exceptionHandler'
 import { fetchUser } from '../../services/userService'
 import { setUserAction } from '../../redux/actions/userActions'
@@ -31,6 +27,7 @@ import { selectCurrentList, selectInitialized, selectTaskList } from '../../redu
 import { selectUser } from '../../redux/selectors/userSelectors'
 import { TASK_LIST } from '../../models/appModel'
 import DraggableLayout from '../layouts/DraggableLayout'
+import { AddTask } from './AddTask'
 
 class TaskView extends PureComponent {
 
@@ -53,12 +50,7 @@ class TaskView extends PureComponent {
         return (
             <DraggableLayout onDragEnd={this.updateTaskPositionIndex}  user={user} onAllTasksClick={this.handleAllTasksClick}>
                 <div>
-                    <Row style={{ marginTop: '10px' }}>
-                        <Col>
-                            <Input type="text" placeholder={t('new.task')} onKeyPress={this.onAddNewTask} autoFocus={isBrowser}
-                                   innerRef={input => this.taskNameInput = input}/>
-                        </Col>
-                    </Row>
+                    <AddTask />
                     {initialized ? <Fragment>
                         <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={toggleCurrentTaskList}/>
                         {list.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
@@ -131,23 +123,6 @@ class TaskView extends PureComponent {
         }
     }
 
-    onAddNewTask = async (e) => {
-        const input = e.target
-        if (e.key === 'Enter' && input.value.trim() !== '') {
-            const { setCurrentTaskListToInbox, createTask } = this.props
-            const task = handleDueDateOf({ name: input.value.trim() })
-            input.disabled = true
-            try {
-                setCurrentTaskListToInbox()
-                await createTask(task)
-                input.value = ''
-            } finally {
-                input.disabled = false
-                this.taskNameInput.focus()
-            }
-        }
-    }
-
     handleAllTasksClick = () => {
         const { location, setCurrentTaskListToInbox } = this.props
         const { pathname } = location
@@ -181,14 +156,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     updateTaskIndex: (sourceListType, sourceIndex, destinationListType, destinationIndex) => async (dispatch) => {
         updateTasksOrderAsync({ sourceListType, sourceIndex, destinationListType, destinationIndex })
         dispatch(updateTaskPositionIndexAction({ sourceListType, sourceIndex, destinationListType, destinationIndex }))
-    },
-
-    createTask: task => async (dispatch) => {
-        try {
-            dispatch(createTaskAction(await createTask(task)))
-        } catch (e) {
-            handleServerException(e)
-        }
     },
 
     // id: number
