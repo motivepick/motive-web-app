@@ -1,7 +1,7 @@
-import TasksSubtitle from '../common/TasksSubtitle'
+import TasksSubtitle from '../../common/TasksSubtitle'
 import React from 'react'
-import { useTasksStore } from '../../redux'
-import { TASK_LIST } from '../../models/appModel'
+import { useTasksStore } from '../../../redux'
+import { TASK_LIST } from '../../../models/appModel'
 
 const NoTasks = () => (
     <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>

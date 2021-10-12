@@ -6,10 +6,14 @@ import { handleServerException } from '../utils/exceptionHandler'
 import { ICreateTaskRequest, IUpdateTaskRequest } from '../models/redux/taskServiceModel'
 import { createTaskAction, setCurrentListAction, updateTaskAction } from './actions/taskActions'
 import { selectCurrentList, selectDisplayedTasks } from './selectors/taskSelectors'
+import { setUserAction } from './actions/userActions'
+import { fetchUser } from '../services/userService'
+import { selectUser } from './selectors/userSelectors'
 
 export const useTasksStore = () => {
     const dispatch = useDispatch()
 
+    const user = useSelector(selectUser)
     const taskList = useSelector(selectCurrentList)
     const displayedTasks = useSelector(selectDisplayedTasks)
 
@@ -34,7 +38,17 @@ export const useTasksStore = () => {
         [dispatch]
     )
 
+    const setUser = useCallback(async () => {
+        try {
+            dispatch(setUserAction(await fetchUser()))
+        } catch (e) {
+            handleServerException(e)
+        }
+    }, [dispatch])
+
     return {
+        user,
+        setUser,
         displayedTasks,
         taskList,
         createTask,

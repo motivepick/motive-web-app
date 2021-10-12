@@ -13,11 +13,13 @@ type TDraggableLayout = {
 const DraggableLayout: React.FC<TDraggableLayout> = (props) => {
     const { children, user, onAllTasksClick, onDragEnd } = props
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
+        <>
             <Navigation user={user} onAllTasksClick={onAllTasksClick}/>
-            { children }
+            <DragDropContext onDragEnd={onDragEnd}>
+                { children }
+            </DragDropContext>
             <Footer/>
-        </DragDropContext>
+        </>
     )
 }
 
