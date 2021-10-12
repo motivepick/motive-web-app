@@ -1,6 +1,8 @@
+// @ts-nocheck
 import moment from 'moment'
 import * as R from 'ramda'
 import { ITask } from '../models/appModel'
+import { ICreateTaskRequest } from '../models/redux/taskServiceModel'
 
 const DAYS_OF_WEEK = {
     0: ['sunday', 'воскресенье'],
@@ -18,24 +20,26 @@ const nameWithoutLastWord = (name: string, lastWord: string): string => name.sub
 
 const wordsOf = (name: string): string[] => name.split(' ').map(w => w.trim())
 
-export const handleDueDateOf = (task: ITask): ITask => {
+export const handleDueDateOf = (task: ITask | ICreateTaskRequest): ITask => {
     const words = wordsOf(task.name)
     const lastWord = words[words.length - 1].toLowerCase()
     const wordBeforeLast = words.length > 1 ? words[words.length - 2].toLowerCase() : null
+    const name = nameWithoutLastWord(task.name, lastWord)
+
     if (R.contains(lastWord, ['today', 'сегодня'])) {
-        return { ...task, name: nameWithoutLastWord(task.name, lastWord), dueDate: moment().endOf('day') }
+        return { ...task, name, dueDate: moment().endOf('day') }
     } else if (R.contains(lastWord, ['tomorrow', 'завтра'])) {
-        return { ...task, name: nameWithoutLastWord(task.name, lastWord), dueDate: moment().add(1, 'days').endOf('day') }
+        return { ...task, name, dueDate: moment().add(1, 'days').endOf('day') }
     } else if (R.contains(lastWord, ['послезавтра'])) {
-        return { ...task, name: nameWithoutLastWord(task.name, lastWord), dueDate: moment().add(2, 'days').endOf('day') }
+        return { ...task, name, dueDate: moment().add(2, 'days').endOf('day') }
     } else if (R.contains(lastWord, ALL_DAYS_OF_WEEK) && R.contains(wordBeforeLast, ['on', 'в', 'во'])) {
         const dayOfWeek: string = R.toPairs(DAYS_OF_WEEK).find(entry => entry[1].includes(lastWord))![0]
         const startOfTomorrow = moment().startOf('day').add(1, 'days')
         const dueDate = moment().day(dayOfWeek).endOf('day')
         const dueDateInFuture = dueDate.isBefore(startOfTomorrow) ? dueDate.add(1, 'weeks') : dueDate
-        return { ...task, name: nameWithoutLastWord(nameWithoutLastWord(task.name, lastWord), wordBeforeLast as string), dueDate: dueDateInFuture }
+        return { ...task, name: nameWithoutLastWord(name, wordBeforeLast as string), dueDate: dueDateInFuture }
     } else {
         const date = moment(lastWord, ['DD.MM.YYYY', 'DD.MM.YY'], true).endOf('day')
-        return date.isValid() ? { ...task, name: nameWithoutLastWord(task.name, lastWord), dueDate: date.endOf('day') } : { ...task }
+        return date.isValid() ? { ...task, name, dueDate: date.endOf('day') } : { ...task }
     }
 }

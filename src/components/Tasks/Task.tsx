@@ -18,7 +18,7 @@ interface TaskProps extends Partial<DraggableProps> {
 const HTML_ANCHOR_TAG = 'a'
 
 const Task: React.FC<TaskProps> = (props) => {
-    const { isDraggable, id, index, name, description, saveTask } = props
+    const { isDraggable, id, index, name, description } = props
     const [areDetailsShown, setAreDetailsShown] = useState(false)
     const [isClosed, setIsClosed] = useState(props.closed)
 
@@ -52,7 +52,7 @@ const Task: React.FC<TaskProps> = (props) => {
             <div className="task">
                 <TaskHeader task={{ name, dueDate }} isClosed={isClosed} onClick={handleTaskClick}
                             onClose={handleTaskClose}/>
-                {areDetailsShown && <TaskDetails task={{ id, name, description, dueDate: props.dueDate }} saveTask={saveTask}/>}
+                {areDetailsShown && <TaskDetails task={{ id, name, description, dueDate: props.dueDate }} />}
             </div>
         )
     }

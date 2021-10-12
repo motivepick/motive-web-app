@@ -12,7 +12,7 @@ export type ITask = {
 }
 
 export type ITaskNullable = {
-    id?: number;
+    id: number;
     name?: string;
     description?: string | null;
     created?: Moment | string;

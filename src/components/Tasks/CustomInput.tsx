@@ -6,7 +6,7 @@ interface CustomInputProps {
     value?: string | null;
     type: string;
     placeholder?: string;
-    maxLength: number;
+    maxLength?: number;
     onSave: (value: string) => string;
 }
 

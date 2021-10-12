@@ -3,8 +3,8 @@ import { useCallback } from 'react'
 
 import TaskService from '../services/taskService'
 import { handleServerException } from '../utils/exceptionHandler'
-import { ICreateTaskRequest } from '../models/redux/taskServiceModel'
-import { createTaskAction, setCurrentListAction } from './actions/taskActions'
+import { ICreateTaskRequest, IUpdateTaskRequest } from '../models/redux/taskServiceModel'
+import { createTaskAction, setCurrentListAction, updateTaskAction } from './actions/taskActions'
 
 export const useTasksStore = () => {
     const dispatch = useDispatch()
@@ -17,6 +17,14 @@ export const useTasksStore = () => {
         }
     }, [dispatch])
 
+    const updateTask = useCallback(async (id: number, task: IUpdateTaskRequest) => {
+        try {
+            dispatch(updateTaskAction(await TaskService.updateTask(id, task)))
+        } catch (e) {
+            handleServerException(e)
+        }
+    }, [dispatch])
+
     const setTaskList = useCallback(
         taskList => dispatch(setCurrentListAction(taskList)),
         [dispatch]
@@ -24,6 +32,7 @@ export const useTasksStore = () => {
 
     return {
         createTask,
+        updateTask,
         setTaskList
     }
 }

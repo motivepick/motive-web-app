@@ -11,10 +11,9 @@ import {
     setCurrentListAction,
     setTasksAction,
     undoCloseTaskAction,
-    updateTaskAction,
     updateTaskPositionIndexAction
 } from '../../redux/actions/taskActions'
-import { closeTask, searchUserTasks, undoCloseTask, updateTask, updateTasksOrderAsync } from '../../services/taskService'
+import { closeTask, searchUserTasks, undoCloseTask, updateTasksOrderAsync } from '../../services/taskService'
 import { handleServerException } from '../../utils/exceptionHandler'
 import { fetchUser } from '../../services/userService'
 import { setUserAction } from '../../redux/actions/userActions'
@@ -45,7 +44,7 @@ class TaskView extends PureComponent {
     }
 
     render() {
-        const { user, currentList, initialized, closeOrUndoCloseTask, updateTask, toggleCurrentTaskList, t } = this.props
+        const { user, currentList, initialized, closeOrUndoCloseTask, toggleCurrentTaskList, t } = this.props
         const list = this.props[currentList]
         return (
             <DraggableLayout onDragEnd={this.updateTaskPositionIndex}  user={user} onAllTasksClick={this.handleAllTasksClick}>
@@ -62,8 +61,7 @@ class TaskView extends PureComponent {
                                     <div {...provided.droppableProps} ref={provided.innerRef}>
                                         {list.content.map((task, index) =>
                                             <Task isDraggable={true} key={task.id} index={index} id={task.id} name={task.name} description={task.description}
-                                                  dueDate={task.dueDate} closed={currentList === TASK_LIST.CLOSED} onTaskClose={closeOrUndoCloseTask}
-                                                  saveTask={updateTask}/>
+                                                  dueDate={task.dueDate} closed={currentList === TASK_LIST.CLOSED} onTaskClose={closeOrUndoCloseTask} />
                                         )}
                                         {provided.placeholder}
                                     </div>
@@ -156,15 +154,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     updateTaskIndex: (sourceListType, sourceIndex, destinationListType, destinationIndex) => async (dispatch) => {
         updateTasksOrderAsync({ sourceListType, sourceIndex, destinationListType, destinationIndex })
         dispatch(updateTaskPositionIndexAction({ sourceListType, sourceIndex, destinationListType, destinationIndex }))
-    },
-
-    // id: number
-    updateTask: (id, task) => async (dispatch) => {
-        try {
-            dispatch(updateTaskAction(await updateTask(id, task)))
-        } catch (e) {
-            handleServerException(e)
-        }
     },
 
     // id: number
