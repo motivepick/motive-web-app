@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import { Container } from 'reactstrap'
 import { withTranslation } from 'react-i18next'
 
@@ -14,10 +14,12 @@ class Routes extends PureComponent {
     render() {
         return (
             <Container>
-                <Route exact={true} path="/" component={TaskView}/>
-                <Route exact={true} path="/schedule" component={ScheduleView}/>
-                <Route path="/login" component={LoginView}/>
-                <Route path="/privacy" component={PrivacyView}/>
+                <Switch>
+                    <Route exact={true} path="/" component={TaskView}/>
+                    <Route exact={true} path="/schedule" component={ScheduleView}/>
+                    <Route path="/login" component={LoginView}/>
+                    <Route path="/privacy" component={PrivacyView}/>
+                </Switch>
             </Container>
         )
     }

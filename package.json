@@ -6,7 +6,7 @@
   "dependencies": {
     "bootstrap": "4.4.1",
     "font-awesome": "4.7.0",
-    "history": "5.0.1",
+    "history": "4.7.2",
     "i18next": "20.4.0",
     "i18next-browser-languagedetector": "6.1.2",
     "moment": "2.29.1",
