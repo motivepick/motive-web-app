@@ -50,29 +50,31 @@ class Task extends PureComponent {
         const { closed } = this.state
         const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
         return (
-            <div className="task">
-                <div className="task-header">
-                    <CheckMark toggled={closed} onToggle={this.handleTaskClose}/>
-                    <div className="task-body">
-                        <Title dimmedStyle={closed} onClick={this.handleTaskClick}>{name}</Title>
-                        <DueDate dimmedStyle={closed} onClick={this.handleTaskClick}>{dueDate}</DueDate>
+            <div className="task-container">
+                <div className="task">
+                    <div className="task-header">
+                        <CheckMark toggled={closed} onToggle={this.handleTaskClose}/>
+                        <div className="task-body">
+                            <Title dimmedStyle={closed} onClick={this.handleTaskClick}>{name}</Title>
+                            <DueDate dimmedStyle={closed} onClick={this.handleTaskClick}>{dueDate}</DueDate>
+                        </div>
                     </div>
-                </div>
 
-                {this.state.detailsShown &&
-                <Form className="task-form" onSubmit={e => e.preventDefault()}>
-                    <FormGroup>
-                        <CustomInput type="text" value={name} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
-                    </FormGroup>
-                    <FormGroup>
-                        <CustomInput type="date" value={dueDate && dueDate.format("YYYY-MM-DD")} onSave={this.saveDate}/>
-                    </FormGroup>
-                    <FormGroup className="task-form-description">
-                        <CustomInput type="textarea" placeholder={t('task.description')} value={description}
-                            onSave={this.saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
-                    </FormGroup>
-                </Form>
-                }
+                    {this.state.detailsShown &&
+                    <Form className="task-form" onSubmit={e => e.preventDefault()}>
+                        <FormGroup>
+                            <CustomInput type="text" value={name} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
+                        </FormGroup>
+                        <FormGroup>
+                            <CustomInput type="date" value={dueDate && dueDate.format('YYYY-MM-DD')} onSave={this.saveDate}/>
+                        </FormGroup>
+                        <FormGroup className="task-form-description">
+                            <CustomInput type="textarea" placeholder={t('task.description')} value={description}
+                                onSave={this.saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
+                        </FormGroup>
+                    </Form>
+                    }
+                </div>
             </div>
         )
     }
