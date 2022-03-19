@@ -63,7 +63,7 @@ class TaskView extends PureComponent {
                     </Row>
                     {initialized ? <Fragment>
                         <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={toggleCurrentTaskList}/>
-                        {list.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                        {list.totalElements === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                             <img src='/images/no-tasks-eng.png' width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
                         </div>}
                         <div>
