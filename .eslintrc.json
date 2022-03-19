@@ -1,9 +1,8 @@
 {
-  "parser": "babel-eslint",
-
+  "parser": "@typescript-eslint/parser",
   "plugins": ["react"],
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 2020,
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
@@ -15,7 +14,7 @@
     "node": true,
     "mocha": true
   },
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended"],
   "rules": {
     "strict": [2, "safe"],
     "no-debugger": 2,
@@ -37,7 +36,6 @@
     "no-eval": 2,
     "no-with": 2,
     "valid-typeof": 2,
-    "no-unused-vars": 2,
     "no-continue": 1,
     "no-extra-semi": 1,
     "no-unreachable": 1,
@@ -51,6 +49,10 @@
     "react/prop-types": 0,
     "react/no-deprecated": 1,
     "no-console": 1,
-    "no-undefined": 1
+    "no-undefined": 1,
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0
   }
 }
