@@ -1,7 +1,7 @@
-import React, {MouseEventHandler} from 'react'
-import {withTranslation, WithTranslation} from 'react-i18next'
-import {Col, Row} from 'reactstrap'
-import {TASK_LIST, TaskListTypeAsLiterals} from '../../models/appModel'
+import React, { MouseEventHandler } from 'react'
+import { withTranslation, WithTranslation } from 'react-i18next'
+import { Col, Row } from 'reactstrap'
+import { TASK_LIST, TaskListTypeAsLiterals } from '../../models/appModel'
 import './TasksSubtitle.css'
 
 interface TasksSubtitleProps extends WithTranslation {
