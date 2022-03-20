@@ -66,20 +66,18 @@ class TaskView extends PureComponent {
                         {list.totalElements === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                             <img src='/images/no-tasks-eng.png' width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
                         </div>}
-                        <div>
-                            <Droppable droppableId={currentList}>
-                                {provided => (
-                                    <div {...provided.droppableProps} ref={provided.innerRef}>
-                                        {list.content.map((task, index) =>
-                                            <Task isDraggable={true} key={task.id} index={index} id={task.id} name={task.name} description={task.description}
-                                                  dueDate={task.dueDate} closed={currentList === TASK_LIST.CLOSED} onTaskClose={closeOrUndoCloseTask}
-                                                  saveTask={updateTask}/>
-                                        )}
-                                        {provided.placeholder}
-                                    </div>
-                                )}
-                            </Droppable>
-                        </div>
+                        <Droppable droppableId={currentList}>
+                            {provided => (
+                                <div {...provided.droppableProps} ref={provided.innerRef}>
+                                    {list.content.map((task, index) =>
+                                        <Task isDraggable={true} key={task.id} index={index} id={task.id} name={task.name} description={task.description}
+                                              dueDate={task.dueDate} closed={currentList === TASK_LIST.CLOSED} onTaskClose={closeOrUndoCloseTask}
+                                              saveTask={updateTask}/>
+                                    )}
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
                     </Fragment> : <SpinnerView/>}
                 </div>
                 <Footer/>
