@@ -1,11 +1,10 @@
 import { Moment } from 'moment'
-import React, { MouseEventHandler, ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import { format } from '../../../../../utils/dateFormat'
 
 import './styles.css'
 
 type DueDateProps = {
-    onClick: MouseEventHandler;
     dimmedStyle: boolean;
     children: ReactNode;
 }
@@ -28,9 +27,9 @@ const classOf = (dueDate: Moment, dimmedStyle: boolean): string => {
 }
 
 export const DueDate: React.FC<DueDateProps> = props => {
-    const { onClick, dimmedStyle = false, children } = props
+    const { dimmedStyle = false, children } = props
 
     return children
-        ? <small onClick={onClick} className={classOf(children as Moment, dimmedStyle)}>{format(children as Moment)}</small>
+        ? <small className={classOf(children as Moment, dimmedStyle)}>{format(children as Moment)}</small>
         : null
 }

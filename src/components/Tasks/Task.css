@@ -1,11 +1,13 @@
 .task-container {
-    padding: 3px 0
+    padding: 3px 0;
+    cursor: default;
 }
 
 .task {
     background-color: #f8f9fa;
     border-radius: .25rem;
     padding: .4rem .2rem;
+    cursor: pointer;
 }
 
 .task-body {

@@ -26,6 +26,14 @@ interface TaskProps extends WithTranslation, DraggableProps {
     closed: boolean;
 }
 
+const DUE_DATE_FORMAT = 'YYYY-MM-DD'
+
+const isTaskToggle = (target: any) => {
+    const tagName = target.tagName.toLowerCase()
+    const className = target.className
+    return ['div', 'small', 'del'].includes(tagName) && !className.includes('task-check-mark-element')
+}
+
 class Task extends PureComponent<TaskProps> {
 
     static propTypes = {
@@ -63,12 +71,12 @@ class Task extends PureComponent<TaskProps> {
         const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
         return (
             <div className="task-container">
-                <div className="task">
+                <div className="task" onClick={this.handleTaskClick}>
                     <div className="task-header">
                         <CheckMark toggled={closed} onToggle={this.handleTaskClose}/>
                         <div className="task-body">
-                            <Title dimmedStyle={closed} onClick={this.handleTaskClick}>{name}</Title>
-                            <DueDate dimmedStyle={closed} onClick={this.handleTaskClick}>{dueDate}</DueDate>
+                            <Title dimmedStyle={closed}>{name}</Title>
+                            <DueDate dimmedStyle={closed}>{dueDate}</DueDate>
                         </div>
                     </div>
 
@@ -78,7 +86,8 @@ class Task extends PureComponent<TaskProps> {
                             <CustomInput type="text" value={name} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
                         </FormGroup>
                         <FormGroup>
-                            <CustomInput type="date" value={dueDate && dueDate.format('YYYY-MM-DD')} onSave={this.saveDate}/>
+                            <CustomInput type="date" value={dueDate && dueDate.format(DUE_DATE_FORMAT)}
+                                onSave={this.saveDate} maxLength={DUE_DATE_FORMAT.length}/>
                         </FormGroup>
                         <FormGroup className="task-form-description">
                             <CustomInput type="textarea" placeholder={t('task.description')} value={description}
@@ -99,8 +108,7 @@ class Task extends PureComponent<TaskProps> {
     }
 
     handleTaskClick = ({ target }: React.MouseEvent<HTMLElement>) => {
-        // @ts-ignore
-        if (target.tagName.toLowerCase() !== 'a') {
+        if (isTaskToggle(target)) {
             const { detailsShown } = this.state
             this.setState({ detailsShown: !detailsShown })
         }

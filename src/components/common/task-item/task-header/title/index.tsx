@@ -1,10 +1,9 @@
-import React, { MouseEventHandler, PropsWithChildren } from 'react'
+import React, { PropsWithChildren } from 'react'
 import WithLinks from '../../../WithLinks'
 
 import './styles.css'
 
 type TitleProps = {
-    onClick: MouseEventHandler;
     dimmedStyle: boolean;
 }
 
@@ -19,10 +18,6 @@ const RegularTitle: React.FC<PropsWithChildren<unknown>> = ({ children }) =>
     </div>
 
 export const Title: React.FC<PropsWithChildren<TitleProps>> = props => {
-    const { onClick, dimmedStyle = false, children } = props
-    return (
-        <div onClick={onClick}>
-            {dimmedStyle ? <DimmedTitle>{children}</DimmedTitle> : <RegularTitle>{children}</RegularTitle>}
-        </div>
-    )
+    const { dimmedStyle = false, children } = props
+    return dimmedStyle ? <DimmedTitle>{children}</DimmedTitle> : <RegularTitle>{children}</RegularTitle>
 }
