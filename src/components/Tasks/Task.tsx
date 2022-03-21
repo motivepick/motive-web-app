@@ -31,7 +31,7 @@ const DUE_DATE_FORMAT = 'YYYY-MM-DD'
 const isTaskToggle = (target: any) => {
     const tagName = target.tagName.toLowerCase()
     const className = target.className
-    return ['div', 'small', 'del'].includes(tagName) && !className.includes('task-check-mark-element')
+    return ['div', 'form', 'small', 'del'].includes(tagName) && !className.includes('task-check-mark-element')
 }
 
 class Task extends PureComponent<TaskProps> {
