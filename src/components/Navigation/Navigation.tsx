@@ -23,7 +23,7 @@ class Navigation extends PureComponent<NavigationProps> {
                     <img src='/logo.png' width="30" height="30" className="d-inline-block align-top" alt="Motive Logo"/>
                 </NavbarBrand>
                 <div className="collapse navbar-collapse">
-                    <ul className="navbar-nav mr-auto">
+                    <ul className="navbar-nav mr-auto" style={{ textTransform: 'uppercase', fontSize: '80%' }}>
                         {/* TODO: make active work again */}
                         <li className="nav-item">
                             {/* eslint-disable-next-line */}
