@@ -1,3 +1,4 @@
+// @ts-ignore
 import { History } from 'history'
 import React, { PureComponent } from 'react'
 import { withTranslation, WithTranslation } from 'react-i18next'
