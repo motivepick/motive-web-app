@@ -59,7 +59,7 @@ class LoginView extends PureComponent<LoginViewProps> {
                 </main>
                 <div className="footer">
                     <span className="text-muted">
-                         <a href="mailto:motivepick@yahoo.com">
+                         <a href="mailto:milestone@yahoo.com">
                              {t('contactUs')}
                          </a>
                     </span>

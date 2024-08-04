@@ -20,15 +20,15 @@ const PrivacyView: React.FC<WithTranslation> = () =>
                 </Row>
                 <Row style={{ fontSize: '14px' }}>
                     <Col sm="12" md={{ size: 6, offset: 3 }}>
-                        <p>At MotivePick, accessible from <a
-                            href="https://motivepick.com">https://motivepick.com</a>,
+                        <p>At Milestone, accessible from <a
+                            href="https://milestone.yaskovdev.com">https://milestone.yaskovdev.com</a>,
                             one of our main priorities is the
                             privacy of our visitors. This Privacy Policy document contains types of information that
-                            is collected and recorded by MotivePick and how we use it.</p>
+                            is collected and recorded by Milestone and how we use it.</p>
 
                         <p>If you have additional questions or require more information about our Privacy Policy, do
                             not hesitate to contact us through email at <a
-                                href="mailto:motivepick@yahoo.com">motivepick@yahoo.com</a></p>
+                                href="mailto:milestone@yahoo.com">milestone@yahoo.com</a></p>
 
                         <h3 className="text-center">General Data Protection Regulation (GDPR)</h3>
                         <p>We are a Data Controller of your information. If you'd like to learn more about GDPR and
@@ -36,17 +36,17 @@ const PrivacyView: React.FC<WithTranslation> = () =>
                                 href="https://www.freeprivacypolicy.com/blog/gdpr-privacy-policy/">GDPR guide</a>.
                         </p>
 
-                        <p>MotivePick legal basis for collecting and using the personal information described in
+                        <p>Milestone legal basis for collecting and using the personal information described in
                             this Privacy Policy depends on the Personal Information we collect and the specific
                             context in which we collect the information:</p>
                         <ul>
-                            <li>MotivePick needs to perform a contract with you</li>
-                            <li>You have given MotivePick permission to do so</li>
-                            <li>Processing your personal information is in MotivePick legitimate interests</li>
-                            <li>MotivePick needs to comply with the law</li>
+                            <li>Milestone needs to perform a contract with you</li>
+                            <li>You have given Milestone permission to do so</li>
+                            <li>Processing your personal information is in Milestone legitimate interests</li>
+                            <li>Milestone needs to comply with the law</li>
                         </ul>
 
-                        <p>MotivePick will retain your personal information only for as long as is necessary for the
+                        <p>Milestone will retain your personal information only for as long as is necessary for the
                             purposes set out in this Privacy Policy. We will retain and use your information to the
                             extent necessary to comply with our legal obligations, resolve disputes, and enforce our
                             policies.</p>
@@ -66,7 +66,7 @@ const PrivacyView: React.FC<WithTranslation> = () =>
 
                         <h3 className="text-center">Log Files</h3>
 
-                        <p>MotivePick follows a standard procedure of using log files. These files log visitors when
+                        <p>Milestone follows a standard procedure of using log files. These files log visitors when
                             they visit websites. All hosting companies do this and a part of hosting services'
                             analytics. The information collected by log files include internet protocol (IP)
                             addresses, browser type, Internet Service Provider (ISP), date and time stamp,
@@ -77,7 +77,7 @@ const PrivacyView: React.FC<WithTranslation> = () =>
 
                         <h3 className="text-center">Cookies</h3>
 
-                        <p>Like any other website, MotivePick uses 'cookies'. These cookies are used to store
+                        <p>Like any other website, Milestone uses 'cookies'. These cookies are used to store
                             information including visitors' preferences, and the pages on the website that the
                             visitor accessed or visited. The information is used to optimize the users' experience
                             by customizing our web page content based on visitors' browser type and/or other
@@ -91,21 +91,21 @@ const PrivacyView: React.FC<WithTranslation> = () =>
                         <h3 className="text-center">Privacy Policies</h3>
 
                         <p>You may consult this list to find the Privacy Policy for each of the advertising partners
-                            of MotivePick.</p>
+                            of Milestone.</p>
 
                         <p>Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web
                             Beacons that are used in their respective advertisements and links that appear on
-                            MotivePick, which are sent directly to users' browser. They automatically receive your
+                            Milestone, which are sent directly to users' browser. They automatically receive your
                             IP address when this occurs. These technologies are used to measure the effectiveness of
                             their advertising campaigns and/or to personalize the advertising content that you see
                             on websites that you visit.</p>
 
-                        <p>Note that MotivePick has no access to or control over these cookies that are used by
+                        <p>Note that Milestone has no access to or control over these cookies that are used by
                             third-party advertisers.</p>
 
                         <h3 className="text-center">Third Pary Privacy Policies</h3>
 
-                        <p>MotivePick's Privacy Policy does not apply to other advertisers or websites. Thus, we are
+                        <p>Milestone's Privacy Policy does not apply to other advertisers or websites. Thus, we are
                             advising you to consult the respective Privacy Policies of these third-party ad servers
                             for more detailed information. It may include their practices and instructions about how
                             to opt-out of certain options. You may find a complete list of these Privacy Policies
@@ -121,7 +121,7 @@ const PrivacyView: React.FC<WithTranslation> = () =>
                             We encourage parents and guardians to observe, participate in, and/or monitor and guide
                             their online activity.</p>
 
-                        <p>MotivePick does not knowingly collect any Personal Identifiable Information from children
+                        <p>Milestone does not knowingly collect any Personal Identifiable Information from children
                             under the age of 13. If you think that your child provided this kind of information on
                             our website, we strongly encourage you to contact us immediately and we will do our best
                             efforts to promptly remove such information from our records.</p>
@@ -130,7 +130,7 @@ const PrivacyView: React.FC<WithTranslation> = () =>
 
                         <p>Our Privacy Policy created at GDPRPrivacyPolicy.net) applies only to our online
                             activities and is valid for visitors to our website with regards to the information that
-                            they shared and/or collect in MotivePick. This policy is not applicable to any
+                            they shared and/or collect in Milestone. This policy is not applicable to any
                             information collected offline or via channels other than this website. <a
                                 href="https://gdprprivacypolicy.net">Our GDPR Privacy Policy</a> was generated from
                             the GDPR Privacy Policy Generator.</p>
