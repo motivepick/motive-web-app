@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { withTranslation, WithTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { Button, Col, i, Row } from 'reactstrap'
+import { Button, Col, Row } from 'reactstrap'
 import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../../config'
 
 interface LoginViewProps extends WithTranslation {
