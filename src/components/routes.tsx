@@ -1,5 +1,5 @@
 import React from 'react'
-import { Redirect, Route, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import { Container } from 'reactstrap'
 import { withTranslation } from 'react-i18next'
 
@@ -16,7 +16,7 @@ const Routes = () =>
             <Route exact={true} path="/schedule" component={ScheduleView}/>
             <Route path="/login" component={LoginView}/>
             <Route path="/privacy" component={PrivacyView}/>
-            <Route path="/" component={() => <Redirect to="/"/>}/>
+            <Route path="/" component={() => <div>404</div>}/>
         </Switch>
     </Container>
 
