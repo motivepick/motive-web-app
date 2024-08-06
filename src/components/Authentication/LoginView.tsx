@@ -20,7 +20,7 @@ class LoginView extends PureComponent<LoginViewProps> {
                 <main>
                     <Row style={{ marginTop: '40px', marginBottom: '10px' }}>
                         <Col className="text-center">
-                            <img src='/logo.png' alt="Motive Logo" width={'64px'} height={'64px'}/>
+                            <img src='/logo.png' alt="Milestone Logo" width={'64px'} height={'64px'}/>
                         </Col>
                     </Row>
                     <Row style={{ marginTop: '20px', marginBottom: '10px' }}>

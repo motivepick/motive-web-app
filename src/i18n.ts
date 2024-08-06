@@ -6,7 +6,7 @@ i18n.use(LanguageDetector).init({
     resources: {
         en: {
             translations: {
-                'welcome': 'Motive',
+                'welcome': 'Milestone',
                 'description': 'Defeat your laziness',
                 'login.facebook': 'Login With Facebook',
                 'login.vk': 'Login With VK',
@@ -30,7 +30,7 @@ i18n.use(LanguageDetector).init({
         },
         ru: {
             translations: {
-                'welcome': 'Motive',
+                'welcome': 'Milestone',
                 'description': 'Победи лень',
                 'login.facebook': 'Войти через Facebook',
                 'login.vk': 'Войти через VK',
@@ -55,7 +55,7 @@ i18n.use(LanguageDetector).init({
         },
         zh: {
             translations: {
-                'welcome': 'Motive',
+                'welcome': 'Milestone',
                 'description': '小小工具，幫你大大打擊懶惰蟲',
                 'login.facebook': '以Facebook登入',
                 'login.vk': '以VK登入',
