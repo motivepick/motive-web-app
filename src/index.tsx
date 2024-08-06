@@ -69,3 +69,5 @@ ReactDOM.render(
         </I18nextProvider>
     </Provider>, document.getElementById('root')
 )
+
+document.documentElement.lang = i18n.language
