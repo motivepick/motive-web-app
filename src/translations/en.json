@@ -1,0 +1,22 @@
+{
+  "welcome": "Motive",
+  "description": "Defeat your laziness",
+  "login.facebook": "Login With Facebook",
+  "login.vk": "Login With VK",
+  "tryWithoutLogin": "Try Without Login",
+  "logout": "Logout",
+  "deleteTasksAndLogout": "Delete Tasks And Logout",
+  "loading": "Loading...",
+  "new.task": "What should I not forget?",
+  "task.description": "Additional Details",
+  "contactUs": "Contact us",
+  "privacyPolicy": "Privacy Policy",
+  "numberOfTasks": "{{count}} task",
+  "numberOfTasks_plural": "{{count}} tasks",
+  "showOpenTasks": "Show open",
+  "showClosedTasks": "Show closed",
+  "allTasks": "Tasks",
+  "schedule": "Schedule",
+  "futureTasks": "Future Tasks",
+  "overdueTasks": "Overdue Tasks"
+}

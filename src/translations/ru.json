@@ -1,0 +1,23 @@
+{
+  "welcome": "Motive",
+  "description": "Победи лень",
+  "login.facebook": "Войти через Facebook",
+  "login.vk": "Войти через VK",
+  "tryWithoutLogin": "Попробовать без логина",
+  "logout": "Выйти",
+  "deleteTasksAndLogout": "Удалить задачи и выйти",
+  "loading": "Загрузка...",
+  "new.task": "О чём нужно не забыть?",
+  "task.description": "Дополнительные подробности",
+  "contactUs": "Связаться с нами",
+  "privacyPolicy": "Политика конфиденциальности",
+  "numberOfTasks_0": "{{count}} задача",
+  "numberOfTasks_1": "{{count}} задачи",
+  "numberOfTasks_2": "{{count}} задач",
+  "showOpenTasks": "Показать открытые",
+  "showClosedTasks": "Показать закрытые",
+  "allTasks": "Задачи",
+  "schedule": "Расписание",
+  "futureTasks": "Будущие задачи",
+  "overdueTasks": "Просроченные задачи"
+}
