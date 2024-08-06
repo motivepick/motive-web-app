@@ -2,7 +2,7 @@ import i18n from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { I18N_DEBUG } from './config'
 
-i18n.use(LanguageDetector).init({
+const i18nOptions = {
     resources: {
         en: {
             translations: {
@@ -83,7 +83,7 @@ i18n.use(LanguageDetector).init({
     ns: ['translations'],
     defaultNS: 'translations',
 
-    keySeparator: false,
+    keySeparator: 'false',
 
     interpolation: {
         escapeValue: false,
@@ -91,12 +91,20 @@ i18n.use(LanguageDetector).init({
     },
 
     react: {
-        wait: true
+        wait: true,
+        useSuspense: false
     },
 
     detection: {
         order: ['navigator', 'querystring', 'cookie', 'localStorage', 'htmlTag', 'path', 'subdomain']
     }
-})
+}
+
+i18n
+    .use(LanguageDetector)
+    .init({
+        supportedLngs: ['en', 'ru', 'zh'],
+        ... i18nOptions
+    })
 
 export default i18n
