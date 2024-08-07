@@ -1,5 +1,7 @@
 import i18n from 'i18next'
+import Backend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector'
+import { initReactI18next } from 'react-i18next';
 import { I18N_DEBUG } from './config'
 
 import English from './translations/en.json'
@@ -18,6 +20,7 @@ const i18nOptions = {
     ns: ['translations'],
     defaultNS: 'translations',
 
+    // char to separate keys. If working with a flat JSON, it's recommended to set this to false.
     keySeparator: 'false',
 
     interpolation: {
@@ -26,7 +29,6 @@ const i18nOptions = {
     },
 
     react: {
-        wait: true,
         useSuspense: false
     },
 
@@ -36,7 +38,9 @@ const i18nOptions = {
 }
 
 i18n
+    .use(Backend)
     .use(LanguageDetector)
+    .use(initReactI18next)
     .init({
         supportedLngs: ['en', 'ru', 'zh'],
         ... i18nOptions
