@@ -11,7 +11,7 @@
   "task.description": "更多細節",
   "contactUs": "Contact us",
   "privacyPolicy": "Privacy Policy",
-  "numberOfTasks": "{{count}} 個待辦事項",
+  "numberOfTasks_other": "{{count}} 個待辦事項",
   "showOpenTasks": "顯示進行中事項",
   "showClosedTasks": "顯示已完成事項",
   "allTasks": "Tasks",
