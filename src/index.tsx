@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom'
 import { Router } from 'react-router-dom'
 // @ts-ignore
@@ -13,7 +13,7 @@ import 'moment/locale/zh-tw'
 import 'font-awesome/css/font-awesome.min.css'
 import './index.css'
 import rootReducer from './redux/reducers'
-import i18n from './i18n'
+import './i18n'
 import Routes from './components/routes'
 
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
@@ -61,10 +61,10 @@ export const history = createBrowserHistory()
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router history={history}>
-            <Routes/>
-        </Router>
+        <Suspense fallback={<div>Loading...</div>}>
+            <Router history={history}>
+                <Routes/>
+            </Router>
+        </Suspense>
     </Provider>, document.getElementById('root')
 )
-
-document.documentElement.lang = i18n.language
