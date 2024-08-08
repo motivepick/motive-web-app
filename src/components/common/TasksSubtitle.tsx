@@ -15,7 +15,7 @@ const TasksSubtitle: React.FC<TasksSubtitleProps> = props => {
     return (
         <Row className="task-subtitle">
             <Col xs={5} style={{ color: '#8E8E93' }}>{t('numberOfTasks', { count: numberOfTasks })}</Col>
-            <Col xs={7} style={{ color: '#EC445A' }} className={'text-right'}>
+            <Col xs={7} style={{ color: '#EC445A' }} className={'text-end'}>
                 <a onClick={onToggleOpenClosedTasks} style={{ cursor: 'pointer' }}>
                     {t(currentList === TASK_LIST.CLOSED ? 'showOpenTasks' : 'showClosedTasks')}
                 </a>
