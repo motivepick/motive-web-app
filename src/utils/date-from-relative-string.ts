@@ -1,4 +1,4 @@
-import moment, { Moment } from 'moment'
+import moment from 'moment'
 import { DateTime } from 'luxon'
 import * as R from 'ramda'
 import { ITask } from '../models/appModel'
@@ -41,7 +41,9 @@ const getDateFromRelativeString = (dateStr: string): DateTime => {
         const calcDaysToAdd = ((7 - DateTime.local().weekday + Number(dayOfWeek)) % 7) || 7
         return DateTime.local().plus({ days: calcDaysToAdd }).endOf('day')
     } else {
-        return (getDateInFormat(dateStr, DATE_FORMAT_LONG).isValid ? getDateInFormat(dateStr, DATE_FORMAT_LONG) : getDateInFormat(dateStr, DATE_FORMAT_SHORT)).endOf('day')
+        return (getDateInFormat(dateStr, DATE_FORMAT_LONG).isValid
+            ? getDateInFormat(dateStr, DATE_FORMAT_LONG)
+            : getDateInFormat(dateStr, DATE_FORMAT_SHORT)).endOf('day')
     }
 }
 
@@ -49,7 +51,7 @@ const getValidRelativeString = (taskName: string): string | null => {
     const words = wordsOf(taskName)
     const lastWord = words.pop()?.toLowerCase() || ''
     const wordBeforeLast = words.pop()?.toLowerCase() || ''
-    
+
     if (isCasualDay(lastWord)) {
         return lastWord
     } else if (isDayOfWeek(wordBeforeLast, lastWord)) {
@@ -62,9 +64,9 @@ const getValidRelativeString = (taskName: string): string | null => {
 export const dateFromRelativeString = (task: ITask): ITask => {
     const dateStr = getValidRelativeString(task.name)
 
-    if(task.name.toLowerCase() == dateStr) return task
+    if (task.name.toLowerCase() == dateStr) return task
 
-    var dueDate =  dateStr && moment(getDateFromRelativeString(dateStr!).toJSDate())
-    var taskName = dateStr ? nameWithoutLastWord(task.name, dateStr) : task.name
+    const dueDate =  dateStr && moment(getDateFromRelativeString(dateStr!).toJSDate())
+    const taskName = dateStr ? nameWithoutLastWord(task.name, dateStr) : task.name
     return { ...task, name: taskName, dueDate }
 }
