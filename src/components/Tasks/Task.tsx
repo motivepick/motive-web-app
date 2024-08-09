@@ -10,7 +10,7 @@ import { DueDate } from '../common/task-item/task-header/due-date'
 import { Title } from '../common/task-item/task-header/title'
 import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../config'
 import { ITaskNullable } from '../../models/appModel'
-import { handleDueDateOf } from '../../utils/taskUtils'
+import { dateFromRelativeString } from '../../utils/date-from-relative-string'
 
 import { CustomInput } from './CustomInput'
 
@@ -116,7 +116,7 @@ class Task extends PureComponent<TaskProps> {
 
     saveName = (name: string) => {
         // @ts-ignore
-        const task = handleDueDateOf({ name: name ? name.trim() : '' })
+        const task = dateFromRelativeString({ name: name ? name.trim() : '' })
         this.props.saveTask(this.props.id, task)
         return task.name
     }

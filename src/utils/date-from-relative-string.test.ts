@@ -1,4 +1,4 @@
-import { dateFromRelativeString } from './taskUtils'
+import { dateFromRelativeString } from './date-from-relative-string'
 import { DateTime } from 'luxon'
 import { ITask } from '../models/appModel'
 import { Moment } from 'moment'
