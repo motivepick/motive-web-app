@@ -1,4 +1,5 @@
-import moment from 'moment'
+import moment, { Moment } from 'moment'
+import { DateTime } from 'luxon'
 import * as R from 'ramda'
 import { ITask } from '../models/appModel'
 
@@ -12,30 +13,58 @@ const DAYS_OF_WEEK = {
     6: ['saturday', 'субботу']
 }
 
+const CASUAL_DAY = {
+    0: ['today', 'сегодня'],
+    1: ['tomorrow', 'завтра'],
+    2: ['послезавтра']
+}
+
 const ALL_DAYS_OF_WEEK = R.chain(R.identity, R.values(DAYS_OF_WEEK))
+const ALL_CASUAL_DAY = R.chain(R.identity, R.values(CASUAL_DAY))
+const DATE_FORMAT_LONG = 'dd.MM.yyyy'
+const DATE_FORMAT_SHORT = 'dd.MM.yy'
 
 const nameWithoutLastWord = (name: string, lastWord: string): string => name.substring(0, name.length - lastWord.length).trim()
+const wordsOf = (name: string): string[] => name.split(/\s+/)
+const getDateInFormat = (dateStr: string, format: string): DateTime => DateTime.fromFormat(dateStr, format, { setZone: true })
+const isCasualDay = (dateStr: string) => ALL_CASUAL_DAY.includes(dateStr)
+const isDayOfWeek = (wordBeforeLast: string, lastWord: string) => ALL_DAYS_OF_WEEK.includes(lastWord) && ['on', 'в', 'во'].includes(wordBeforeLast)
+const isSupportedDateFormat = (dateStr: string) => getDateInFormat(dateStr, DATE_FORMAT_LONG).isValid || getDateInFormat(dateStr, DATE_FORMAT_SHORT).isValid
 
-const wordsOf = (name: string): string[] => name.split(' ').map(w => w.trim())
-
-export const handleDueDateOf = (task: ITask): ITask => {
-    const words = wordsOf(task.name)
-    const lastWord = words[words.length - 1].toLowerCase()
-    const wordBeforeLast = words.length > 1 ? words[words.length - 2].toLowerCase() : null
-    if (R.contains(lastWord, ['today', 'сегодня'])) {
-        return { ...task, name: nameWithoutLastWord(task.name, lastWord), dueDate: moment().endOf('day') }
-    } else if (R.contains(lastWord, ['tomorrow', 'завтра'])) {
-        return { ...task, name: nameWithoutLastWord(task.name, lastWord), dueDate: moment().add(1, 'days').endOf('day') }
-    } else if (R.contains(lastWord, ['послезавтра'])) {
-        return { ...task, name: nameWithoutLastWord(task.name, lastWord), dueDate: moment().add(2, 'days').endOf('day') }
-    } else if (R.contains(lastWord, ALL_DAYS_OF_WEEK) && R.contains(wordBeforeLast, ['on', 'в', 'во'])) {
-        const dayOfWeek: string = R.toPairs(DAYS_OF_WEEK).find(entry => entry[1].includes(lastWord))![0]
-        const startOfTomorrow = moment().startOf('day').add(1, 'days')
-        const dueDate = moment().day(dayOfWeek).endOf('day')
-        const dueDateInFuture = dueDate.isBefore(startOfTomorrow) ? dueDate.add(1, 'weeks') : dueDate
-        return { ...task, name: nameWithoutLastWord(nameWithoutLastWord(task.name, lastWord), wordBeforeLast as string), dueDate: dueDateInFuture }
+const getDateFromRelativeString = (dateStr: string): DateTime => {
+    const lastWord = dateStr.split(' ').pop()!
+    const casualDay: string | undefined = R.toPairs(CASUAL_DAY).find(entry => entry[1].includes(lastWord))?.[0]
+    const dayOfWeek: string | undefined = R.toPairs(DAYS_OF_WEEK).find(entry => entry[1].includes(lastWord))?.[0]
+    if (casualDay) {
+        return DateTime.local().plus({ days: Number(casualDay) }).endOf('day')
+    } else if (dayOfWeek) {
+        const calcDaysToAdd = ((7 - DateTime.local().weekday + Number(dayOfWeek)) % 7) || 7
+        return DateTime.local().plus({ days: calcDaysToAdd }).endOf('day')
     } else {
-        const date = moment(lastWord, ['DD.MM.YYYY', 'DD.MM.YY'], true).endOf('day')
-        return date.isValid() ? { ...task, name: nameWithoutLastWord(task.name, lastWord), dueDate: date.endOf('day') } : { ...task }
+        return (getDateInFormat(dateStr, DATE_FORMAT_LONG).isValid ? getDateInFormat(dateStr, DATE_FORMAT_LONG) : getDateInFormat(dateStr, DATE_FORMAT_SHORT)).endOf('day')
     }
+}
+
+const getValidRelativeString = (taskName: string): string | null => {
+    const words = wordsOf(taskName)
+    const lastWord = words.pop()?.toLowerCase() || ''
+    const wordBeforeLast = words.pop()?.toLowerCase() || ''
+    
+    if (isCasualDay(lastWord)) {
+        return lastWord
+    } else if (isDayOfWeek(wordBeforeLast, lastWord)) {
+        return wordBeforeLast + ' ' + lastWord
+    } else {
+        return isSupportedDateFormat(lastWord) ? lastWord : null
+    }
+}
+
+export const dateFromRelativeString = (task: ITask): ITask => {
+    const dateStr = getValidRelativeString(task.name)
+
+    if(task.name.toLowerCase() == dateStr) return task
+
+    var dueDate =  dateStr && moment(getDateFromRelativeString(dateStr!).toJSDate())
+    var taskName = dateStr ? nameWithoutLastWord(task.name, dateStr) : task.name
+    return { ...task, name: taskName, dueDate }
 }
