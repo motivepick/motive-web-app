@@ -4,22 +4,16 @@ export type ITask = {
     id: number;
     name: string;
     description: string | null;
-    created: DateTime | string;
     dueDate: DateTime | string | null;
-    closingDate: DateTime | string | null;
     closed: boolean;
-    visible: boolean;
 }
 
 export type ITaskNullable = {
     id?: number;
     name?: string;
     description?: string | null;
-    created?: DateTime | string;
     dueDate?: DateTime | string | null;
-    closingDate?: DateTime | string | null;
     closed?: boolean;
-    visible?: boolean;
 }
 
 export type ITaskPositionIndex = {
