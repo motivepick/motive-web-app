@@ -1,5 +1,5 @@
 // @ts-nocheck
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 import { Draggable, DraggableProps } from 'react-beautiful-dnd'
@@ -68,7 +68,7 @@ class Task extends PureComponent<TaskProps> {
     renderItem() {
         const { name, description, t } = this.props
         const { closed } = this.state
-        const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
+        const dueDate = this.props.dueDate ? DateTime(this.props.dueDate) : null
         return (
             <div className="task-container">
                 <div className="task" onClick={this.handleTaskClick}>
@@ -128,7 +128,7 @@ class Task extends PureComponent<TaskProps> {
     }
 
     saveDate = (dueDate: string) => {
-        const task = { dueDate: moment(dueDate, 'YYYY-MM-DD').endOf('day') }
+        const task = { dueDate: DateTime(dueDate, 'YYYY-MM-DD').endOf('day') }
         this.props.saveTask(this.props.id, task)
         return task.dueDate
     }

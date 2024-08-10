@@ -1,15 +1,15 @@
-import { Moment } from 'moment'
+import { DateTime } from 'luxon'
 import { IScheduleWeek, ITask } from '../appModel'
 
 export type ICreateTaskRequest = {
     name: string;
-    dueDate?: Moment;
+    dueDate?: DateTime;
 }
 
 export type IUpdateTaskRequest = {
     name?: string;
     description?: string;
-    dueDate?: Moment;
+    dueDate?: DateTime;
 }
 
 export type ISort = {

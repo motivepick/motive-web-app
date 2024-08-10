@@ -1,7 +1,6 @@
 import { dateFromRelativeString } from './date-from-relative-string'
 import { DateTime } from 'luxon'
 import { ITask } from '../models/appModel'
-import { Moment } from 'moment'
 
 describe('dateFromRelativeString', () => {
   it.each([['12.12.2022', 'dd.MM.yyyy'], ['12.12.22', 'dd.MM.yy']])('should set the dueDate based on the last word in the task name if it is a valid date: "%s"', (date, format) => {
@@ -9,9 +8,9 @@ describe('dateFromRelativeString', () => {
     const expectedDate = DateTime.fromFormat(date, format).endOf('day').toJSDate()
 
     const updatedTask = dateFromRelativeString(task)
-    var dueDate = updatedTask.dueDate as Moment
+    var dueDate = updatedTask.dueDate
 
-    expect(dueDate.toDate()).toEqual(expectedDate)
+    expect(dueDate).toEqual(expectedDate)
     expect(updatedTask.name).toEqual('Do something')
   })
 
@@ -19,9 +18,9 @@ describe('dateFromRelativeString', () => {
     const task = { name: taskName } as ITask
 
     const updatedTask = dateFromRelativeString(task)
-    var dueDate = updatedTask.dueDate as Moment
+    var dueDate = updatedTask.dueDate
 
-    expect(dueDate?.toDate()).toBeUndefined()
+    expect(dueDate).toBeUndefined()
     expect(updatedTask.name).toEqual(taskName)
   })
 
@@ -29,9 +28,9 @@ describe('dateFromRelativeString', () => {
     const task = { name: taskName } as ITask
 
     const updatedTask = dateFromRelativeString(task)
-    var dueDate = updatedTask.dueDate as Moment
+    var dueDate = updatedTask.dueDate
 
-    expect(dueDate?.toDate()).toBeUndefined()
+    expect(dueDate).toBeUndefined()
     expect(updatedTask.name).toEqual(taskName)
   })
 
@@ -39,9 +38,9 @@ describe('dateFromRelativeString', () => {
     const task = { name: 'Do something послезавтра' } as ITask
 
     const updatedTask = dateFromRelativeString(task)
-    var dueDate = updatedTask.dueDate as Moment
+    var dueDate = updatedTask.dueDate
 
-    expect(dueDate.toDate()).toEqual(DateTime.local().plus({ days: 2 }).endOf('day').toJSDate())
+    expect(dueDate).toEqual(DateTime.local().plus({ days: 2 }).endOf('day').toJSDate())
     expect(updatedTask.name).toEqual('Do something')
   })
 
@@ -49,9 +48,9 @@ describe('dateFromRelativeString', () => {
     const task = { name: `Do something ${dateStr}` } as ITask
 
     const updatedTask = dateFromRelativeString(task)
-    var dueDate = updatedTask.dueDate as Moment
+    var dueDate = updatedTask.dueDate
 
-    expect(dueDate.toDate()).toEqual(DateTime.local().endOf('day').toJSDate())
+    expect(dueDate).toEqual(DateTime.local().endOf('day').toJSDate())
     expect(updatedTask.name).toEqual('Do something')
   })
 
@@ -59,9 +58,9 @@ describe('dateFromRelativeString', () => {
     const task = { name: `Do something ${dateStr}` } as ITask
 
     const updatedTask = dateFromRelativeString(task)
-    var dueDate = updatedTask.dueDate as Moment
+    var dueDate = updatedTask.dueDate
 
-    expect(dueDate.toDate()).toEqual(DateTime.local().plus({ days: 1 }).endOf('day').toJSDate())
+    expect(dueDate).toEqual(DateTime.local().plus({ days: 1 }).endOf('day').toJSDate())
     expect(updatedTask.name).toEqual('Do something')
   })
 
@@ -95,9 +94,9 @@ describe('dateFromRelativeString', () => {
     const task = { name: `Do something ${lastWords}` } as ITask
 
     const updatedTask = dateFromRelativeString(task)
-    var dueDate = updatedTask.dueDate as Moment
+    var dueDate = updatedTask.dueDate
 
-    expect(dueDate.toDate()).toEqual(expectedDate)
+    expect(dueDate).toEqual(expectedDate)
     expect(updatedTask.name).toEqual('Do something')
   })
 })

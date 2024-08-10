@@ -1,4 +1,3 @@
-import moment from 'moment'
 import { DateTime } from 'luxon'
 import * as R from 'ramda'
 import { ITask } from '../models/appModel'
@@ -66,7 +65,7 @@ export const dateFromRelativeString = (task: ITask): ITask => {
 
     if (task.name.toLowerCase() == dateStr) return task
 
-    const dueDate =  dateStr && moment(getDateFromRelativeString(dateStr!).toJSDate())
+    const dueDate =  dateStr && getDateFromRelativeString(dateStr!)
     const taskName = dateStr ? nameWithoutLastWord(task.name, dateStr) : task.name
     return { ...task, name: taskName, dueDate }
 }
