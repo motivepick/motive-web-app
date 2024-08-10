@@ -67,7 +67,7 @@ class ScheduleView extends PureComponent<ScheduleViewProps, ScheduleViewState> {
                            .map(day =>
                                (
                                    <Fragment key={day}>
-                                       <ScheduleHeader date={day}/>
+                                       <ScheduleHeader>{t('{{ date, DATE_SHORT_RELATIVE }}', { date: day })}</ScheduleHeader>
                                        <Droppable droppableId={day}>
                                            {provided => (
                                                <div {...provided.droppableProps} ref={provided.innerRef}>
@@ -85,7 +85,7 @@ class ScheduleView extends PureComponent<ScheduleViewProps, ScheduleViewState> {
                                    </Fragment>
                                ))}
                     {schedule.future.length > 0 && <Fragment>
-                        <ScheduleHeader value={t('futureTasks')}/>
+                        <ScheduleHeader>{t('futureTasks')}</ScheduleHeader>
                         <Droppable droppableId="future">
                             {provided => (
                                 <div {...provided.droppableProps} ref={provided.innerRef}>
@@ -100,7 +100,7 @@ class ScheduleView extends PureComponent<ScheduleViewProps, ScheduleViewState> {
                         </Droppable>
                     </Fragment>}
                     {schedule.overdue.length > 0 && <Fragment>
-                        <ScheduleHeader value={t('overdueTasks')}/>
+                        <ScheduleHeader>{t('overdueTasks')}</ScheduleHeader>
                         <Droppable droppableId="overdue">
                             {provided => (
                                 <div {...provided.droppableProps} ref={provided.innerRef}>
