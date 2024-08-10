@@ -70,7 +70,7 @@ export default function (state: TasksState = INITIAL_STATE, action: TaskAction |
         }
     } else if (type === SET_TASKS) {
         const { list, tasks } = payload as { list: TaskListTypeAsLiterals; tasks: ISearchUserTasksResponse }
-        const { content, totalElements } = tasks
+        const { content, page: { totalElements } } = tasks
         return {
             ...state,
             [list]: { ...state[list], content: [...state[list].content, ...content], totalElements },

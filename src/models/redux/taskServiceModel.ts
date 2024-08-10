@@ -27,8 +27,16 @@ export type IPageable = {
     unpaged: boolean;
 }
 
+export type IPage = {
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    number: number;
+}
+
 export type ISearchUserTasksResponse = {
     content: ITask[],
+    page: IPage,
     pageable: IPageable,
     numberOfElements: number;
     totalElements: number;

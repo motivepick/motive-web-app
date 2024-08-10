@@ -67,7 +67,7 @@ class ScheduleView extends PureComponent<ScheduleViewProps, ScheduleViewState> {
                            .map(day =>
                                (
                                    <Fragment key={day}>
-                                       <ScheduleHeader>{t('{{ date, DATE_SHORT_RELATIVE }}', { date: day })}</ScheduleHeader>
+                                       <ScheduleHeader>{t('{{ date, DATE_SHORT_RELATIVE }}', { date: new Date(day) })}</ScheduleHeader>
                                        <Droppable droppableId={day}>
                                            {provided => (
                                                <div {...provided.droppableProps} ref={provided.innerRef}>

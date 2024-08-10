@@ -26,7 +26,7 @@ interface TaskProps extends WithTranslation, DraggableProps {
     closed: boolean;
 }
 
-const DUE_DATE_FORMAT = 'YYYY-MM-DD'
+const DUE_DATE_FORMAT = 'yyyy-MM-dd'
 
 const isTaskToggle = (target: any) => {
     const tagName = target.tagName.toLowerCase()
@@ -68,7 +68,7 @@ class Task extends PureComponent<TaskProps> {
     renderItem() {
         const { name, description, t } = this.props
         const { closed } = this.state
-        const dueDate = this.props.dueDate ? DateTime(this.props.dueDate) : null
+        const dueDate = this.props.dueDate ? DateTime.fromISO(this.props.dueDate) : null
         return (
             <div className="task-container">
                 <div className="task" onClick={this.handleTaskClick}>
@@ -86,7 +86,7 @@ class Task extends PureComponent<TaskProps> {
                             <CustomInput type="text" value={name} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
                         </FormGroup>
                         <FormGroup>
-                            <CustomInput type="date" value={dueDate && dueDate.format(DUE_DATE_FORMAT)}
+                            <CustomInput type="date" value={dueDate && dueDate.toFormat(DUE_DATE_FORMAT)}
                                 onSave={this.saveDate} maxLength={DUE_DATE_FORMAT.length}/>
                         </FormGroup>
                         <FormGroup className="task-form-description">
@@ -128,7 +128,7 @@ class Task extends PureComponent<TaskProps> {
     }
 
     saveDate = (dueDate: string) => {
-        const task = { dueDate: DateTime(dueDate, 'YYYY-MM-DD').endOf('day') }
+        const task = { dueDate: DateTime.fromISO(dueDate).endOf('day').toUTC() }
         this.props.saveTask(this.props.id, task)
         return task.dueDate
     }
