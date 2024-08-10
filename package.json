@@ -10,9 +10,9 @@
     "i18next": "23.12.2",
     "i18next-browser-languagedetector": "8.0.0",
     "i18next-http-backend": "2.5.2",
-    "moment": "^2.30.1",
+    "luxon": "3.5.0",
     "prop-types": "15.7.2",
-    "ramda": "0.27.1",
+    "ramda": "0.30.1",
     "react": "17.0.2",
     "react-beautiful-dnd": "13.1.0",
     "react-device-detect": "1.17.0",
@@ -28,20 +28,22 @@
     "redux": "4.1.1",
     "redux-thunk": "2.3.0",
     "superagent": "6.1.0",
-    "typescript": "4.3.5",
+    "typescript": "4.7.4",
     "url-search-params-polyfill": "8.1.1",
     "uuid": "8.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "eject": "react-scripts eject",
     "lint": "./node_modules/.bin/eslint ./src --ext .js"
   },
   "devDependencies": {
+    "@types/jest": "29.5.12",
+    "@types/luxon": "3.4.2",
     "@types/node": "16.7.0",
     "@types/ramda": "0.27.44",
     "@types/react": "17.0.19",
@@ -61,7 +63,8 @@
     "eslint-plugin-import": "2.24.1",
     "eslint-plugin-jsx-a11y": "6.5.1",
     "eslint-plugin-react": "7.29.4",
-    "gh-pages": "^6.1.1"
+    "gh-pages": "^6.1.1",
+    "jest": "27.5.1"
   },
   "browserslist": {
     "production": [

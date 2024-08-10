@@ -5,7 +5,7 @@ import { Col, Input, Row } from 'reactstrap'
 import Task from './Task'
 import Navigation from '../Navigation/Navigation'
 import { withTranslation } from 'react-i18next'
-import { handleDueDateOf } from '../../utils/taskUtils'
+import { dateFromRelativeString } from '../../utils/date-from-relative-string'
 import SpinnerView from '../common/Spinner'
 import { isBrowser } from 'react-device-detect'
 import TasksSubtitle from '../common/TasksSubtitle'
@@ -136,7 +136,7 @@ class TaskView extends PureComponent {
         const input = e.target
         if (e.key === 'Enter' && input.value.trim() !== '') {
             const { setCurrentTaskListToInbox, createTask } = this.props
-            const task = handleDueDateOf({ name: input.value.trim() })
+            const task = dateFromRelativeString({ name: input.value.trim() })
             input.disabled = true
             try {
                 setCurrentTaskListToInbox()

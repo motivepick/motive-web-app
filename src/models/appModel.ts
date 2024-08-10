@@ -1,12 +1,12 @@
-import { Moment } from 'moment'
+import { DateTime } from 'luxon'
 
 export type ITask = {
     id: number;
     name: string;
     description: string | null;
-    created: Moment | string;
-    dueDate: Moment | string | null;
-    closingDate: Moment | string | null;
+    created: DateTime | string;
+    dueDate: DateTime | string | null;
+    closingDate: DateTime | string | null;
     closed: boolean;
     visible: boolean;
 }
@@ -15,9 +15,9 @@ export type ITaskNullable = {
     id?: number;
     name?: string;
     description?: string | null;
-    created?: Moment | string;
-    dueDate?: Moment | string | null;
-    closingDate?: Moment | string | null;
+    created?: DateTime | string;
+    dueDate?: DateTime | string | null;
+    closingDate?: DateTime | string | null;
     closed?: boolean;
     visible?: boolean;
 }

@@ -1,16 +1,16 @@
 // @ts-nocheck
-import moment from 'moment'
+import { DateTime } from 'luxon'
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 import { Draggable, DraggableProps } from 'react-beautiful-dnd'
 import { withTranslation, WithTranslation } from 'react-i18next'
 import { Form, FormGroup } from 'reactstrap'
 import { CheckMark } from '../common/task-item/task-header/check-mark'
-import { DueDate } from '../common/task-item/task-header/due-date'
+import DueDate from '../common/task-item/task-header/due-date'
 import { Title } from '../common/task-item/task-header/title'
 import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../config'
 import { ITaskNullable } from '../../models/appModel'
-import { handleDueDateOf } from '../../utils/taskUtils'
+import { dateFromRelativeString } from '../../utils/date-from-relative-string'
 
 import { CustomInput } from './CustomInput'
 
@@ -26,7 +26,7 @@ interface TaskProps extends WithTranslation, DraggableProps {
     closed: boolean;
 }
 
-const DUE_DATE_FORMAT = 'YYYY-MM-DD'
+const DUE_DATE_FORMAT = 'yyyy-MM-dd'
 
 const isTaskToggle = (target: any) => {
     const tagName = target.tagName.toLowerCase()
@@ -68,7 +68,7 @@ class Task extends PureComponent<TaskProps> {
     renderItem() {
         const { name, description, t } = this.props
         const { closed } = this.state
-        const dueDate = this.props.dueDate ? moment(this.props.dueDate, moment.ISO_8601) : null
+        const dueDate = this.props.dueDate ? DateTime.fromISO(this.props.dueDate) : null
         return (
             <div className="task-container">
                 <div className="task" onClick={this.handleTaskClick}>
@@ -86,7 +86,7 @@ class Task extends PureComponent<TaskProps> {
                             <CustomInput type="text" value={name} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
                         </FormGroup>
                         <FormGroup>
-                            <CustomInput type="date" value={dueDate && dueDate.format(DUE_DATE_FORMAT)}
+                            <CustomInput type="date" value={dueDate && dueDate.toFormat(DUE_DATE_FORMAT)}
                                 onSave={this.saveDate} maxLength={DUE_DATE_FORMAT.length}/>
                         </FormGroup>
                         <FormGroup className="task-form-description">
@@ -116,7 +116,7 @@ class Task extends PureComponent<TaskProps> {
 
     saveName = (name: string) => {
         // @ts-ignore
-        const task = handleDueDateOf({ name: name ? name.trim() : '' })
+        const task = dateFromRelativeString({ name: name ? name.trim() : '' })
         this.props.saveTask(this.props.id, task)
         return task.name
     }
@@ -128,7 +128,7 @@ class Task extends PureComponent<TaskProps> {
     }
 
     saveDate = (dueDate: string) => {
-        const task = { dueDate: moment(dueDate, 'YYYY-MM-DD').endOf('day') }
+        const task = { dueDate: DateTime.fromISO(dueDate).endOf('day').toUTC() }
         this.props.saveTask(this.props.id, task)
         return task.dueDate
     }
