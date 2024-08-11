@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { Fragment, PureComponent } from 'react'
+import { useLocation } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Col, Input, Row } from 'reactstrap'
 import Task from './Task'
@@ -25,7 +26,6 @@ import { fetchUser } from '../../services/userService'
 import { setUserAction } from '../../redux/actions/userActions'
 import Footer from '../common/Footer'
 import { delay, DELAY_MS } from '../../utils/delay'
-import { history } from '../../index'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import { DEFAULT_LIMIT, INFINITE_SCROLL_BOTTOM_OFFSET } from '../../config'
@@ -53,7 +53,7 @@ class TaskView extends PureComponent {
         const list = this.props[currentList]
         return (
             <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
-                <Navigation history={this.props.history} user={user} onAllTasksClick={this.handleAllTasksClick}/>
+                <Navigation isTemporaryUserLoggedIn={user.temporary} onAllTasksClick={this.handleAllTasksClick}/>
                 <div>
                     <Row style={{ marginTop: '10px' }}>
                         <Col>
@@ -154,8 +154,6 @@ class TaskView extends PureComponent {
         const { pathname } = location
         if (pathname === '/') {
             setCurrentTaskListToInbox()
-        } else {
-            history.push('/')
         }
     }
 }
@@ -231,4 +229,10 @@ const mapStateToProps = state => ({
     initialized: selectInitialized(state)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withTranslation()(TaskView))
+const TaskViewWithLocation = (props) => {
+    const location = useLocation()
+
+    return <TaskView {...props} location={location} />
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation()(TaskViewWithLocation))

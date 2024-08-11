@@ -1,8 +1,6 @@
 import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom'
-import { Router } from 'react-router-dom'
-// @ts-ignore
-import { createBrowserHistory } from 'history'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { applyMiddleware, createStore } from 'redux'
 import thunkMiddleware from 'redux-thunk'
@@ -15,12 +13,10 @@ import Routes from './components/routes'
 
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
-export const history = createBrowserHistory()
-
 ReactDOM.render(
     <Provider store={store}>
         <Suspense fallback={<div>Loading...</div>}>
-            <Router history={history}>
+            <Router>
                 <Routes/>
             </Router>
         </Suspense>
