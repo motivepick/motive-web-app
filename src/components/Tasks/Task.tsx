@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { DateTime } from 'luxon'
-import React, { FC, useState } from 'react'
+import React, { FC, MouseEvent, useState } from 'react'
 import { Draggable, DraggableProps } from '@hello-pangea/dnd'
 import { useTranslation } from 'react-i18next'
 import { Form, FormGroup } from 'reactstrap'
@@ -22,12 +22,17 @@ interface TaskItemProps {
     detailsShown: boolean
     name: string
     description?: string
-    dueDateValue?: DateTimeMaybeValid
+    dueDate?: DateTimeMaybeValid | null
     closed: boolean
+    handleTaskClick: (e: MouseEvent<HTMLElement>) => void
+    handleTaskClose: () => Promise<void>
+    saveName: (name: string) => string
+    saveDescription: (description: string) => string
+    saveDate: (dueDate: string) => DateTimeMaybeValid
 }
 
 const TaskItem: FC<TaskItemProps> = props => {
-    const { name, description, dueDateValue, closed, detailsShown, handleTaskClick, handleTaskClose, saveName, saveDescription, saveDate } = props
+    const { name, description, dueDate, closed, detailsShown, handleTaskClick, handleTaskClose, saveName, saveDescription, saveDate } = props
     const { t } = useTranslation()
     return (
         <div className="task-container">
@@ -36,7 +41,7 @@ const TaskItem: FC<TaskItemProps> = props => {
                     <CheckMark toggled={closed} onToggle={handleTaskClose}/>
                     <div className="task-body">
                         <Title dimmedStyle={closed}>{name}</Title>
-                        <DueDate dimmedStyle={closed}>{dueDateValue}</DueDate>
+                        <DueDate dimmedStyle={closed}>{dueDate}</DueDate>
                     </div>
                 </div>
 
@@ -46,7 +51,7 @@ const TaskItem: FC<TaskItemProps> = props => {
                             <CustomInput type="text" value={name} onSave={saveName} maxLength={TASK_NAME_LIMIT}/>
                         </FormGroup>
                         <FormGroup>
-                            <CustomInput type="date" value={dueDateValue && dueDateValue.toFormat(DUE_DATE_FORMAT)}
+                            <CustomInput type="date" value={dueDate && dueDate.toFormat(DUE_DATE_FORMAT)}
                                          onSave={saveDate} maxLength={DUE_DATE_FORMAT.length}/>
                         </FormGroup>
                         <FormGroup className="task-form-description">
@@ -84,18 +89,18 @@ const isTaskToggle = (target: any) => {
 }
 
 interface Props extends DraggableProps {
-    id: number;
-    name: string;
-    description?: string;
-    dueDate?: string;
+    id: number
+    name: string
+    description?: string
+    dueDate?: string
     closed: boolean
-    saveTask: (id: number, task: ITaskNullable) => void;
-    onTaskClose: (id: number) => void;
+    isDraggable: boolean
+    saveTask: (id: number, task: ITaskNullable) => void
+    onTaskClose: (id: number) => void
 }
 
 const Task: FC<Props> = props => {
     const { id, name, description, dueDate, isDraggable, index, saveTask, onTaskClose } = props
-    const dueDateValue = dueDate ? DateTime.fromISO(dueDate) : null
     const [detailsShown, setDetailsShown] = useState(false)
     const [closed, setClosed] = useState(props.closed)
 
@@ -104,7 +109,7 @@ const Task: FC<Props> = props => {
         onTaskClose(id)
     }
 
-    const handleTaskClick = ({ target }: React.MouseEvent<HTMLElement>) => {
+    const handleTaskClick = ({ target }: MouseEvent<HTMLElement>) => {
         if (isTaskToggle(target)) {
             setDetailsShown(!detailsShown)
         }
@@ -133,7 +138,7 @@ const Task: FC<Props> = props => {
             <TaskItem
                 name={name}
                 description={description}
-                dueDateValue={dueDateValue}
+                dueDate={dueDate ? DateTime.fromISO(dueDate) : null}
                 closed={closed}
                 detailsShown={detailsShown}
                 handleTaskClick={handleTaskClick}
