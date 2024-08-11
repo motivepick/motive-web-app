@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { DateTime } from 'luxon'
-import React, { FC, MouseEvent, useState } from 'react'
+import React, { FC, MouseEvent, useCallback, useState } from 'react'
 import { Draggable, DraggableProps } from '@hello-pangea/dnd'
 import { useTranslation } from 'react-i18next'
 import { Form, FormGroup } from 'reactstrap'
@@ -51,12 +51,16 @@ const TaskItem: FC<TaskItemProps> = props => {
                             <CustomInput type="text" value={name} onSave={saveName} maxLength={TASK_NAME_LIMIT}/>
                         </FormGroup>
                         <FormGroup>
-                            <CustomInput type="date" value={dueDate && dueDate.toFormat(DUE_DATE_FORMAT)}
-                                         onSave={saveDate} maxLength={DUE_DATE_FORMAT.length}/>
+                            <CustomInput type="date" value={dueDate && dueDate.toFormat(DUE_DATE_FORMAT)} onSave={saveDate} maxLength={DUE_DATE_FORMAT.length}/>
                         </FormGroup>
                         <FormGroup className="task-form-description">
-                            <CustomInput type="textarea" placeholder={t('task.description')} value={description}
-                                         onSave={saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
+                            <CustomInput
+                                type="textarea"
+                                placeholder={t('task.description')}
+                                value={description}
+                                onSave={saveDescription}
+                                maxLength={TASK_DESCRIPTION_LIMIT}
+                            />
                         </FormGroup>
                     </Form>
                 }
@@ -104,34 +108,34 @@ const Task: FC<Props> = props => {
     const [detailsShown, setDetailsShown] = useState(false)
     const [closed, setClosed] = useState(props.closed)
 
-    const handleTaskClose = async () => {
+    const handleTaskClose = useCallback(async () => {
         setClosed(!closed)
         onTaskClose(id)
-    }
+    }, [id, closed, onTaskClose, setClosed])
 
-    const handleTaskClick = ({ target }: MouseEvent<HTMLElement>) => {
-        if (isTaskToggle(target)) {
+    const handleTaskClick = useCallback((e: MouseEvent<HTMLElement>) => {
+        if (isTaskToggle(e.target)) {
             setDetailsShown(!detailsShown)
         }
-    }
+    }, [detailsShown, setDetailsShown])
 
-    const saveName = (name: string) => {
+    const saveName = useCallback((name: string) => {
         const task = dateFromRelativeString({ name: name ? name.trim() : '' })
         saveTask(id, task)
         return task.name
-    }
+    }, [id, saveTask])
 
-    const saveDescription = (description: string) => {
+    const saveDescription = useCallback((description: string) => {
         const task = { description }
         saveTask(id, task)
         return task.description
-    }
+    }, [id, saveTask])
 
-    const saveDate = (dueDate: string) => {
+    const saveDate = useCallback((dueDate: string) => {
         const task = { dueDate: DateTime.fromISO(dueDate).endOf('day').toUTC() }
         saveTask(id, task)
         return task.dueDate
-    }
+    }, [id, saveTask])
 
     return (
         <DraggableWrapper id={id} index={index} isDraggable={isDraggable}>
