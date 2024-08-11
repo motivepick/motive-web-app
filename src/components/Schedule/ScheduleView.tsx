@@ -1,5 +1,4 @@
 // @ts-nocheck
-import { History } from 'history'
 import React, { Fragment, MouseEventHandler, PureComponent } from 'react'
 import { DragDropContext, DraggableLocation, Droppable, DropResult } from 'react-beautiful-dnd'
 import { withTranslation, WithTranslation } from 'react-i18next'
@@ -39,7 +38,6 @@ interface ScheduleViewProps extends WithTranslation {
     setSchedule: () => void;
     closeScheduleTask: () => void;
     onToggleOpenClosedTasks: MouseEventHandler;
-    history: History;
 }
 
 interface ScheduleViewState {
@@ -60,7 +58,7 @@ class ScheduleView extends PureComponent<ScheduleViewProps, ScheduleViewState> {
         const { user, schedule, initialized, closeScheduleTask, updateScheduleTask, t } = this.props
         return (
             <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
-                <Navigation history={this.props.history} isTemporaryUserLoggedIn={user.temporary}/>
+                <Navigation isTemporaryUserLoggedIn={user.temporary}/>
                 {initialized ? <div>
                     {Object.keys(schedule)
                            .filter(day => !['future', 'overdue'].includes(day) && schedule[day].length > 0)
