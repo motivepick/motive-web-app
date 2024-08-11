@@ -32,7 +32,7 @@ i18n
     .init(i18nOptions)
     .then(() => document.documentElement.lang = i18n.resolvedLanguage || i18n.language)
 
-i18n.services.formatter?.add('DATE_SHORT_RELATIVE', (value, lng, options) => {
+i18n.services.formatter?.add('DATE_SHORT_RELATIVE', (value, lng) => {
     const date = DateTime.fromJSDate(value).setLocale(lng as string)
     const dayDiff = Math.round(date.diffNow('days').days)
     if (-1 <= dayDiff && dayDiff <=1) return i18n.t('{{val, relativetime(day)}}', { val: dayDiff, numeric: 'auto' })
