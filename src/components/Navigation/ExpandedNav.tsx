@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 interface ExpandedNavProps {
   onAllTasksClick?: () => void
@@ -9,15 +9,14 @@ interface ExpandedNavProps {
 const ExpandedNav: React.FC<ExpandedNavProps> = ({ onAllTasksClick }) => {
   const { t } = useTranslation()
   return (
-    <Fragment>
-      <li className="nav-item">
-        {/* TODO: make active work again */}
-        <Link to="/" className="nav-link" onClick={onAllTasksClick}>{t('allTasks')}</Link>
-      </li>
-      <li className="nav-item">
-        <Link to="/schedule" className="nav-link">{t('schedule')}</Link>
-      </li>
-    </Fragment>
+      <Fragment>
+          <li className="nav-item">
+              <NavLink exact to="/" className="nav-link" onClick={onAllTasksClick}>{t('allTasks')}</NavLink>
+          </li>
+          <li className="nav-item">
+              <NavLink to="/schedule" className="nav-link">{t('schedule')}</NavLink>
+          </li>
+      </Fragment>
   )
 }
 
