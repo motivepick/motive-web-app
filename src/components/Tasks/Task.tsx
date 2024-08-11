@@ -14,22 +14,68 @@ import { dateFromRelativeString } from '../../utils/date-from-relative-string'
 import { CustomInput } from './CustomInput'
 
 import './Task.css'
-
-interface Props extends DraggableProps {
-    id: number;
-    name: string;
-    description?: string;
-    dueDate?: string;
-    saveTask: (id: number, task: ITaskNullable) => void;
-    onTaskClose: (id: number) => void;
-    closed: boolean;
-}
-
-interface TaskItemProps {
-
-}
+import { DateTimeMaybeValid } from 'luxon/src/datetime'
 
 const DUE_DATE_FORMAT = 'yyyy-MM-dd'
+
+interface TaskItemProps {
+    detailsShown: boolean
+    name: string
+    description?: string
+    dueDateValue?: DateTimeMaybeValid
+    closed: boolean
+}
+
+const TaskItem: FC<TaskItemProps> = props => {
+    const { name, description, dueDateValue, closed, detailsShown, handleTaskClick, handleTaskClose, saveName, saveDescription, saveDate } = props
+    const { t } = useTranslation()
+    return (
+        <div className="task-container">
+            <div className="task" onClick={handleTaskClick}>
+                <div className="task-header">
+                    <CheckMark toggled={closed} onToggle={handleTaskClose}/>
+                    <div className="task-body">
+                        <Title dimmedStyle={closed}>{name}</Title>
+                        <DueDate dimmedStyle={closed}>{dueDateValue}</DueDate>
+                    </div>
+                </div>
+
+                {detailsShown &&
+                    <Form className="task-form" onSubmit={e => e.preventDefault()}>
+                        <FormGroup>
+                            <CustomInput type="text" value={name} onSave={saveName} maxLength={TASK_NAME_LIMIT}/>
+                        </FormGroup>
+                        <FormGroup>
+                            <CustomInput type="date" value={dueDateValue && dueDateValue.toFormat(DUE_DATE_FORMAT)}
+                                         onSave={saveDate} maxLength={DUE_DATE_FORMAT.length}/>
+                        </FormGroup>
+                        <FormGroup className="task-form-description">
+                            <CustomInput type="textarea" placeholder={t('task.description')} value={description}
+                                         onSave={saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
+                        </FormGroup>
+                    </Form>
+                }
+            </div>
+        </div>
+    )
+}
+
+interface DraggableWrapperProps {
+    id: number
+    index: number
+    isDraggable: boolean
+}
+
+const DraggableWrapper: FC<DraggableWrapperProps> = ({ id, index, isDraggable, children }) =>
+    isDraggable ? (
+        <Draggable draggableId={id.toString()} index={index}>
+            {(provided) => (
+                <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                    {children}
+                </div>
+            )}
+        </Draggable>
+    ) : children
 
 const isTaskToggle = (target: any) => {
     const tagName = target.tagName.toLowerCase()
@@ -37,16 +83,21 @@ const isTaskToggle = (target: any) => {
     return ['div', 'form', 'small', 'del'].includes(tagName) && !className.includes('task-check-mark-element')
 }
 
-const TaskItem: FC<TaskItemProps> = props => {
-    return ()
+interface Props extends DraggableProps {
+    id: number;
+    name: string;
+    description?: string;
+    dueDate?: string;
+    closed: boolean
+    saveTask: (id: number, task: ITaskNullable) => void;
+    onTaskClose: (id: number) => void;
 }
 
 const Task: FC<Props> = props => {
     const { id, name, description, dueDate, isDraggable, index, saveTask, onTaskClose } = props
     const dueDateValue = dueDate ? DateTime.fromISO(dueDate) : null
-    const [detailsShown, setDetailsShown] = useState(props.closed)
-    const [closed, setClosed] = useState(false)
-    const { t } = useTranslation()
+    const [detailsShown, setDetailsShown] = useState(false)
+    const [closed, setClosed] = useState(props.closed)
 
     const handleTaskClose = async () => {
         setClosed(!closed)
@@ -60,7 +111,6 @@ const Task: FC<Props> = props => {
     }
 
     const saveName = (name: string) => {
-        // @ts-ignore
         const task = dateFromRelativeString({ name: name ? name.trim() : '' })
         saveTask(id, task)
         return task.name
@@ -78,73 +128,22 @@ const Task: FC<Props> = props => {
         return task.dueDate
     }
 
-    if (isDraggable) {
-        return (
-            <Draggable draggableId={id.toString()} index={index}>
-                {(provided) => (
-                    <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                        <div className="task-container">
-                            <div className="task" onClick={handleTaskClick}>
-                                <div className="task-header">
-                                    <CheckMark toggled={closed} onToggle={handleTaskClose}/>
-                                    <div className="task-body">
-                                        <Title dimmedStyle={closed}>{name}</Title>
-                                        <DueDate dimmedStyle={closed}>{dueDateValue}</DueDate>
-                                    </div>
-                                </div>
-
-                                {detailsShown &&
-                                    <Form className="task-form" onSubmit={e => e.preventDefault()}>
-                                        <FormGroup>
-                                            <CustomInput type="text" value={name} onSave={saveName} maxLength={TASK_NAME_LIMIT}/>
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <CustomInput type="date" value={dueDateValue && dueDateValue.toFormat(DUE_DATE_FORMAT)}
-                                                         onSave={saveDate} maxLength={DUE_DATE_FORMAT.length}/>
-                                        </FormGroup>
-                                        <FormGroup className="task-form-description">
-                                            <CustomInput type="textarea" placeholder={t('task.description')} value={description}
-                                                         onSave={saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
-                                        </FormGroup>
-                                    </Form>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </Draggable>
-        )
-    } else {
-        return (
-            <div className="task-container">
-                <div className="task" onClick={handleTaskClick}>
-                    <div className="task-header">
-                        <CheckMark toggled={closed} onToggle={handleTaskClose}/>
-                        <div className="task-body">
-                            <Title dimmedStyle={closed}>{name}</Title>
-                            <DueDate dimmedStyle={closed}>{dueDateValue}</DueDate>
-                        </div>
-                    </div>
-
-                    {detailsShown &&
-                        <Form className="task-form" onSubmit={e => e.preventDefault()}>
-                            <FormGroup>
-                                <CustomInput type="text" value={name} onSave={saveName} maxLength={TASK_NAME_LIMIT}/>
-                            </FormGroup>
-                            <FormGroup>
-                                <CustomInput type="date" value={dueDateValue && dueDateValue.toFormat(DUE_DATE_FORMAT)}
-                                             onSave={saveDate} maxLength={DUE_DATE_FORMAT.length}/>
-                            </FormGroup>
-                            <FormGroup className="task-form-description">
-                                <CustomInput type="textarea" placeholder={t('task.description')} value={description}
-                                             onSave={saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
-                            </FormGroup>
-                        </Form>
-                    }
-                </div>
-            </div>
-        )
-    }
+    return (
+        <DraggableWrapper id={id} index={index} isDraggable={isDraggable}>
+            <TaskItem
+                name={name}
+                description={description}
+                dueDateValue={dueDateValue}
+                closed={closed}
+                detailsShown={detailsShown}
+                handleTaskClick={handleTaskClick}
+                handleTaskClose={handleTaskClose}
+                saveName={saveName}
+                saveDescription={saveDescription}
+                saveDate={saveDate}
+            />
+        </DraggableWrapper>
+    )
 }
 
 export default Task
