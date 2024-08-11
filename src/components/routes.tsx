@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { Container } from 'reactstrap'
 import { withTranslation } from 'react-i18next'
 
@@ -11,13 +11,13 @@ import ScheduleView from './Schedule/ScheduleView'
 
 const AppRoutes = () =>
     <Container>
-        <Switch>
-            <Route exact={true} path="/" component={TaskView}/>
-            <Route exact={true} path="/schedule" component={ScheduleView}/>
-            <Route path="/login" component={LoginView}/>
-            <Route path="/privacy" component={PrivacyView}/>
-            <Route path="/" component={() => <div>404</div>}/>
-        </Switch>
+        <Routes>
+            <Route path="/" element={<TaskView />}/>
+            <Route path="/schedule" element={<ScheduleView />}/>
+            <Route path="/login" element={<LoginView />}/>
+            <Route path="/privacy" element={<PrivacyView />}/>
+            <Route path="*" element={<div>404</div>} />
+        </Routes>
     </Container>
 
 export default withTranslation()(AppRoutes)

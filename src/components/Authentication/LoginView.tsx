@@ -5,7 +5,7 @@ import { Button, Col, Row } from 'reactstrap'
 import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../../config'
 
 interface LoginViewProps {
-    disabled: boolean
+    disabled?: boolean
 }
 
 const LoginView: React.FC<LoginViewProps> = () => {

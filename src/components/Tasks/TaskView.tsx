@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { Fragment, PureComponent } from 'react'
+import { useLocation } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Col, Input, Row } from 'reactstrap'
 import Task from './Task'
@@ -228,4 +229,10 @@ const mapStateToProps = state => ({
     initialized: selectInitialized(state)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(withTranslation()(TaskView))
+const TaskViewWithLocation = (props) => {
+    const location = useLocation()
+
+    return <TaskView {...props} location={location} />
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation()(TaskViewWithLocation))

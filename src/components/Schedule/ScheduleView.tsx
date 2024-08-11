@@ -1,7 +1,7 @@
 // @ts-nocheck
-import React, { Fragment, MouseEventHandler, PureComponent } from 'react'
+import React, { Fragment, PureComponent } from 'react'
 import { DragDropContext, DraggableLocation, Droppable, DropResult } from 'react-beautiful-dnd'
-import { withTranslation, WithTranslation } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
 import {
@@ -14,7 +14,7 @@ import { closeTaskAction, updateTaskAction } from '../../redux/actions/taskActio
 import { setUserAction } from '../../redux/actions/userActions'
 import Footer from '../common/Footer'
 import ScheduleHeader from '../common/ScheduleHeader'
-import { ISchedule, ITask, IUser } from '../../models/appModel'
+import { ITask } from '../../models/appModel'
 import { IScheduleTaskPositionIndex } from '../../models/redux/scheduleActionModel'
 import { AppState, ScheduleState, UserState } from '../../models/redux/stateModel'
 import Navigation from '../Navigation/Navigation'
@@ -28,25 +28,7 @@ import { delay, DELAY_MS } from '../../utils/delay'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import { handleServerException } from '../../utils/exceptionHandler'
 
-interface ScheduleViewProps extends WithTranslation {
-    user: IUser;
-    schedule: ISchedule;
-    initialized: boolean;
-    updateScheduleTask: (id: number, task: ITask) => void;
-    updateScheduleTaskIndex: (arg: IScheduleTaskPositionIndex | DropResult) => void;
-    setUser: () => void;
-    setSchedule: () => void;
-    closeScheduleTask: () => void;
-    onToggleOpenClosedTasks: MouseEventHandler;
-}
-
-interface ScheduleViewState {
-    user: IUser;
-    schedule: ISchedule;
-    initialized: boolean;
-}
-
-class ScheduleView extends PureComponent<ScheduleViewProps, ScheduleViewState> {
+class ScheduleView extends PureComponent {
 
     componentDidMount() {
         const { setUser, setSchedule } = this.props
