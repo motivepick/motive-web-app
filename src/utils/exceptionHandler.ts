@@ -1,5 +1,7 @@
 import { ResponseError } from 'superagent'
-import { history } from '../index'
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const handleAuthorizationError = () => {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const handleServerError = () => {}
@@ -12,7 +14,7 @@ export const handleServerException = (e: ResponseError) => {
     if (response) {
         const { status } = response
         if (status === 401 || status === 403) {
-            history.push('/login')
+            handleAuthorizationError()
         } else {
             handleServerError()
         }
