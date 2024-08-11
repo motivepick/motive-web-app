@@ -1,4 +1,4 @@
-# Milestone Web App [![Build Status](https://travis-ci.com/milestone/milestone-web-app.svg?branch=master)](https://travis-ci.com/milestone/milestone-web-app)
+# Milestone Web App
 
 The service that is going to defeat the laziness.
 

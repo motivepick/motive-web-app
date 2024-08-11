@@ -2,7 +2,7 @@
 import { DateTime } from 'luxon'
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
-import { Draggable, DraggableProps } from 'react-beautiful-dnd'
+import { Draggable, DraggableProps } from '@hello-pangea/dnd'
 import { withTranslation, WithTranslation } from 'react-i18next'
 import { Form, FormGroup } from 'reactstrap'
 import { CheckMark } from '../common/task-item/task-header/check-mark'

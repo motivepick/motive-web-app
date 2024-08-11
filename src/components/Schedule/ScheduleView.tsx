@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React, { Fragment, PureComponent } from 'react'
-import { DragDropContext, DraggableLocation, Droppable, DropResult } from 'react-beautiful-dnd'
+import { DragDropContext, DraggableLocation, Droppable, DropResult } from '@hello-pangea/dnd'
 import { withTranslation } from 'react-i18next'
 import { connect } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux'
