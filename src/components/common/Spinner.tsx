@@ -1,9 +1,10 @@
-import React from 'react'
-import { withTranslation, WithTranslation } from 'react-i18next'
+import React, { FC } from 'react'
 import { Col, Row } from 'reactstrap'
+import { useTranslation } from 'react-i18next'
 
-const Spinner: React.FC<WithTranslation> = ({ t }) =>
-    <div>
+const Spinner: FC = () => {
+    const { t } = useTranslation()
+    return <div>
         <Row style={{ marginTop: '150px', marginBottom: '10px' }}>
             <Col className="text-center">
                 <div className="spinner-grow text-secondary" role="status">
@@ -12,5 +13,6 @@ const Spinner: React.FC<WithTranslation> = ({ t }) =>
             </Col>
         </Row>
     </div>
+}
 
-export default withTranslation()(Spinner)
+export default Spinner
