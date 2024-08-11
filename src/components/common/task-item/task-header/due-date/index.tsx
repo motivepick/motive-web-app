@@ -1,10 +1,10 @@
-import React, { ReactNode } from 'react'
-import { withTranslation, WithTranslation } from 'react-i18next'
+import React, { FC, ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 import { DateTime } from 'luxon'
 
 import './styles.css'
 
-type DueDateProps = {
+type Props = {
     dimmedStyle: boolean;
     children: ReactNode;
 }
@@ -16,8 +16,9 @@ const classOf = (dueDate: DateTime | undefined, dimmedStyle: boolean): string =>
     return ''
 }
 
-const DueDate: React.FC<DueDateProps & WithTranslation> = props => {
-    const { dimmedStyle = false, children, t } = props
+const DueDate: FC<Props> = props => {
+    const { dimmedStyle = false, children } = props
+    const { t } = useTranslation()
 
     return children
         ? <small
@@ -25,4 +26,4 @@ const DueDate: React.FC<DueDateProps & WithTranslation> = props => {
         : null
 }
 
-export default withTranslation()(DueDate)
+export default DueDate

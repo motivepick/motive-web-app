@@ -1,17 +1,18 @@
 import React, { MouseEventHandler } from 'react'
-import { withTranslation, WithTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { Col, Row } from 'reactstrap'
 import { TASK_LIST, TaskListTypeAsLiterals } from '../../models/appModel'
 import './TasksSubtitle.css'
 
-interface TasksSubtitleProps extends WithTranslation {
+interface Props {
     numberOfTasks: number;
     currentList: TaskListTypeAsLiterals;
     onToggleOpenClosedTasks: MouseEventHandler;
 }
 
-const TasksSubtitle: React.FC<TasksSubtitleProps> = props => {
-    const { numberOfTasks, currentList, onToggleOpenClosedTasks, t } = props
+const TasksSubtitle: React.FC<Props> = props => {
+    const { t } = useTranslation()
+    const { numberOfTasks, currentList, onToggleOpenClosedTasks } = props
     return (
         <Row className="task-subtitle">
             <Col xs={5} style={{ color: '#8E8E93' }}>{t('numberOfTasks', { count: numberOfTasks })}</Col>
@@ -24,4 +25,4 @@ const TasksSubtitle: React.FC<TasksSubtitleProps> = props => {
     )
 }
 
-export default withTranslation()(TasksSubtitle)
+export default TasksSubtitle

@@ -1,9 +1,8 @@
 // @ts-nocheck
 import { DateTime } from 'luxon'
-import PropTypes from 'prop-types'
-import React, { PureComponent } from 'react'
+import React, { FC, useState } from 'react'
 import { Draggable, DraggableProps } from '@hello-pangea/dnd'
-import { withTranslation, WithTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { Form, FormGroup } from 'reactstrap'
 import { CheckMark } from '../common/task-item/task-header/check-mark'
 import DueDate from '../common/task-item/task-header/due-date'
@@ -16,7 +15,7 @@ import { CustomInput } from './CustomInput'
 
 import './Task.css'
 
-interface TaskProps extends WithTranslation, DraggableProps {
+interface Props extends DraggableProps {
     id: number;
     name: string;
     description?: string;
@@ -24,6 +23,10 @@ interface TaskProps extends WithTranslation, DraggableProps {
     saveTask: (id: number, task: ITaskNullable) => void;
     onTaskClose: (id: number) => void;
     closed: boolean;
+}
+
+interface TaskItemProps {
+
 }
 
 const DUE_DATE_FORMAT = 'yyyy-MM-dd'
@@ -34,104 +37,114 @@ const isTaskToggle = (target: any) => {
     return ['div', 'form', 'small', 'del'].includes(tagName) && !className.includes('task-check-mark-element')
 }
 
-class Task extends PureComponent<TaskProps> {
+const TaskItem: FC<TaskItemProps> = props => {
+    return ()
+}
 
-    static propTypes = {
-        id: PropTypes.number.isRequired,
-        name: PropTypes.string.isRequired,
-        description: PropTypes.string,
-        dueDate: PropTypes.string,
-        saveTask: PropTypes.func.isRequired
+const Task: FC<Props> = props => {
+    const { id, name, description, dueDate, isDraggable, index, saveTask, onTaskClose } = props
+    const dueDateValue = dueDate ? DateTime.fromISO(dueDate) : null
+    const [detailsShown, setDetailsShown] = useState(props.closed)
+    const [closed, setClosed] = useState(false)
+    const { t } = useTranslation()
+
+    const handleTaskClose = async () => {
+        setClosed(!closed)
+        onTaskClose(id)
     }
 
-    state = { closed: this.props.closed, detailsShown: false }
-
-    render = () => {
-        const { isDraggable = false } = this.props
-        if (isDraggable) return this.renderDraggable()
-        return this.renderItem()
+    const handleTaskClick = ({ target }: React.MouseEvent<HTMLElement>) => {
+        if (isTaskToggle(target)) {
+            setDetailsShown(!detailsShown)
+        }
     }
 
-    renderDraggable() {
-        const { id, index } = this.props
+    const saveName = (name: string) => {
+        // @ts-ignore
+        const task = dateFromRelativeString({ name: name ? name.trim() : '' })
+        saveTask(id, task)
+        return task.name
+    }
+
+    const saveDescription = (description: string) => {
+        const task = { description }
+        saveTask(id, task)
+        return task.description
+    }
+
+    const saveDate = (dueDate: string) => {
+        const task = { dueDate: DateTime.fromISO(dueDate).endOf('day').toUTC() }
+        saveTask(id, task)
+        return task.dueDate
+    }
+
+    if (isDraggable) {
         return (
             <Draggable draggableId={id.toString()} index={index}>
                 {(provided) => (
                     <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                        {this.renderItem()}
+                        <div className="task-container">
+                            <div className="task" onClick={handleTaskClick}>
+                                <div className="task-header">
+                                    <CheckMark toggled={closed} onToggle={handleTaskClose}/>
+                                    <div className="task-body">
+                                        <Title dimmedStyle={closed}>{name}</Title>
+                                        <DueDate dimmedStyle={closed}>{dueDateValue}</DueDate>
+                                    </div>
+                                </div>
+
+                                {detailsShown &&
+                                    <Form className="task-form" onSubmit={e => e.preventDefault()}>
+                                        <FormGroup>
+                                            <CustomInput type="text" value={name} onSave={saveName} maxLength={TASK_NAME_LIMIT}/>
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <CustomInput type="date" value={dueDateValue && dueDateValue.toFormat(DUE_DATE_FORMAT)}
+                                                         onSave={saveDate} maxLength={DUE_DATE_FORMAT.length}/>
+                                        </FormGroup>
+                                        <FormGroup className="task-form-description">
+                                            <CustomInput type="textarea" placeholder={t('task.description')} value={description}
+                                                         onSave={saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
+                                        </FormGroup>
+                                    </Form>
+                                }
+                            </div>
+                        </div>
                     </div>
                 )}
             </Draggable>
         )
-    }
-
-    renderItem() {
-        const { name, description, t } = this.props
-        const { closed } = this.state
-        const dueDate = this.props.dueDate ? DateTime.fromISO(this.props.dueDate) : null
+    } else {
         return (
             <div className="task-container">
-                <div className="task" onClick={this.handleTaskClick}>
+                <div className="task" onClick={handleTaskClick}>
                     <div className="task-header">
-                        <CheckMark toggled={closed} onToggle={this.handleTaskClose}/>
+                        <CheckMark toggled={closed} onToggle={handleTaskClose}/>
                         <div className="task-body">
                             <Title dimmedStyle={closed}>{name}</Title>
-                            <DueDate dimmedStyle={closed}>{dueDate}</DueDate>
+                            <DueDate dimmedStyle={closed}>{dueDateValue}</DueDate>
                         </div>
                     </div>
 
-                    {this.state.detailsShown &&
-                    <Form className="task-form" onSubmit={e => e.preventDefault()}>
-                        <FormGroup>
-                            <CustomInput type="text" value={name} onSave={this.saveName} maxLength={TASK_NAME_LIMIT}/>
-                        </FormGroup>
-                        <FormGroup>
-                            <CustomInput type="date" value={dueDate && dueDate.toFormat(DUE_DATE_FORMAT)}
-                                onSave={this.saveDate} maxLength={DUE_DATE_FORMAT.length}/>
-                        </FormGroup>
-                        <FormGroup className="task-form-description">
-                            <CustomInput type="textarea" placeholder={t('task.description')} value={description}
-                                onSave={this.saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
-                        </FormGroup>
-                    </Form>
+                    {detailsShown &&
+                        <Form className="task-form" onSubmit={e => e.preventDefault()}>
+                            <FormGroup>
+                                <CustomInput type="text" value={name} onSave={saveName} maxLength={TASK_NAME_LIMIT}/>
+                            </FormGroup>
+                            <FormGroup>
+                                <CustomInput type="date" value={dueDateValue && dueDateValue.toFormat(DUE_DATE_FORMAT)}
+                                             onSave={saveDate} maxLength={DUE_DATE_FORMAT.length}/>
+                            </FormGroup>
+                            <FormGroup className="task-form-description">
+                                <CustomInput type="textarea" placeholder={t('task.description')} value={description}
+                                             onSave={saveDescription} maxLength={TASK_DESCRIPTION_LIMIT}/>
+                            </FormGroup>
+                        </Form>
                     }
                 </div>
             </div>
         )
     }
-
-    handleTaskClose = async () => {
-        const { id, onTaskClose } = this.props
-        const { closed } = this.state
-        this.setState({ closed: !closed })
-        onTaskClose(id)
-    }
-
-    handleTaskClick = ({ target }: React.MouseEvent<HTMLElement>) => {
-        if (isTaskToggle(target)) {
-            const { detailsShown } = this.state
-            this.setState({ detailsShown: !detailsShown })
-        }
-    }
-
-    saveName = (name: string) => {
-        // @ts-ignore
-        const task = dateFromRelativeString({ name: name ? name.trim() : '' })
-        this.props.saveTask(this.props.id, task)
-        return task.name
-    }
-
-    saveDescription = (description: string) => {
-        const task = { description }
-        this.props.saveTask(this.props.id, task)
-        return task.description
-    }
-
-    saveDate = (dueDate: string) => {
-        const task = { dueDate: DateTime.fromISO(dueDate).endOf('day').toUTC() }
-        this.props.saveTask(this.props.id, task)
-        return task.dueDate
-    }
 }
 
-export default withTranslation()(Task)
+export default Task
