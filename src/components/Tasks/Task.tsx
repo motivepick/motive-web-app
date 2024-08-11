@@ -109,15 +109,15 @@ const Task: FC<Props> = props => {
     const [closed, setClosed] = useState(props.closed)
 
     const handleTaskClose = useCallback(async () => {
-        setClosed(!closed)
+        setClosed(closed => !closed)
         onTaskClose(id)
-    }, [id, closed, onTaskClose, setClosed])
+    }, [id, onTaskClose])
 
     const handleTaskClick = useCallback((e: MouseEvent<HTMLElement>) => {
         if (isTaskToggle(e.target)) {
-            setDetailsShown(!detailsShown)
+            setDetailsShown(detailsShown => !detailsShown)
         }
-    }, [detailsShown, setDetailsShown])
+    }, [])
 
     const saveName = useCallback((name: string) => {
         const task = dateFromRelativeString({ name: name ? name.trim() : '' })
