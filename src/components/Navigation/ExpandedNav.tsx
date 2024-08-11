@@ -1,40 +1,24 @@
-// @ts-ignore
-import { History } from 'history'
-import React, { Fragment, PureComponent } from 'react'
-import { withTranslation, WithTranslation } from 'react-i18next'
+import React, { Fragment } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { history } from '../../index'
 
-interface ExpandedNavProps extends WithTranslation {
-    history: History;
-    onAllTasksClick?: () => void
+interface ExpandedNavProps {
+  onAllTasksClick?: () => void
 }
 
-class ExpandedNav extends PureComponent<ExpandedNavProps> {
-
-    render() {
-        const { onAllTasksClick, t } = this.props
-        return (
-          <Fragment>
-              {/* TODO: make active work again */}
-              <li className="nav-item">
-                  {/* eslint-disable-next-line */}
-                  <a className="nav-link" onClick={onAllTasksClick || this.handleAllTasksClick} style={{ cursor: 'pointer' }}>
-                      {t('allTasks')}
-                  </a>
-              </li>
-              <li className="nav-item">
-                  <Link className="nav-link" to="/schedule">
-                      {t('schedule')}
-                  </Link>
-              </li>
-          </Fragment>
-        )
-    }
-
-    handleAllTasksClick = () => {
-        history.push('/')
-    }
+const ExpandedNav: React.FC<ExpandedNavProps> = ({ onAllTasksClick }) => {
+  const { t } = useTranslation()
+  return (
+    <Fragment>
+      <li className="nav-item">
+        {/* TODO: make active work again */}
+        <Link to="/" className="nav-link" onClick={onAllTasksClick}>{t('allTasks')}</Link>
+      </li>
+      <li className="nav-item">
+        <Link to="/schedule" className="nav-link">{t('schedule')}</Link>
+      </li>
+    </Fragment>
+  )
 }
 
-export default withTranslation()(ExpandedNav)
+export default ExpandedNav
