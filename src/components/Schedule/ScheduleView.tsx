@@ -60,7 +60,7 @@ class ScheduleView extends PureComponent<ScheduleViewProps, ScheduleViewState> {
         const { user, schedule, initialized, closeScheduleTask, updateScheduleTask, t } = this.props
         return (
             <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
-                <Navigation history={this.props.history} user={user}/>
+                <Navigation history={this.props.history} isTemporaryUserLoggedIn={user.temporary}/>
                 {initialized ? <div>
                     {Object.keys(schedule)
                            .filter(day => !['future', 'overdue'].includes(day) && schedule[day].length > 0)

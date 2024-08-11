@@ -9,7 +9,7 @@ import LoginView from './Authentication/LoginView'
 import PrivacyView from './Privacy/PrivacyView'
 import ScheduleView from './Schedule/ScheduleView'
 
-const Routes = () =>
+const AppRoutes = () =>
     <Container>
         <Switch>
             <Route exact={true} path="/" component={TaskView}/>
@@ -20,4 +20,4 @@ const Routes = () =>
         </Switch>
     </Container>
 
-export default withTranslation()(Routes)
+export default withTranslation()(AppRoutes)

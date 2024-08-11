@@ -53,7 +53,7 @@ class TaskView extends PureComponent {
         const list = this.props[currentList]
         return (
             <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
-                <Navigation history={this.props.history} user={user} onAllTasksClick={this.handleAllTasksClick}/>
+                <Navigation history={this.props.history} isTemporaryUserLoggedIn={user.temporary} onAllTasksClick={this.handleAllTasksClick}/>
                 <div>
                     <Row style={{ marginTop: '10px' }}>
                         <Col>
