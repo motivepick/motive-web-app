@@ -1,4 +1,4 @@
-# Milestone Web App
+# Milestone Web App [![Build Status](https://github.com/motivepick/motive-web-app/actions/workflows/master_milestone-web-app.yml/badge.svg)](https://github.com/motivepick/motive-web-app/actions/workflows/master_milestone-web-app.yml)
 
 The service that is going to defeat the laziness.
 
