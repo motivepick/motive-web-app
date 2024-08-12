@@ -111,6 +111,7 @@ class TaskView extends PureComponent {
         }
     }
 
+    // TODO: fix again after migration to functional component.
     handleAllTasksClick = () => {
         const { location, setCurrentTaskListToInbox } = this.props
         const { pathname } = location
