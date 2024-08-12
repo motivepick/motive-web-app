@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { Droppable } from '@hello-pangea/dnd'
 import React from 'react'
-import { ITaskNullable, TASK_LIST } from '../../models/appModel'
+import { ITask, ITaskNullable, TASK_LIST } from '../../models/appModel'
 import ScheduleHeader from '../common/ScheduleHeader'
 import Task from '../Tasks/Task'
 
@@ -10,7 +10,7 @@ interface SectionedDroppableTaskListProps {
     header?: string
     isDraggable?: boolean
     tasks: ITaskNullable[]
-    onSaveTask: (id: number, task: ITaskNullable) => void
+    onSaveTask: (id: number, task: ITask) => void
     onTaskClose: (id: number) => void
 }
 
