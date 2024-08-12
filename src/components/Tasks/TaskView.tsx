@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { PureComponent } from 'react'
+import React, { PureComponent, useCallback, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PageLayout from '../common/PageLayout'
@@ -29,8 +29,107 @@ import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import { DEFAULT_LIMIT } from '../../config'
 import { selectCurrentList, selectInitialized, selectTaskList } from '../../redux/selectors/taskSelectors'
 import { selectUser } from '../../redux/selectors/userSelectors'
-import { TASK_LIST } from '../../models/appModel'
+import { TASK_LIST, TaskListTypeAsLiterals } from '../../models/appModel'
 import Scrollable from './Scrollable'
+import { create } from 'node:domain'
+
+interface Props {
+    currentList: TaskListTypeAsLiterals
+}
+
+const InboxView: React.FC<Props> = (props: Props) => {
+    const {
+        user,
+        currentList,
+        initialized,
+        closeOrUndoCloseTask,
+        updateTask,
+        toggleCurrentTaskList,
+        setUser,
+        setTasks,
+        setCurrentTaskListToInbox,
+        createTask,
+        updateTaskIndex
+    } = props
+    const list = props[currentList]
+
+    const [inbox, setInbox] = useState(false)
+    const [closed, setClosed] = useState(false)
+
+    useEffect(() => {
+        if (!user.accountId) {
+            setUser()
+        }
+
+        if (props[TASK_LIST.INBOX].content.length === 0) {
+            setTasks(TASK_LIST.INBOX)
+        }
+
+        if (props[TASK_LIST.CLOSED].content.length === 0) {
+            setTasks(TASK_LIST.CLOSED)
+        }
+    }, [])
+
+    const onAddNewTask = useCallback(async (e) => {
+        const task = dateFromRelativeString({ name: e.target.value.trim() })
+        setCurrentTaskListToInbox()
+        await createTask(task)
+    }, [setCurrentTaskListToInbox, createTask]) // TODO: cleanup the dependency list here and below
+
+    const updateTaskPositionIndex = useCallback((result) => {
+        const { source, destination } = result
+        if (userReallyChangedOrder(source, destination)) {
+            updateTaskIndex(source.droppableId, source.index, destination.droppableId, destination.index)
+        }
+    }, [updateTaskIndex])
+
+    // const handleScroll = useCallback(() => {
+    //     const scrolling = currentList == TASK_LIST.INBOX ? inbox : closed
+    //     const setScrolling = currentList == TASK_LIST.INBOX ? setInbox : setClosed
+    //     if (!scrolling) {
+    //         const list = props[currentList]
+    //         if (list.content.length < list.totalElements) {
+    //             setScrolling(true)
+    //         }
+    //     }
+    // }, [currentList, setTasks, inbox, setInbox, closed, setClosed])
+    //
+    // useEffect(() => {
+    //     const setScrolling = currentList == TASK_LIST.INBOX ? setInbox : setClosed
+    //     try {
+    //         setTasks(currentList)
+    //     } finally {
+    //         setScrolling(false)
+    //     }
+    // }, [inbox, closed, currentList])
+
+    console.log('RENDERING FOR', currentList, 'CONTENT LENGTH', list.content.length)
+
+    if (initialized) {
+        return (
+            <>
+                <AddNewTask onAddNewTask={onAddNewTask}/>
+                <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={toggleCurrentTaskList}/>
+                <DragDropContext onDragEnd={updateTaskPositionIndex}>
+                    {list.totalElements === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                        <img src="/images/no-tasks-eng.png" width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
+                    </div>}
+                    <DroppableTaskListWithHeader
+                        droppableId={currentList}
+                        isDraggable
+                        tasks={list.content}
+                        onSaveTask={updateTask}
+                        onTaskClose={closeOrUndoCloseTask}
+                    />
+                    {/* <Scrollable onScroll={handleScroll}> */}
+                    {/* </Scrollable> */}
+                </DragDropContext>
+            </>
+        )
+    } else {
+        return <SpinnerView/>
+    }
+}
 
 class TaskView extends PureComponent {
 
@@ -60,7 +159,7 @@ class TaskView extends PureComponent {
             <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={toggleCurrentTaskList}/>
             <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
                 {list.totalElements === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-                    <img src='/images/no-tasks-eng.png' width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
+                    <img src="/images/no-tasks-eng.png" width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
                 </div>}
                 <Scrollable onScroll={this.handleScroll}>
                     <DroppableTaskListWithHeader
@@ -139,6 +238,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 
     setTasks: (list) => async (dispatch, getState) => {
         const offset = selectTaskList(getState(), list).content.length
+        console.log('setting tasks for list', list, 'with offset', offset)
         try {
             dispatch(setTasksAction(list, await searchUserTasks(list, offset, DEFAULT_LIMIT)))
         } catch (e) {
@@ -202,9 +302,11 @@ const TaskViewWithLocation = (props) => {
     const location = useLocation()
     const { user } = props
 
-    return <PageLayout user={user}>
-        <TaskView {...props} location={location} />
-    </PageLayout>
+    return (
+        <PageLayout user={user}>
+            <InboxView {...props} location={location}/>
+        </PageLayout>
+    )
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withTranslation()(TaskViewWithLocation))
