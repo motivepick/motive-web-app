@@ -26,7 +26,7 @@ import { setUserAction } from '../../redux/actions/userActions'
 import { delay, DELAY_MS } from '../../utils/delay'
 import { DragDropContext } from '@hello-pangea/dnd'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
-import { DEFAULT_LIMIT, INFINITE_SCROLL_BOTTOM_OFFSET } from '../../config'
+import { DEFAULT_LIMIT } from '../../config'
 import { selectCurrentList, selectInitialized, selectTaskList } from '../../redux/selectors/taskSelectors'
 import { selectUser } from '../../redux/selectors/userSelectors'
 import { TASK_LIST } from '../../models/appModel'
@@ -51,7 +51,7 @@ class TaskView extends PureComponent {
     }
 
     render() {
-        const { currentList, initialized, closeOrUndoCloseTask, updateTask, toggleCurrentTaskList, t } = this.props
+        const { currentList, initialized, closeOrUndoCloseTask, updateTask, toggleCurrentTaskList } = this.props
         const list = this.props[currentList]
         if (!initialized) return <SpinnerView/>
 
