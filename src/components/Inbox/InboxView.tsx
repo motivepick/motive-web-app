@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useCallback, useEffect } from 'react'
+import React, { FC, useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PageLayout from '../common/PageLayout'
@@ -35,7 +35,7 @@ interface Props {
     currentList: TaskListTypeAsLiterals
 }
 
-const InboxView: React.FC<Props> = (props: Props) => {
+const InboxView: FC<Props> = (props: Props) => {
     const {
         user,
         currentList,
