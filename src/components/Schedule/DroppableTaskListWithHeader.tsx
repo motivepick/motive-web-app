@@ -3,7 +3,7 @@ import { Droppable } from '@hello-pangea/dnd'
 import React from 'react'
 import { ITask, ITaskNullable, TASK_LIST } from '../../models/appModel'
 import ScheduleHeader from '../common/ScheduleHeader'
-import Task from '../Tasks/Task'
+import Task from '.././Inbox/Task'
 
 interface SectionedDroppableTaskListProps {
     droppableId: string

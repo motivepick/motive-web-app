@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Col, Form, FormGroup, Row } from 'reactstrap'
 import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../../../config'
 import { ITask } from '../../../../models/appModel'
-import { CustomInput } from '../../../Tasks/CustomInput'
+import { CustomInput } from '../../.././Inbox/CustomInput'
 
 import './styles.css'
 
