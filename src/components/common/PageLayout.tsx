@@ -5,14 +5,14 @@ import Footer from './Footer'
 
 interface PageLayoutProps {
     user: IUser
+    onAllTasksClick?: () => void
 }
 
-const PageLayout: React.FC<PageLayoutProps> = ({ user, children }) => {
-    return <>
-        <Navigation isTemporaryUserLoggedIn={user.temporary}/>
-        { children }
+const PageLayout: React.FC<PageLayoutProps> = ({ user, onAllTasksClick, children }) =>
+    <>
+        <Navigation isTemporaryUserLoggedIn={user.temporary} onAllTasksClick={onAllTasksClick}/>
+        {children}
         <Footer/>
     </>
-}
 
 export default PageLayout

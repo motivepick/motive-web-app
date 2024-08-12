@@ -80,8 +80,6 @@ const InboxView: FC<Props> = (props: Props) => {
         }
     }, [updateTaskIndex])
 
-    // TODO: fix again after migration to functional component.
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleAllTasksClick = useCallback(() => {
         const { pathname } = location
         if (pathname === '/') {
@@ -90,7 +88,7 @@ const InboxView: FC<Props> = (props: Props) => {
     }, [])
 
     return (
-        <PageLayout user={user}>
+        <PageLayout user={user} onAllTasksClick={handleAllTasksClick}>
             {initialized ? <>
                 <AddNewTask onAddNewTask={onAddNewTask}/>
                 <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={toggleCurrentTaskList}/>
