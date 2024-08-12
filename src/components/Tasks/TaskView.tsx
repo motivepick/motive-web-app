@@ -30,6 +30,7 @@ import { DEFAULT_LIMIT, INFINITE_SCROLL_BOTTOM_OFFSET } from '../../config'
 import { selectCurrentList, selectInitialized, selectTaskList } from '../../redux/selectors/taskSelectors'
 import { selectUser } from '../../redux/selectors/userSelectors'
 import { TASK_LIST } from '../../models/appModel'
+import Scrollable from './Scrollable'
 
 class TaskView extends PureComponent {
 
@@ -39,11 +40,6 @@ class TaskView extends PureComponent {
         this.setUserIfEmpty()
         this.setTasksIfEmpty(TASK_LIST.INBOX)
         this.setTasksIfEmpty(TASK_LIST.CLOSED)
-        window.addEventListener('scroll', this.handleScroll)
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.handleScroll)
     }
 
     onAddNewTask = async (e) => {
@@ -66,7 +62,9 @@ class TaskView extends PureComponent {
                 {list.totalElements === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                     <img src='/images/no-tasks-eng.png' width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
                 </div>}
-                <DroppableTaskListWithHeader droppableId={currentList} isDraggable tasks={list.content} onSaveTask={updateTask} onTaskClose={closeOrUndoCloseTask}/>
+                <Scrollable onScroll={this.handleScroll}>
+                    <DroppableTaskListWithHeader droppableId={currentList} isDraggable tasks={list.content} onSaveTask={updateTask} onTaskClose={closeOrUndoCloseTask}/>
+                </Scrollable>
             </DragDropContext>
         </>
     }
@@ -74,12 +72,7 @@ class TaskView extends PureComponent {
     handleScroll = () => {
         const { currentList, setTasks } = this.props
         const scrolling = this.state[currentList]
-        const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight
-        const body = document.body
-        const html = document.documentElement
-        const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight)
-        const windowBottom = windowHeight + window.pageYOffset
-        if (!scrolling && windowBottom >= docHeight - INFINITE_SCROLL_BOTTOM_OFFSET) {
+        if (!scrolling) {
             const list = this.props[currentList]
             if (list.content.length < list.totalElements) {
                 this.setState({ [currentList]: true }, async () => {
