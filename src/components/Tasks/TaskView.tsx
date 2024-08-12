@@ -1,14 +1,13 @@
 // @ts-nocheck
-import React, { Fragment, PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import { useLocation } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Col, Input, Row } from 'reactstrap'
-import Task from './Task'
-import Navigation from '../Navigation/Navigation'
+import PageLayout from '../common/PageLayout'
+import DroppableTaskListWithHeader from '../Schedule/DroppableTaskListWithHeader'
+import AddNewTask from './AddNewTask'
 import { withTranslation } from 'react-i18next'
 import { dateFromRelativeString } from '../../utils/date-from-relative-string'
 import SpinnerView from '../common/Spinner'
-import { isBrowser } from 'react-device-detect'
 import TasksSubtitle from '../common/TasksSubtitle'
 import { bindActionCreators } from 'redux'
 import {
@@ -24,9 +23,8 @@ import { closeTask, createTask, searchUserTasks, undoCloseTask, updateTask, upda
 import { handleServerException } from '../../utils/exceptionHandler'
 import { fetchUser } from '../../services/userService'
 import { setUserAction } from '../../redux/actions/userActions'
-import Footer from '../common/Footer'
 import { delay, DELAY_MS } from '../../utils/delay'
-import { DragDropContext, Droppable } from '@hello-pangea/dnd'
+import { DragDropContext } from '@hello-pangea/dnd'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import { DEFAULT_LIMIT, INFINITE_SCROLL_BOTTOM_OFFSET } from '../../config'
 import { selectCurrentList, selectInitialized, selectTaskList } from '../../redux/selectors/taskSelectors'
@@ -48,41 +46,29 @@ class TaskView extends PureComponent {
         window.removeEventListener('scroll', this.handleScroll)
     }
 
+    onAddNewTask = async (e) => {
+        const task = dateFromRelativeString({ name: e.target.value.trim() })
+
+        const { setCurrentTaskListToInbox, createTask } = this.props
+        setCurrentTaskListToInbox()
+        await createTask(task)
+    }
+
     render() {
-        const { user, currentList, initialized, closeOrUndoCloseTask, updateTask, toggleCurrentTaskList, t } = this.props
+        const { currentList, initialized, closeOrUndoCloseTask, updateTask, toggleCurrentTaskList, t } = this.props
         const list = this.props[currentList]
-        return (
+        if (!initialized) return <SpinnerView/>
+
+        return <>
+            <AddNewTask onAddNewTask={this.onAddNewTask}/>
+            <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={toggleCurrentTaskList}/>
             <DragDropContext onDragEnd={this.updateTaskPositionIndex}>
-                <Navigation isTemporaryUserLoggedIn={user.temporary} onAllTasksClick={this.handleAllTasksClick}/>
-                <div>
-                    <Row style={{ marginTop: '10px' }}>
-                        <Col>
-                            <Input type="text" placeholder={t('new.task')} onKeyPress={this.onAddNewTask} autoFocus={isBrowser}
-                                   innerRef={input => this.taskNameInput = input}/>
-                        </Col>
-                    </Row>
-                    {initialized ? <Fragment>
-                        <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={toggleCurrentTaskList}/>
-                        {list.totalElements === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-                            <img src='/images/no-tasks-eng.png' width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
-                        </div>}
-                        <Droppable droppableId={currentList}>
-                            {provided => (
-                                <div {...provided.droppableProps} ref={provided.innerRef}>
-                                    {list.content.map((task, index) =>
-                                        <Task isDraggable={true} key={task.id} index={index} id={task.id} name={task.name} description={task.description}
-                                              dueDate={task.dueDate} closed={currentList === TASK_LIST.CLOSED} onTaskClose={closeOrUndoCloseTask}
-                                              saveTask={updateTask}/>
-                                    )}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    </Fragment> : <SpinnerView/>}
-                </div>
-                <Footer/>
+                {list.totalElements === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                    <img src='/images/no-tasks-eng.png' width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
+                </div>}
+                <DroppableTaskListWithHeader droppableId={currentList} isDraggable tasks={list.content} onSaveTask={updateTask} onTaskClose={closeOrUndoCloseTask}/>
             </DragDropContext>
-        )
+        </>
     }
 
     handleScroll = () => {
@@ -129,23 +115,6 @@ class TaskView extends PureComponent {
         const { source, destination } = result
         if (userReallyChangedOrder(source, destination)) {
             updateTaskIndex(source.droppableId, source.index, destination.droppableId, destination.index)
-        }
-    }
-
-    onAddNewTask = async (e) => {
-        const input = e.target
-        if (e.key === 'Enter' && input.value.trim() !== '') {
-            const { setCurrentTaskListToInbox, createTask } = this.props
-            const task = dateFromRelativeString({ name: input.value.trim() })
-            input.disabled = true
-            try {
-                setCurrentTaskListToInbox()
-                await createTask(task)
-                input.value = ''
-            } finally {
-                input.disabled = false
-                this.taskNameInput.focus()
-            }
         }
     }
 
@@ -231,8 +200,11 @@ const mapStateToProps = state => ({
 
 const TaskViewWithLocation = (props) => {
     const location = useLocation()
+    const { user } = props
 
-    return <TaskView {...props} location={location} />
+    return <PageLayout user={user}>
+        <TaskView {...props} location={location} />
+    </PageLayout>
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withTranslation()(TaskViewWithLocation))
