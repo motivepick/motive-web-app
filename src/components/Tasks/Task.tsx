@@ -95,8 +95,8 @@ const isTaskToggle = (target: any) => {
 interface Props extends DraggableProps {
     id: number
     name: string
-    description?: string
-    dueDate?: string
+    description?: string | null
+    dueDate?: DateTime | string | null
     closed: boolean
     isDraggable: boolean
     saveTask: (id: number, task: ITaskNullable) => void
