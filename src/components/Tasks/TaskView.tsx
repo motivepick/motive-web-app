@@ -10,6 +10,7 @@ import { dateFromRelativeString } from '../../utils/date-from-relative-string'
 import SpinnerView from '../common/Spinner'
 import TasksSubtitle from '../common/TasksSubtitle'
 import { bindActionCreators } from 'redux'
+import InfiniteScroll from 'react-infinite-scroll-component';
 import {
     closeTaskAction,
     createTaskAction,
@@ -114,15 +115,25 @@ const InboxView: React.FC<Props> = (props: Props) => {
                     {list.totalElements === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                         <img src="/images/no-tasks-eng.png" width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
                     </div>}
-                    <DroppableTaskListWithHeader
-                        droppableId={currentList}
-                        isDraggable
-                        tasks={list.content}
-                        onSaveTask={updateTask}
-                        onTaskClose={closeOrUndoCloseTask}
-                    />
-                    {/* <Scrollable onScroll={handleScroll}> */}
-                    {/* </Scrollable> */}
+                    <InfiniteScroll
+                        dataLength={list.content.length}
+                        next={() => setTasks(currentList)}
+                        hasMore={list.content.length < list.totalElements}
+                        loader={<h4>Loading...</h4>}
+                        endMessage={
+                            <p style={{ textAlign: 'center' }}>
+                                <b>Yay! You have seen it all</b>
+                            </p>
+                        }
+                    >
+                        <DroppableTaskListWithHeader
+                            droppableId={currentList}
+                            isDraggable
+                            tasks={list.content}
+                            onSaveTask={updateTask}
+                            onTaskClose={closeOrUndoCloseTask}
+                        />
+                    </InfiniteScroll>
                 </DragDropContext>
             </>
         )
