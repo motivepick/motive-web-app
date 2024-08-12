@@ -63,7 +63,13 @@ class TaskView extends PureComponent {
                     <img src='/images/no-tasks-eng.png' width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
                 </div>}
                 <Scrollable onScroll={this.handleScroll}>
-                    <DroppableTaskListWithHeader droppableId={currentList} isDraggable tasks={list.content} onSaveTask={updateTask} onTaskClose={closeOrUndoCloseTask}/>
+                    <DroppableTaskListWithHeader
+                        droppableId={currentList}
+                        isDraggable
+                        tasks={list.content}
+                        onSaveTask={updateTask}
+                        onTaskClose={closeOrUndoCloseTask}
+                    />
                 </Scrollable>
             </DragDropContext>
         </>

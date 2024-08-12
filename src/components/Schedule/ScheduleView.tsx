@@ -97,10 +97,29 @@ const ScheduleView: React.FC = () => {
                 <>
                     {
                         weekdays.map(day =>
-                            <DroppableTaskListWithHeader key={day} droppableId={day} header={t('{{ date, DATE_SHORT_RELATIVE }}', { date: new Date(day) })} tasks={schedule[day]} onTaskClose={closeScheduleTask} onSaveTask={updateScheduleTask}/>)
+                            <DroppableTaskListWithHeader
+                                key={day}
+                                droppableId={day}
+                                header={t('{{ date, DATE_SHORT_RELATIVE }}', { date: new Date(day) })}
+                                tasks={schedule[day]}
+                                onTaskClose={closeScheduleTask}
+                                onSaveTask={updateScheduleTask}
+                            />)
                     }
-                    <DroppableTaskListWithHeader droppableId="future" header={t('futureTasks')} tasks={schedule.future} onTaskClose={closeScheduleTask} onSaveTask={updateScheduleTask}/>
-                    <DroppableTaskListWithHeader droppableId="overdue" header={t('overdueTasks')} tasks={schedule.overdue} onTaskClose={closeScheduleTask} onSaveTask={updateScheduleTask}/>
+                    <DroppableTaskListWithHeader
+                        droppableId="future"
+                        header={t('futureTasks')}
+                        tasks={schedule.future}
+                        onTaskClose={closeScheduleTask}
+                        onSaveTask={updateScheduleTask}
+                    />
+                    <DroppableTaskListWithHeader
+                        droppableId="overdue"
+                        header={t('overdueTasks')}
+                        tasks={schedule.overdue}
+                        onTaskClose={closeScheduleTask}
+                        onSaveTask={updateScheduleTask}
+                    />
                 </>
             </DragDropContext>
         </PageLayout>
