@@ -81,6 +81,7 @@ const InboxView: React.FC<Props> = (props: Props) => {
     }, [updateTaskIndex])
 
     // TODO: fix again after migration to functional component.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const handleAllTasksClick = useCallback(() => {
         const { pathname } = location
         if (pathname === '/') {
@@ -129,7 +130,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
 
     setTasks: (list) => async (dispatch, getState) => {
         const offset = selectTaskList(getState(), list).content.length
-        console.log('setting tasks for list', list, 'with offset', offset)
         try {
             dispatch(setTasksAction(list, await searchUserTasks(list, offset, DEFAULT_LIMIT)))
         } catch (e) {
