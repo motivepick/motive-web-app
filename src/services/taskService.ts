@@ -32,7 +32,7 @@ export const updateTasksOrderAsync = (update: ITaskPositionIndex): Promise<void>
         .withCredentials()
         .then(DO_NOTHING)
 
-export const createTask = async (task: ICreateTaskRequest): Promise<ITask> => {
+export const createTaskApi = async (task: ICreateTaskRequest): Promise<ITask> => {
     const response = await request.post(`${API_URL}/tasks`).send(task).withCredentials()
     return response.body as ITask
 }
@@ -47,7 +47,7 @@ export const undoCloseTask = async (id: number): Promise<ITask> => {
     return response.body as ITask
 }
 
-export const updateTask = async (taskId: number, task: ITask): Promise<ITask> => {
+export const updateTaskApi = async (taskId: number, task: ITask): Promise<ITask> => {
     const response = await request.put(`${API_URL}/tasks/${taskId}`).send(task).withCredentials()
     return response.body as ITask
 }

@@ -15,7 +15,7 @@ import { ITask } from '../../models/appModel'
 import { IScheduleTaskPositionIndex } from '../../models/redux/scheduleActionModel'
 import { selectInitialized, selectSchedule } from '../../redux/selectors/scheduleSelectors'
 import { selectUser } from '../../redux/selectors/userSelectors'
-import { closeTask, searchSchedule, updateTask } from '../../services/taskService'
+import { closeTask, searchSchedule, updateTaskApi } from '../../services/taskService'
 import { fetchUser } from '../../services/userService'
 import SpinnerView from '../common/Spinner'
 import { delay, DELAY_MS } from '../../utils/delay'
@@ -77,7 +77,7 @@ const ScheduleView: React.FC = () => {
 
     const updateScheduleTask = useCallback(async (id: number, task: ITask) => {
         try {
-            const updatedTask = await updateTask(id, task)
+            const updatedTask = await updateTaskApi(id, task)
             dispatch(updateScheduleTaskAction(updatedTask))
             dispatch(updateTaskAction(updatedTask))
         } catch (e) {
