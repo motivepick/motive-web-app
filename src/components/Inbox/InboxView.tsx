@@ -136,8 +136,8 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
     },
 
     updateTaskIndex: (sourceListType, sourceIndex, destinationListType, destinationIndex) => async (dispatch) => {
-        updateTasksOrderAsync({ sourceListType, sourceIndex, destinationListType, destinationIndex })
         dispatch(updateTaskPositionIndexAction({ sourceListType, sourceIndex, destinationListType, destinationIndex }))
+        await updateTasksOrderAsync({ sourceListType, sourceIndex, destinationListType, destinationIndex })
     },
 
     createTask: task => async (dispatch) => {
