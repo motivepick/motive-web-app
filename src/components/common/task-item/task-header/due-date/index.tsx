@@ -22,7 +22,7 @@ const DueDate: FC<Props> = props => {
 
     return children
         ? <small
-            className={classOf(children as DateTime, dimmedStyle)}>{t('{{ date, DATE_SHORT_RELATIVE }}', { date: (children as DateTime).toJSDate() })}</small>
+            className={classOf(children as unknown as DateTime, dimmedStyle)}>{t('{{ date, DATE_SHORT_RELATIVE }}', { date: (children  as unknown as DateTime).toJSDate() })}</small>
         : null
 }
 

@@ -3,7 +3,7 @@ import { IUser } from '../../models/appModel'
 import Navigation from '../Navigation/Navigation'
 import Footer from './Footer'
 
-interface PageLayoutProps {
+interface PageLayoutProps extends React.PropsWithChildren<unknown> {
     user: IUser
     onAllTasksClick?: () => void
 }

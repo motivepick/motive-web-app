@@ -16,6 +16,7 @@ const root = createRoot(container)
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
 root.render(
+    // @ts-ignore
     <Provider store={store}>
         <Suspense fallback={<div>Loading...</div>}>
             <Router>
