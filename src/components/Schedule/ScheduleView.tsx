@@ -15,7 +15,7 @@ import { ITask } from '../../models/appModel'
 import { IScheduleTaskPositionIndex } from '../../models/redux/scheduleActionModel'
 import { selectInitialized, selectSchedule } from '../../redux/selectors/scheduleSelectors'
 import { selectUser } from '../../redux/selectors/userSelectors'
-import { closeTask, searchSchedule, updateTaskApi } from '../../services/taskService'
+import api from '../../services/taskService'
 import { fetchUser } from '../../services/userService'
 import SpinnerView from '../common/Spinner'
 import { delay, DELAY_MS } from '../../utils/delay'
@@ -41,7 +41,7 @@ const ScheduleView: React.FC = () => {
 
         const setSchedule = async () => {
             try {
-                dispatch(setScheduleAction(await searchSchedule()))
+                dispatch(setScheduleAction(await api.searchSchedule()))
             } catch (e) {
                 handleServerException(e)
             }
@@ -66,7 +66,7 @@ const ScheduleView: React.FC = () => {
 
     const closeScheduleTask = useCallback(async (id: number) => {
         try {
-            const values = await Promise.all([closeTask(id), delay(DELAY_MS)])
+            const values = await Promise.all([api.closeTask(id), delay(DELAY_MS)])
             const closedTask = values[0]
             dispatch(closeScheduleTaskAction(closedTask))
             dispatch(closeTaskAction(closedTask))
@@ -77,7 +77,7 @@ const ScheduleView: React.FC = () => {
 
     const updateScheduleTask = useCallback(async (id: number, task: ITask) => {
         try {
-            const updatedTask = await updateTaskApi(id, task)
+            const updatedTask = await api.updateTask(id, task)
             dispatch(updateScheduleTaskAction(updatedTask))
             dispatch(updateTaskAction(updatedTask))
         } catch (e) {

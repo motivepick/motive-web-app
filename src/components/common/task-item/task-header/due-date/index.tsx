@@ -19,11 +19,9 @@ const classOf = (dueDate: DateTime | undefined, dimmedStyle: boolean): string =>
 const DueDate: FC<Props> = props => {
     const { dimmedStyle = false, children } = props
     const { t } = useTranslation()
-
-    return children
-        ? <small
-            className={classOf(children as unknown as DateTime, dimmedStyle)}>{t('{{ date, DATE_SHORT_RELATIVE }}', { date: (children  as unknown as DateTime).toJSDate() })}</small>
-        : null
+    return children ? <small className={classOf(children as unknown as DateTime, dimmedStyle)}>
+        {t('{{ date, DATE_SHORT_RELATIVE }}', { date: (children as unknown as DateTime).toJSDate() })}
+    </small> : null
 }
 
 export default DueDate

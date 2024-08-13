@@ -6,7 +6,7 @@ import { setUserAction } from './userActions'
 import { fetchUser } from '../../services/userService'
 import { handleServerException } from '../../utils/exceptionHandler'
 import { selectCurrentList, selectTaskList } from '../selectors/taskSelectors'
-import { closeTask, createTaskApi, searchUserTasks, undoCloseTask, updateTaskApi, updateTasksOrderAsync } from '../../services/taskService'
+import api from '../../services/taskService'
 import { DEFAULT_LIMIT } from '../../config'
 import { delay, DELAY_MS } from '../../utils/delay'
 
@@ -55,7 +55,7 @@ export const setTasks = (list) => {
     return async (dispatch, getState) => {
         const offset = selectTaskList(getState(), list).content.length
         try {
-            dispatch(setTasksAction(list, await searchUserTasks(list, offset, DEFAULT_LIMIT)))
+            dispatch(setTasksAction(list, await api.searchUserTasks(list, offset, DEFAULT_LIMIT)))
         } catch (e) {
             handleServerException(e)
         }
@@ -65,14 +65,14 @@ export const setTasks = (list) => {
 export const updateTaskIndex = (sourceListType, sourceIndex, destinationListType, destinationIndex) => {
     return async (dispatch) => {
         dispatch(updateTaskPositionIndexAction({ sourceListType, sourceIndex, destinationListType, destinationIndex }))
-        await updateTasksOrderAsync({ sourceListType, sourceIndex, destinationListType, destinationIndex })
+        await api.updateTasksOrderAsync({ sourceListType, sourceIndex, destinationListType, destinationIndex })
     }
 }
 
 export const createTask = task => {
     return async (dispatch) => {
         try {
-            dispatch(createTaskAction(await createTaskApi(task)))
+            dispatch(createTaskAction(await api.createTask(task)))
         } catch (e) {
             handleServerException(e)
         }
@@ -82,7 +82,7 @@ export const createTask = task => {
 export const updateTask = (id, task) => {
     return async (dispatch) => {
         try {
-            dispatch(updateTaskAction(await updateTaskApi(id, task)))
+            dispatch(updateTaskAction(await api.updateTask(id, task)))
         } catch (e) {
             handleServerException(e)
         }
@@ -93,7 +93,7 @@ export const closeOrUndoCloseTask = (id) => {
     return async (dispatch, getState) => {
         const currentList = selectCurrentList(getState())
         try {
-            const service = currentList === TASK_LIST.INBOX ? closeTask : undoCloseTask
+            const service = currentList === TASK_LIST.INBOX ? api.closeTask : api.undoCloseTask
             const action = currentList === TASK_LIST.INBOX ? closeTaskAction : undoCloseTaskAction
             const values = await Promise.all([service(id), delay(DELAY_MS)])
             dispatch(action(values[0]))
