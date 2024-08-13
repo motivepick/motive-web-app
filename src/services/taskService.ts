@@ -43,7 +43,7 @@ const updateTask = async (taskId: number, task: ITask): Promise<ITask> => {
     return response.body as ITask
 }
 
-export const searchSchedule = async (): Promise<ISchedule> => {
+const searchSchedule = async (): Promise<ISchedule> => {
     const response = await request.get(`${API_URL}/schedule`).withCredentials()
     const serverSchedule = response.body as IScheduleFutureAndOverdue & ISearchScheduleWeekResponse
     return Object.assign({}, { ...serverSchedule.week, future: serverSchedule.future, overdue: serverSchedule.overdue })
