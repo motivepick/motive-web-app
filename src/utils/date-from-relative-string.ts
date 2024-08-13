@@ -65,7 +65,7 @@ export const dateFromRelativeString = (task: ITask): ITask => {
 
     if (task.name.toLowerCase() == dateStr) return task
 
-    const dueDate =  dateStr && getDateFromRelativeString(dateStr!)
+    const dueDate: DateTime | null =  dateStr ? getDateFromRelativeString(dateStr!).toUTC() : null
     const taskName = dateStr ? nameWithoutLastWord(task.name, dateStr) : task.name
     return { ...task, name: taskName, dueDate }
 }
