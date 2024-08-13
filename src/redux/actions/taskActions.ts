@@ -1,9 +1,6 @@
-// @ts-nocheck
 import { ITask, ITaskPositionIndex, TASK_LIST, TaskListTypeAsLiterals } from '../../models/appModel'
-import { ISearchUserTasksResponse } from '../../models/redux/taskServiceModel'
+import { ICreateTaskRequest, ISearchUserTasksResponse } from '../../models/redux/taskServiceModel'
 import { TaskAction, TaskListAction, TaskListTypeAction, TaskPositionIndexAction } from '../../models/redux/taskActionsModel'
-import { setUserAction } from './userActions'
-import { fetchUser } from '../../services/userService'
 import { handleServerException } from '../../utils/exceptionHandler'
 import { selectCurrentList, selectTaskList } from '../selectors/taskSelectors'
 import api from '../../services/taskService'
@@ -21,12 +18,11 @@ export const UPDATE_TASK = 'UPDATE_TASK'
 export const setTasksAction = (list: TaskListTypeAsLiterals, tasks: ISearchUserTasksResponse): TaskListAction =>
     ({ type: SET_TASKS, payload: { list, tasks } })
 
-export const updateTaskPositionIndexAction =
-    (taskPositionIndex: ITaskPositionIndex): TaskPositionIndexAction =>
-        ({
-            type: UPDATE_TASK_POSITION_INDEX,
-            payload: taskPositionIndex
-        })
+export const updateTaskPositionIndexAction = (taskPositionIndex: ITaskPositionIndex): TaskPositionIndexAction =>
+    ({
+        type: UPDATE_TASK_POSITION_INDEX,
+        payload: taskPositionIndex
+    })
 
 export const createTaskAction = (task: ITask): TaskAction => ({ type: CREATE_TASK, payload: task })
 
@@ -41,17 +37,8 @@ export const setCurrentListAction = (currentList: TaskListTypeAsLiterals): TaskL
     payload: currentList
 })
 
-export const setUser = () => {
-    return async (dispatch) => {
-        try {
-            dispatch(setUserAction(await fetchUser()))
-        } catch (e) {
-            handleServerException(e)
-        }
-    }
-}
-
-export const setTasks = (list) => {
+export const setTasks = (list: TaskListTypeAsLiterals) => {
+    // @ts-ignore
     return async (dispatch, getState) => {
         const offset = selectTaskList(getState(), list).content.length
         try {
@@ -62,14 +49,16 @@ export const setTasks = (list) => {
     }
 }
 
-export const updateTaskIndex = (sourceListType, sourceIndex, destinationListType, destinationIndex) => {
+export const updateTaskIndex = ({ sourceListType, sourceIndex, destinationListType, destinationIndex }: ITaskPositionIndex) => {
+    // @ts-ignore
     return async (dispatch) => {
         dispatch(updateTaskPositionIndexAction({ sourceListType, sourceIndex, destinationListType, destinationIndex }))
         await api.updateTasksOrderAsync({ sourceListType, sourceIndex, destinationListType, destinationIndex })
     }
 }
 
-export const createTask = task => {
+export const createTask = (task: ICreateTaskRequest) => {
+    // @ts-ignore
     return async (dispatch) => {
         try {
             dispatch(createTaskAction(await api.createTask(task)))
@@ -79,7 +68,8 @@ export const createTask = task => {
     }
 }
 
-export const updateTask = (id, task) => {
+export const updateTask = (id: number, task: ITask) => {
+    // @ts-ignore
     return async (dispatch) => {
         try {
             dispatch(updateTaskAction(await api.updateTask(id, task)))
@@ -89,7 +79,8 @@ export const updateTask = (id, task) => {
     }
 }
 
-export const closeOrUndoCloseTask = (id) => {
+export const closeOrUndoCloseTask = (id: number) => {
+    // @ts-ignore
     return async (dispatch, getState) => {
         const currentList = selectCurrentList(getState())
         try {
@@ -104,12 +95,14 @@ export const closeOrUndoCloseTask = (id) => {
 }
 
 export const setCurrentTaskListToInbox = () => {
+    // @ts-ignore
     return dispatch => {
         dispatch(setCurrentListAction(TASK_LIST.INBOX))
     }
 }
 
 export const toggleCurrentTaskList = () => {
+    // @ts-ignore
     return (dispatch, getState) => {
         dispatch(setCurrentListAction(selectCurrentList(getState()) === TASK_LIST.INBOX ? TASK_LIST.CLOSED : TASK_LIST.INBOX))
     }

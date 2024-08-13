@@ -14,7 +14,6 @@ import {
     createTask,
     setCurrentTaskListToInbox,
     setTasks,
-    setUser,
     toggleCurrentTaskList,
     updateTask,
     updateTaskIndex
@@ -24,6 +23,7 @@ import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import { selectCurrentList, selectInitialized, selectTaskList } from '../../redux/selectors/taskSelectors'
 import { selectUser } from '../../redux/selectors/userSelectors'
 import { TASK_LIST } from '../../models/appModel'
+import { setUser } from '../../redux/actions/userActions'
 
 const InboxView: FC = () => {
     const user = useSelector(selectUser)
@@ -49,18 +49,23 @@ const InboxView: FC = () => {
         if (closed.content.length === 0) {
             dispatch(setTasks(TASK_LIST.CLOSED))
         }
-    }, [dispatch])
+    }, [dispatch]) // TODO: cleanup the dependency list here and below
 
     const onAddNewTask = useCallback(async (e) => {
         const task = dateFromRelativeString({ name: e.target.value.trim() })
         dispatch(setCurrentTaskListToInbox())
         dispatch(createTask(task))
-    }, [dispatch, setCurrentTaskListToInbox, createTask]) // TODO: cleanup the dependency list here and below
+    }, [dispatch, setCurrentTaskListToInbox, createTask])
 
     const updateTaskPositionIndex = useCallback((result) => {
         const { source, destination } = result
         if (userReallyChangedOrder(source, destination)) {
-            dispatch(updateTaskIndex(source.droppableId, source.index, destination.droppableId, destination.index))
+            dispatch(updateTaskIndex({
+                sourceListType: source.droppableId,
+                sourceIndex: source.index,
+                destinationListType: destination.droppableId,
+                destinationIndex: destination.index
+            }))
         }
     }, [dispatch, updateTaskIndex])
 
