@@ -18,7 +18,7 @@ const DropdownNav: React.FC<DropdownNavProps> = ({ isTemporaryUserLoggedIn }) =>
       <DropdownToggle nav>
         <i className="fa fa-bars"/>
       </DropdownToggle>
-      <DropdownMenu right>
+      <DropdownMenu end>
         {isTemporaryUserLoggedIn &&
           <Fragment>
             <DropdownItem onClick={handleVkLogin}>
