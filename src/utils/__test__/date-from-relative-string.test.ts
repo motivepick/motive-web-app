@@ -1,6 +1,6 @@
-import { dateFromRelativeString } from './date-from-relative-string'
+import { dateFromRelativeString } from '../date-from-relative-string'
 import { DateTime } from 'luxon'
-import { ITask } from '../models/appModel'
+import { ITask } from '../../models/appModel'
 
 describe('dateFromRelativeString', () => {
   it.each([['12.12.2022', 'dd.MM.yyyy'], ['12.12.22', 'dd.MM.yy']])('should set the dueDate based on the last word in the task name if it is a valid date: "%s"', (date, format) => {

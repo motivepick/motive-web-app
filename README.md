@@ -6,4 +6,6 @@ Try it out on [https://milestone.yaskovdev.com](https://milestone.yaskovdev.com)
 
 To run locally run `npm start`.
 
+To run unit tests in a non-interactive mode run `npm test` (`npm test -- --watchAll=false` for an interactive mode).
+
 To deploy to GitHub Pages run `npm run deploy`.

@@ -1,4 +1,4 @@
-import i18n from './i18n'
+import i18n from '../i18n'
 import { DateTime } from 'luxon'
 
 const formatDateShort = (date: Date, lng: string) => i18n.t('{{ date, DATE_SHORT_RELATIVE }}', { date: date, lng: lng })
