@@ -21,12 +21,9 @@ import {
 import { DragDropContext } from '@hello-pangea/dnd'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import { selectCurrentList, selectInitialized, selectTaskList } from '../../redux/selectors/taskSelectors'
-import { selectUser } from '../../redux/selectors/userSelectors'
 import { TASK_LIST } from '../../models/appModel'
-import { setUser } from '../../redux/actions/userActions'
 
 const InboxView: FC = () => {
-    const user = useSelector(selectUser)
     const currentList = useSelector(selectCurrentList)
     const initialized = useSelector(selectInitialized)
     const inbox = useSelector(state => selectTaskList(state, TASK_LIST.INBOX))
@@ -38,10 +35,6 @@ const InboxView: FC = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (!user.accountId) {
-            dispatch(setUser())
-        }
-
         if (inbox.content.length === 0) {
             dispatch(setTasks(TASK_LIST.INBOX))
         }
@@ -77,7 +70,7 @@ const InboxView: FC = () => {
     }, [dispatch])
 
     return (
-        <PageLayout user={user} onAllTasksClick={handleAllTasksClick}>
+        <PageLayout onAllTasksClick={handleAllTasksClick}>
             {initialized ? <>
                 <AddNewTask onAddNewTask={onAddNewTask}/>
                 <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={() => dispatch(toggleCurrentTaskList())}/>

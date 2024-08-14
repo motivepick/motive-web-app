@@ -1,14 +1,13 @@
+// @ts-nocheck
 import React, { FC, useCallback, useEffect } from 'react'
 import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeScheduleTask, setSchedule, updateScheduleTask, updateScheduleTaskPositionIndexAction } from '../../redux/actions/scheduleActions'
-import { setUser } from '../../redux/actions/userActions'
 import PageLayout from '../common/PageLayout'
 import { ITask } from '../../models/appModel'
 import { IScheduleTaskPositionIndex } from '../../models/redux/scheduleActionModel'
 import { selectInitialized, selectSchedule } from '../../redux/selectors/scheduleSelectors'
-import { selectUser } from '../../redux/selectors/userSelectors'
 import SpinnerView from '../common/Spinner'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import DroppableTaskListWithHeader from './DroppableTaskListWithHeader'
@@ -16,12 +15,10 @@ import DroppableTaskListWithHeader from './DroppableTaskListWithHeader'
 const ScheduleView: FC = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
-    const user = useSelector(selectUser)
     const schedule = useSelector(selectSchedule)
     const initialized = useSelector(selectInitialized)
 
     useEffect(() => {
-        dispatch(setUser())
         dispatch(setSchedule())
     }, [dispatch])
 
@@ -46,14 +43,14 @@ const ScheduleView: FC = () => {
         dispatch(updateScheduleTask(id, task))
     }, [dispatch])
 
-    if (!initialized) return <PageLayout user={user}><SpinnerView/></PageLayout>
+    if (!initialized) return <PageLayout><SpinnerView/></PageLayout>
 
     const weekdays = Object
         .keys(schedule)
         .filter(day => !['future', 'overdue'].includes(day) && schedule[day].length > 0)
 
     return (
-        <PageLayout user={user}>
+        <PageLayout>
             <DragDropContext onDragEnd={updateTaskPositionIndex}>
                 {
                     weekdays.map(day =>

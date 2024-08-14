@@ -4,7 +4,7 @@ import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from
 import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../../config'
 
 interface DropdownNavProps {
-    isTemporaryUserLoggedIn: boolean
+    isTemporaryUserLoggedIn?: boolean
 }
 
 const DropdownNav: React.FC<DropdownNavProps> = ({ isTemporaryUserLoggedIn }) => {

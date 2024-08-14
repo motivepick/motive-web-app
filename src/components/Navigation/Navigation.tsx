@@ -3,7 +3,7 @@ import DropdownNav from './DropdownNav'
 import ExpandedNav from './ExpandedNav'
 
 interface NavigationProps {
-    isTemporaryUserLoggedIn: boolean
+    isTemporaryUserLoggedIn?: boolean
     onAllTasksClick?: () => void
 }
 
