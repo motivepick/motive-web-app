@@ -1,5 +1,4 @@
 import React from 'react'
-import { IUser } from '../../models/appModel'
 import { useFetchUserQuery } from '../../redux/userApi'
 import Navigation from '../Navigation/Navigation'
 import Footer from './Footer'
@@ -10,15 +9,17 @@ interface PageLayoutProps extends React.PropsWithChildren<unknown> {
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({ onAllTasksClick, children }) => {
-    const  { data: user, isLoading }  = useFetchUserQuery()
+    const { data: user, isLoading } = useFetchUserQuery()
 
-    if (isLoading) return <Spinner />
+    if (isLoading) return <Spinner/>
 
-    return <>
-        <Navigation isTemporaryUserLoggedIn={user!.temporary} onAllTasksClick={onAllTasksClick}/>
-        {children}
-        <Footer/>
-    </>
+    return (
+        <>
+            <Navigation isTemporaryUserLoggedIn={user?.temporary} onAllTasksClick={onAllTasksClick}/>
+            {children}
+            <Footer/>
+        </>
+    )
 }
 
 export default PageLayout
