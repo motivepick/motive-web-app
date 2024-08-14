@@ -35,7 +35,7 @@ i18n
 i18n.services.formatter?.add('DATE_SHORT_RELATIVE', (value, lng) => {
     const date = DateTime.fromJSDate(value).setLocale(lng as string)
     const dayDiff = Math.round(date.diffNow('days').days)
-    if (-1 <= dayDiff && dayDiff <=1) return i18n.t('{{val, relativetime(day)}}', { val: dayDiff, numeric: 'auto' })
+    if (-1 <= dayDiff && dayDiff <= 1) return i18n.t('yesterdayTodayOrTomorrow', { val: dayDiff, numeric: 'auto' })
     if (1 < dayDiff && dayDiff < 7) return date.toFormat('cccc')
     return date.toFormat('dd.MM.yyyy')
 })

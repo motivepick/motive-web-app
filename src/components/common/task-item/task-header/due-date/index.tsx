@@ -20,7 +20,7 @@ const DueDate: FC<Props> = props => {
     const { dimmedStyle = false, children } = props
     const { t } = useTranslation()
     return children ? <small className={classOf(children as unknown as DateTime, dimmedStyle)}>
-        {t('{{ date, DATE_SHORT_RELATIVE }}', { date: (children as unknown as DateTime).toJSDate() })}
+        {t('dueDate', { date: (children as unknown as DateTime).toJSDate() })}
     </small> : null
 }
 

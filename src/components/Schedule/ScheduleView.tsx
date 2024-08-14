@@ -57,7 +57,7 @@ const ScheduleView: FC = () => {
                         <DroppableTaskListWithHeader
                             key={day}
                             droppableId={day}
-                            header={t('{{ date, DATE_SHORT_RELATIVE }}', { date: new Date(day) })}
+                            header={t('dueDate', { date: new Date(day) })}
                             tasks={schedule[day]}
                             onTaskClose={closeTask}
                             onSaveTask={updateTask}

@@ -16,6 +16,8 @@
   "showOpenTasks": "Show open",
   "showClosedTasks": "Show closed",
   "allTasks": "Tasks",
+  "yesterdayTodayOrTomorrow": "{{ val, relativetime(day) }}",
+  "dueDate": "{{ date, DATE_SHORT_RELATIVE }}",
   "schedule": "Schedule",
   "futureTasks": "Future Tasks",
   "overdueTasks": "Overdue Tasks"
