@@ -1,13 +1,12 @@
-import React, { FC, ReactElement } from 'react'
+import React, { FC, PropsWithChildren } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 
 interface Props {
     isAllowed: boolean,
-    redirectPath: string,
-    children?: ReactElement
+    redirectPath: string
 }
 
-const ProtectedRoute: FC<Props> = ({ isAllowed, redirectPath, children }: Props) =>
-    isAllowed ? children || <Outlet/> : <Navigate to={redirectPath} replace/>
+const ProtectedRoute: FC<PropsWithChildren<Props>> = ({ isAllowed, redirectPath, children }) =>
+    isAllowed ? <>{children}</> || <Outlet/> : <Navigate to={redirectPath} replace/>
 
 export default ProtectedRoute

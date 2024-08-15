@@ -26,11 +26,9 @@ const Root: FC = () => {
     return (
         <Container>
             {isLoading ? <Spinner/> : <ProtectedRoute isAllowed={!!user} redirectPath="/login">
-                <>
-                    <Navigation isTemporaryUserLoggedIn={user?.temporary} onAllTasksClick={handleAllTasksClick}/>
-                    <Outlet/>
-                    <Footer/>
-                </>
+                <Navigation isTemporaryUserLoggedIn={user?.temporary} onAllTasksClick={handleAllTasksClick}/>
+                <Outlet/>
+                <Footer/>
             </ProtectedRoute>}
         </Container>
     )
