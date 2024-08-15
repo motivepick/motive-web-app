@@ -4,7 +4,6 @@ import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dn
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeScheduleTask, setSchedule, updateScheduleTask, updateScheduleTaskPositionIndexAction } from '../../redux/actions/scheduleActions'
-import PageLayout from '../common/PageLayout'
 import { ITask } from '../../models/appModel'
 import { IScheduleTaskPositionIndex } from '../../models/redux/scheduleActionModel'
 import { selectInitialized, selectSchedule } from '../../redux/selectors/scheduleSelectors'
@@ -43,42 +42,40 @@ const ScheduleView: FC = () => {
         dispatch(updateScheduleTask(id, task))
     }, [dispatch])
 
-    if (!initialized) return <PageLayout><SpinnerView/></PageLayout>
+    if (!initialized) return <SpinnerView/>
 
     const weekdays = Object
         .keys(schedule)
         .filter(day => !['future', 'overdue'].includes(day) && schedule[day].length > 0)
 
     return (
-        <PageLayout>
-            <DragDropContext onDragEnd={updateTaskPositionIndex}>
-                {
-                    weekdays.map(day =>
-                        <DroppableTaskListWithHeader
-                            key={day}
-                            droppableId={day}
-                            header={t('dueDate', { date: new Date(day) })}
-                            tasks={schedule[day]}
-                            onTaskClose={closeTask}
-                            onSaveTask={updateTask}
-                        />)
-                }
-                <DroppableTaskListWithHeader
-                    droppableId="future"
-                    header={t('futureTasks')}
-                    tasks={schedule.future}
-                    onTaskClose={closeTask}
-                    onSaveTask={updateTask}
-                />
-                <DroppableTaskListWithHeader
-                    droppableId="overdue"
-                    header={t('overdueTasks')}
-                    tasks={schedule.overdue}
-                    onTaskClose={closeTask}
-                    onSaveTask={updateTask}
-                />
-            </DragDropContext>
-        </PageLayout>
+        <DragDropContext onDragEnd={updateTaskPositionIndex}>
+            {
+                weekdays.map(day =>
+                    <DroppableTaskListWithHeader
+                        key={day}
+                        droppableId={day}
+                        header={t('dueDate', { date: new Date(day) })}
+                        tasks={schedule[day]}
+                        onTaskClose={closeTask}
+                        onSaveTask={updateTask}
+                    />)
+            }
+            <DroppableTaskListWithHeader
+                droppableId="future"
+                header={t('futureTasks')}
+                tasks={schedule.future}
+                onTaskClose={closeTask}
+                onSaveTask={updateTask}
+            />
+            <DroppableTaskListWithHeader
+                droppableId="overdue"
+                header={t('overdueTasks')}
+                tasks={schedule.overdue}
+                onTaskClose={closeTask}
+                onSaveTask={updateTask}
+            />
+        </DragDropContext>
     )
 }
 

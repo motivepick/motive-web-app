@@ -1,8 +1,6 @@
 // @ts-nocheck
 import React, { FC, useCallback, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import PageLayout from '../common/PageLayout'
 import DroppableTaskListWithHeader from '../Schedule/DroppableTaskListWithHeader'
 import AddNewTask from './AddNewTask'
 import { dateFromRelativeString } from '../../utils/date-from-relative-string'
@@ -29,8 +27,6 @@ const InboxView: FC = () => {
     const inbox = useSelector(state => selectTaskList(state, TASK_LIST.INBOX))
     const closed = useSelector(state => selectTaskList(state, TASK_LIST.CLOSED))
     const list = currentList == TASK_LIST.INBOX ? inbox : closed
-
-    const location = useLocation()
 
     const dispatch = useDispatch()
 
@@ -62,39 +58,30 @@ const InboxView: FC = () => {
         }
     }, [dispatch, updateTaskIndex])
 
-    const handleAllTasksClick = useCallback(() => {
-        const { pathname } = location
-        if (pathname === '/') {
-            dispatch(setCurrentTaskListToInbox())
-        }
-    }, [dispatch])
-
     return (
-        <PageLayout onAllTasksClick={handleAllTasksClick}>
-            {initialized ? <>
-                <AddNewTask onAddNewTask={onAddNewTask}/>
-                <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={() => dispatch(toggleCurrentTaskList())}/>
-                <DragDropContext onDragEnd={updateTaskPositionIndex}>
-                    {list.totalElements === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-                        <img src="/images/no-tasks-eng.png" width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
-                    </div>}
-                    <InfiniteScroll
-                        dataLength={list.content.length}
-                        next={() => dispatch(setTasks(currentList))}
-                        hasMore={list.content.length < list.totalElements}
-                        loader={<h4>Loading...</h4>}
-                    >
-                        <DroppableTaskListWithHeader
-                            droppableId={currentList}
-                            isDraggable
-                            tasks={list.content}
-                            onSaveTask={(id, task) => dispatch(updateTask(id, task))}
-                            onTaskClose={id => dispatch(closeOrUndoCloseTask(id))}
-                        />
-                    </InfiniteScroll>
-                </DragDropContext>
-            </> : <SpinnerView/>}
-        </PageLayout>
+        initialized ? <>
+            <AddNewTask onAddNewTask={onAddNewTask}/>
+            <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={() => dispatch(toggleCurrentTaskList())}/>
+            <DragDropContext onDragEnd={updateTaskPositionIndex}>
+                {list.totalElements === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                    <img src="/images/no-tasks-eng.png" width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
+                </div>}
+                <InfiniteScroll
+                    dataLength={list.content.length}
+                    next={() => dispatch(setTasks(currentList))}
+                    hasMore={list.content.length < list.totalElements}
+                    loader={<h4>Loading...</h4>}
+                >
+                    <DroppableTaskListWithHeader
+                        droppableId={currentList}
+                        isDraggable
+                        tasks={list.content}
+                        onSaveTask={(id, task) => dispatch(updateTask(id, task))}
+                        onTaskClose={id => dispatch(closeOrUndoCloseTask(id))}
+                    />
+                </InfiniteScroll>
+            </DragDropContext>
+        </> : <SpinnerView/>
     )
 }
 
