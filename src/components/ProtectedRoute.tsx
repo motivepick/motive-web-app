@@ -1,5 +1,5 @@
 import React, { FC, PropsWithChildren } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 interface Props {
     isAllowed: boolean,
@@ -7,6 +7,6 @@ interface Props {
 }
 
 const ProtectedRoute: FC<PropsWithChildren<Props>> = ({ isAllowed, redirectPath, children }) =>
-    isAllowed ? <>{children}</> || <Outlet/> : <Navigate to={redirectPath} replace/>
+    isAllowed ? <>{children}</> : <Navigate to={redirectPath} replace/>
 
 export default ProtectedRoute
