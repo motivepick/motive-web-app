@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Col, Input, Row } from 'reactstrap'
 
 interface AddNewTaskProps {
-    onAddNewTask: (event: KeyboardEvent<HTMLInputElement>) => void
+    onAddNewTask: (event: KeyboardEvent<HTMLInputElement>) => Promise<void>
 }
 
 const AddNewTask: FC<AddNewTaskProps> = ({ onAddNewTask }) => {
