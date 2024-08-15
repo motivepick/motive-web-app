@@ -3,10 +3,12 @@ import React, { FC, useCallback, useEffect } from 'react'
 import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { closeScheduleTask, setSchedule, updateScheduleTask, updateScheduleTaskPositionIndexAction } from '../../redux/actions/scheduleActions'
+import { closeScheduleTask, setSchedule, updateScheduleTaskPositionIndexAction } from '../../redux/actions/scheduleActions'
+import { updateScheduleTask } from '../../redux/reducers/scheduleSlice'
+import { useCloseTaskMutation, useSearchScheduleQuery, useUpdateTaskMutation } from '../../redux/taskApi'
+import PageLayout from '../common/PageLayout'
 import { ITask } from '../../models/appModel'
 import { IScheduleTaskPositionIndex } from '../../models/redux/scheduleActionModel'
-import { selectInitialized, selectSchedule } from '../../redux/selectors/scheduleSelectors'
 import SpinnerView from '../common/Spinner'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import DroppableTaskListWithHeader from './DroppableTaskListWithHeader'
@@ -14,8 +16,10 @@ import DroppableTaskListWithHeader from './DroppableTaskListWithHeader'
 const ScheduleView: FC = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
-    const schedule = useSelector(selectSchedule)
-    const initialized = useSelector(selectInitialized)
+
+    const { data: schedule, isLoading, isFetching } = useSearchScheduleQuery()
+    // const [closeTask] = useCloseTaskMutation()
+    const [updateTask] = useUpdateTaskMutation()
 
     useEffect(() => {
         dispatch(setSchedule())
@@ -42,7 +46,12 @@ const ScheduleView: FC = () => {
         dispatch(updateScheduleTask(id, task))
     }, [dispatch])
 
-    if (!initialized) return <SpinnerView/>
+    const handleUpdateTask = useCallback((task: ITask) => {
+        updateTask(task)
+        dispatch(updateScheduleTask(task))
+    }, [updateTask, dispatch])
+
+    if (isLoading || isFetching) return <SpinnerView/>
 
     const weekdays = Object
         .keys(schedule)
@@ -58,7 +67,7 @@ const ScheduleView: FC = () => {
                         header={t('dueDate', { date: new Date(day) })}
                         tasks={schedule[day]}
                         onTaskClose={closeTask}
-                        onSaveTask={updateTask}
+                        onSaveTask={handleUpdateTask}
                     />)
             }
             <DroppableTaskListWithHeader
@@ -66,14 +75,14 @@ const ScheduleView: FC = () => {
                 header={t('futureTasks')}
                 tasks={schedule.future}
                 onTaskClose={closeTask}
-                onSaveTask={updateTask}
+                onSaveTask={handleUpdateTask}
             />
             <DroppableTaskListWithHeader
                 droppableId="overdue"
                 header={t('overdueTasks')}
                 tasks={schedule.overdue}
                 onTaskClose={closeTask}
-                onSaveTask={updateTask}
+                onSaveTask={handleUpdateTask}
             />
         </DragDropContext>
     )

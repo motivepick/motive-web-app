@@ -3,6 +3,7 @@ import { IScheduleTaskPositionIndex, ScheduleAction, ScheduleTaskAction, Schedul
 import api from '../../services/taskService'
 import { handleServerException } from '../../utils/exceptionHandler'
 import { delay, DELAY_MS } from '../../utils/delay'
+import { taskApi } from '../taskApi'
 import { closeTaskAction, updateTaskAction } from './taskActions'
 
 export const SET_SCHEDULE = 'SET_SCHEDULE'
@@ -33,7 +34,8 @@ export const setSchedule = () => {
     // @ts-ignore
     return async (dispatch) => {
         try {
-            dispatch(setScheduleAction(await api.searchSchedule()))
+            // @ts-ignore
+            dispatch(setScheduleAction(taskApi.endpoints.searchSchedule.initiate()))
         } catch (e) {
             handleServerException(e)
         }
@@ -59,7 +61,7 @@ export const updateScheduleTask = (id: number, task: ITask) => {
     return async (dispatch) => {
         try {
             const updatedTask = await api.updateTask(id, task)
-            dispatch(updateScheduleTaskAction(updatedTask))
+            // dispatch(updateScheduleTaskAction(updatedTask))
             dispatch(updateTaskAction(updatedTask))
         } catch (e) {
             handleServerException(e)
