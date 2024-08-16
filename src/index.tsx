@@ -12,6 +12,7 @@ import ScheduleView from './components/Schedule/ScheduleView'
 import InboxView from './components/Inbox/InboxView'
 import PrivacyView from './components/Privacy/PrivacyView'
 import LoginView from './components/Authentication/LoginView'
+import { setTheme } from './utils/theme'
 
 const container = document.getElementById('root') as Element
 const root = createRoot(container)
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
         element: <PrivacyView/>
     }
 ])
+
+const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+setTheme(mediaQuery.matches ? 'dark' : 'light')
+mediaQuery.addEventListener('change', ({ matches }) => setTheme(matches ? 'dark' : 'light'))
 
 root.render(
     // @ts-ignore
