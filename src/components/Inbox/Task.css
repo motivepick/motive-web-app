@@ -4,7 +4,7 @@
 }
 
 .task {
-    background-color: #f8f9fa;
+    background-color: var(--bs-tertiary-bg);
     border-radius: .25rem;
     padding: .4rem .2rem;
     cursor: pointer;

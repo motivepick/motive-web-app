@@ -8,7 +8,7 @@ interface NavigationProps {
 }
 
 const Navigation: React.FC<NavigationProps> = ({ isTemporaryUserLoggedIn, onAllTasksClick }) =>
-    <nav className="navbar navbar-expand navbar-light bg-light" style={{ borderRadius: '.25rem' }}>
+    <nav className="navbar navbar-expand navbar-light bg-body-tertiary" style={{ borderRadius: '.25rem' }}>
         <div className="container-fluid">
             <div className="collapse navbar-collapse">
                 <ul className="navbar-nav me-auto" style={{ textTransform: 'uppercase', fontSize: '80%' }}>
