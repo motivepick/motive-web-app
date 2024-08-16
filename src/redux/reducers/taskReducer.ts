@@ -20,15 +20,15 @@ import { copyOfListWithUpdatedTask } from '../../utils/lists'
 
 const emptyTaskList = () => ({
     content: [],
-    totalElements: 0
+    totalElements: 0,
+    initialized: false
 })
 
 const INITIAL_STATE = {
     task: <ITask>{},
     currentList: TASK_LIST.INBOX,
     [TASK_LIST.INBOX]: emptyTaskList() as TaskListWithTotal,
-    [TASK_LIST.CLOSED]: emptyTaskList() as TaskListWithTotal,
-    initialized: false
+    [TASK_LIST.CLOSED]: emptyTaskList() as TaskListWithTotal
 }
 
 const moveTaskSameList = (list: ITask[], sourceIndex: number, destinationIndex: number): ITask[] => {
@@ -73,8 +73,7 @@ export default function (state: TasksState = INITIAL_STATE, action: TaskAction |
         const { content, page: { totalElements } } = tasks
         return {
             ...state,
-            [list]: { ...state[list], content: [...state[list].content, ...content], totalElements },
-            initialized: true
+            [list]: { ...state[list], content: [...state[list].content, ...content], totalElements, initialized: true }
         }
     } else if (type === CLOSE_TASK) {
         const sourceList = state[TASK_LIST.INBOX].content

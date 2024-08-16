@@ -5,4 +5,4 @@ export const selectCurrentList = (state: AppState): TaskListTypeAsLiterals => st
 
 export const selectTaskList = (state: AppState, list: TaskListTypeAsLiterals): TaskListWithTotal => state.tasks[list]
 
-export const selectInitialized = (state: AppState): boolean => state.tasks.initialized
+export const selectInitialized = (state: AppState, list: TaskListTypeAsLiterals): boolean => state.tasks[list].initialized

@@ -23,7 +23,7 @@ import { TASK_LIST } from '../../models/appModel'
 
 const InboxView: FC = () => {
     const currentList = useSelector(selectCurrentList)
-    const initialized = useSelector(selectInitialized)
+    const initialized = useSelector(state => selectInitialized(state, currentList))
     const inbox = useSelector(state => selectTaskList(state, TASK_LIST.INBOX))
     const closed = useSelector(state => selectTaskList(state, TASK_LIST.CLOSED))
     const list = currentList == TASK_LIST.INBOX ? inbox : closed
@@ -63,7 +63,7 @@ const InboxView: FC = () => {
             <AddNewTask onAddNewTask={onAddNewTask}/>
             <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={() => dispatch(toggleCurrentTaskList())}/>
             <DragDropContext onDragEnd={updateTaskPositionIndex}>
-                {list.totalElements === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                {list.content.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                     <img src="/images/no-tasks-eng.png" width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
                 </div>}
                 <InfiniteScroll

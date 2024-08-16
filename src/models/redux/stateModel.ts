@@ -12,6 +12,7 @@ export type ScheduleState = {
 export type TaskListWithTotal = {
     content: ITask[];
     totalElements: number;
+    initialized: boolean;
 }
 
 type TaskListState = {
@@ -22,7 +23,6 @@ type TaskListState = {
 type TaskState = {
     task: ITask;
     currentList: TaskListTypeAsLiterals;
-    initialized: boolean;
 }
 
 export type TasksState = TaskState & TaskListState
