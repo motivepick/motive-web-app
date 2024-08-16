@@ -53,8 +53,8 @@ const InboxView: FC = () => {
     return (
         <>
             <AddNewTask onAddNewTask={onAddNewTask}/>
+            <TasksSubtitle numberOfTasks={list.totalElements} currentList={listId} onToggleOpenClosedTasks={() => dispatch(toggleCurrentTaskList())}/>
             {list.initialized ? <>
-                <TasksSubtitle numberOfTasks={list.totalElements} currentList={listId} onToggleOpenClosedTasks={() => dispatch(toggleCurrentTaskList())}/>
                 <DragDropContext onDragEnd={updateTaskPositionIndex}>
                     {list.content.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                         <img src="/images/no-tasks-eng.png" width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
