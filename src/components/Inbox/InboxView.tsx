@@ -53,28 +53,31 @@ const InboxView: FC = () => {
     return (
         <>
             <AddNewTask onAddNewTask={onAddNewTask}/>
-            <TasksSubtitle numberOfTasks={list.totalElements} currentList={listId} onToggleOpenClosedTasks={() => dispatch(toggleCurrentTaskList())}/>
-            {list.initialized ? <>
-                <DragDropContext onDragEnd={updateTaskPositionIndex}>
-                    {list.content.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-                        <img src="/images/no-tasks-eng.png" width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
-                    </div>}
-                    <InfiniteScroll
-                        dataLength={list.content.length}
-                        next={() => dispatch(setTasks(listId))}
-                        hasMore={list.content.length < list.totalElements}
-                        loader={<h4>Loading...</h4>}
-                    >
-                        <DroppableTaskListWithHeader
-                            droppableId={listId}
-                            isDraggable
-                            tasks={list.content}
-                            onSaveTask={(id, task) => dispatch(updateTask(id, task))}
-                            onTaskClose={id => dispatch(closeOrUndoCloseTask(id))}
-                        />
-                    </InfiniteScroll>
-                </DragDropContext>
-            </> : <SpinnerView/>}
+            <TasksSubtitle
+                showNumberOfTasks={list.initialized}
+                numberOfTasks={list.totalElements}
+                currentList={listId}
+                onToggleOpenClosedTasks={() => dispatch(toggleCurrentTaskList())}
+            />
+            {list.initialized ? <DragDropContext onDragEnd={updateTaskPositionIndex}>
+                {list.content.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                    <img src="/images/no-tasks-eng.png" width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
+                </div>}
+                <InfiniteScroll
+                    dataLength={list.content.length}
+                    next={() => dispatch(setTasks(listId))}
+                    hasMore={list.content.length < list.totalElements}
+                    loader={<h4>Loading...</h4>}
+                >
+                    <DroppableTaskListWithHeader
+                        droppableId={listId}
+                        isDraggable
+                        tasks={list.content}
+                        onSaveTask={(id, task) => dispatch(updateTask(id, task))}
+                        onTaskClose={id => dispatch(closeOrUndoCloseTask(id))}
+                    />
+                </InfiniteScroll>
+            </DragDropContext> : <SpinnerView/>}
         </>
     )
 }
