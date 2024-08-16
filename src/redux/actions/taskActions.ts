@@ -2,7 +2,7 @@ import { ITask, ITaskPositionIndex, TASK_LIST, TaskListTypeAsLiterals } from '..
 import { ICreateTaskRequest, ISearchUserTasksResponse } from '../../models/redux/taskServiceModel'
 import { TaskAction, TaskListAction, TaskListTypeAction, TaskPositionIndexAction } from '../../models/redux/taskActionsModel'
 import { handleServerException } from '../../utils/exceptionHandler'
-import { selectCurrentList, selectTaskList } from '../selectors/taskSelectors'
+import { selectCurrentList, selectTaskLists } from '../selectors/taskSelectors'
 import api from '../../services/taskService'
 import { DEFAULT_LIMIT } from '../../config'
 import { delay, DELAY_MS } from '../../utils/delay'
@@ -40,7 +40,7 @@ export const setCurrentListAction = (currentList: TaskListTypeAsLiterals): TaskL
 export const setTasks = (list: TaskListTypeAsLiterals) => {
     // @ts-ignore
     return async (dispatch, getState) => {
-        const offset = selectTaskList(getState(), list).content.length
+        const offset = selectTaskLists(getState())[list].content.length
         try {
             dispatch(setTasksAction(list, await api.searchUserTasks(list, offset, DEFAULT_LIMIT)))
         } catch (e) {

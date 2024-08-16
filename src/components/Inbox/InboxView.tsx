@@ -18,27 +18,19 @@ import {
 } from '../../redux/actions/taskActions'
 import { DragDropContext } from '@hello-pangea/dnd'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
-import { selectCurrentList, selectInitialized, selectTaskList } from '../../redux/selectors/taskSelectors'
-import { TASK_LIST } from '../../models/appModel'
+import { selectCurrentList, selectTaskLists } from '../../redux/selectors/taskSelectors'
 
 const InboxView: FC = () => {
-    const currentList = useSelector(selectCurrentList)
-    const initialized = useSelector(state => selectInitialized(state, currentList))
-    const inbox = useSelector(state => selectTaskList(state, TASK_LIST.INBOX))
-    const closed = useSelector(state => selectTaskList(state, TASK_LIST.CLOSED))
-    const list = currentList == TASK_LIST.INBOX ? inbox : closed
+    const listId = useSelector(selectCurrentList)
+    const list = useSelector(selectTaskLists)[listId]
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (inbox.content.length === 0) {
-            dispatch(setTasks(TASK_LIST.INBOX))
+        if (!list.initialized) {
+            dispatch(setTasks(listId))
         }
-
-        if (closed.content.length === 0) {
-            dispatch(setTasks(TASK_LIST.CLOSED))
-        }
-    }, [dispatch]) // TODO: cleanup the dependency list here and below
+    }, [dispatch, listId]) // TODO: cleanup the dependency list here and below
 
     const onAddNewTask = useCallback(async (e) => {
         const task = dateFromRelativeString({ name: e.target.value.trim() })
@@ -59,21 +51,21 @@ const InboxView: FC = () => {
     }, [dispatch, updateTaskIndex])
 
     return (
-        initialized ? <>
+        list.initialized ? <>
             <AddNewTask onAddNewTask={onAddNewTask}/>
-            <TasksSubtitle numberOfTasks={list.totalElements} currentList={currentList} onToggleOpenClosedTasks={() => dispatch(toggleCurrentTaskList())}/>
+            <TasksSubtitle numberOfTasks={list.totalElements} currentList={listId} onToggleOpenClosedTasks={() => dispatch(toggleCurrentTaskList())}/>
             <DragDropContext onDragEnd={updateTaskPositionIndex}>
                 {list.content.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                     <img src="/images/no-tasks-eng.png" width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
                 </div>}
                 <InfiniteScroll
                     dataLength={list.content.length}
-                    next={() => dispatch(setTasks(currentList))}
+                    next={() => dispatch(setTasks(listId))}
                     hasMore={list.content.length < list.totalElements}
                     loader={<h4>Loading...</h4>}
                 >
                     <DroppableTaskListWithHeader
-                        droppableId={currentList}
+                        droppableId={listId}
                         isDraggable
                         tasks={list.content}
                         onSaveTask={(id, task) => dispatch(updateTask(id, task))}
