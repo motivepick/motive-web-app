@@ -24,10 +24,15 @@ const taskSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addMatcher(
-            taskApi.endpoints.searchUserTasks.matchFulfilled,
+            taskApi.endpoints.searchInboxTasks.matchFulfilled,
             (state, { payload }) => {
-                state.totalElementsINBOX = state.currentList === TASK_LIST.INBOX ? payload.page.totalElements : state.totalElementsINBOX
-                state.totalElementsCLOSED = state.currentList === TASK_LIST.CLOSED ? payload.page.totalElements : state.totalElementsCLOSED
+                state.totalElementsINBOX = payload.page.totalElements
+            }
+        )
+        builder.addMatcher(
+            taskApi.endpoints.searchClosedTasks.matchFulfilled,
+            (state, { payload }) => {
+                state.totalElementsCLOSED = payload.page.totalElements
             }
         )
         builder.addMatcher(

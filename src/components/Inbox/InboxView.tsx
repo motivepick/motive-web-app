@@ -5,8 +5,8 @@ import { setCurrentTaskListToInbox, toggleCurrentTaskList } from '../../redux/re
 import { AppDispatch, RootState } from '../../redux/store'
 import {
     useCloseTaskMutation,
-    useCreateTaskMutation,
-    useSearchUserTasksQuery, useUndoCloseTaskMutation, useUpdateTaskMutation, useUpdateTasksOrderAsyncMutation
+    useCreateTaskMutation, useSearchClosedTasksQuery, useSearchInboxTasksQuery,
+    useUndoCloseTaskMutation, useUpdateTaskMutation, useUpdateTasksOrderAsyncMutation
 } from '../../redux/taskApi'
 import PageLayout from '../common/PageLayout'
 import DroppableTaskListWithHeader from '../Schedule/DroppableTaskListWithHeader'
@@ -36,8 +36,8 @@ const InboxView: FC = () => {
 
     const [offsetInbox, setOffsetInbox] = useState(0)
     const [offsetClosed, setOffsetClosed] = useState(0)
-    const { isLoading: isLoadingInbox } = useSearchUserTasksQuery({ list: TASK_LIST.INBOX, offset: offsetInbox, limit: 20 })
-    const { isLoading: isLoadingClosed } = useSearchUserTasksQuery({ list: TASK_LIST.CLOSED, offset: offsetClosed, limit: 20 })
+    const { isLoading: isLoadingInbox } = useSearchInboxTasksQuery({ offset: offsetInbox, limit: 20 })
+    const { isLoading: isLoadingClosed } = useSearchClosedTasksQuery({ offset: offsetClosed, limit: 20 })
 
     const onAddNewTask = useCallback(async (e: React.KeyboardEvent<HTMLInputElement>) => {
         const task = dateFromRelativeString({ name: (e.target as HTMLInputElement).value.trim() } as ITask)

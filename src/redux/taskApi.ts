@@ -19,6 +19,18 @@ export const taskApi = createApi({
                 params: { offset, limit }
             })
         }),
+        searchInboxTasks: builder.query<ISearchUserTasksResponse, { offset: number, limit: number }>({
+            query: ({ offset, limit }) => ({
+                url: '/task-lists/INBOX',
+                params: { offset, limit }
+            })
+        }),
+        searchClosedTasks: builder.query<ISearchUserTasksResponse, { offset: number, limit: number }>({
+            query: ({ offset, limit }) => ({
+                url: '/task-lists/CLOSED',
+                params: { offset, limit }
+            })
+        }),
         updateTasksOrderAsync: builder.mutation<void, ITaskPositionIndex>({
             query: (taskPositionIndex) => ({
                 url: '/orders',
@@ -65,6 +77,8 @@ export const taskApi = createApi({
 
 export const {
     useSearchUserTasksQuery,
+    useSearchInboxTasksQuery,
+    useSearchClosedTasksQuery,
     useUpdateTasksOrderAsyncMutation,
     useCreateTaskMutation,
     useCloseTaskMutation,
