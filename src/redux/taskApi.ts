@@ -12,6 +12,7 @@ import { ISearchScheduleWeekResponse, ISearchUserTasksResponse } from '../models
 export const taskApi = createApi({
     reducerPath: 'taskApi',
     baseQuery: fetchBaseQuery({ baseUrl: API_URL, credentials: 'include' }),
+    tagTypes: ['Schedule'],
     endpoints: (builder) => ({
         searchUserTasks: builder.query<ISearchUserTasksResponse, { list: TaskListTypeAsLiterals, offset: number, limit: number }>({
             query: ({ list, offset, limit }) => ({
@@ -55,7 +56,8 @@ export const taskApi = createApi({
             query: (id) => ({
                 url: `/tasks/${id}/undo-closing`,
                 method: 'PUT'
-            })
+            }),
+            invalidatesTags: ['Schedule']
         }),
         updateTask: builder.mutation<ITask, { id: number, task: ITask }>({
             query: ({ id, task }) => ({
@@ -70,7 +72,8 @@ export const taskApi = createApi({
                 ...response.week,
                 future: response.future,
                 overdue: response.overdue
-            })
+            }),
+            providesTags: ['Schedule']
         })
     })
 })

@@ -1,10 +1,9 @@
-// @ts-nocheck
-import React, { FC, useCallback, useEffect } from 'react'
+import React, { FC, useCallback } from 'react'
 import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { closeScheduleTask, setSchedule, updateScheduleTaskPositionIndexAction } from '../../redux/actions/scheduleActions'
-import { updateScheduleTask } from '../../redux/reducers/scheduleSlice'
+import { updateScheduleTaskPositionIndex } from '../../redux/reducers/scheduleSlice'
+import { RootState } from '../../redux/store'
 import { useCloseTaskMutation, useSearchScheduleQuery, useUpdateTaskMutation } from '../../redux/taskApi'
 import PageLayout from '../common/PageLayout'
 import { ITask } from '../../models/appModel'
@@ -17,13 +16,10 @@ const ScheduleView: FC = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
 
-    const { data: schedule, isLoading, isFetching } = useSearchScheduleQuery()
-    // const [closeTask] = useCloseTaskMutation()
-    const [updateTask] = useUpdateTaskMutation()
-
-    useEffect(() => {
-        dispatch(setSchedule())
-    }, [dispatch])
+    const schedule = useSelector((state: RootState) => state.schedule)
+    const { isLoading, isFetching } = useSearchScheduleQuery()
+    const [updateTaskMutation] = useUpdateTaskMutation()
+    const [closeTaskMutation] = useCloseTaskMutation()
 
     const updateTaskPositionIndex = useCallback((result: DropResult) => {
         const { source, destination } = result
@@ -34,22 +30,17 @@ const ScheduleView: FC = () => {
                 destinationDroppableId: destination!.droppableId,
                 destinationIndex: destination!.index
             }
-            dispatch(updateScheduleTaskPositionIndexAction(scheduleTaskPositionIndex))
+            dispatch(updateScheduleTaskPositionIndex(scheduleTaskPositionIndex))
         }
     }, [dispatch])
 
     const closeTask = useCallback(async (id: number) => {
-        dispatch(closeScheduleTask(id))
-    }, [dispatch])
+        await closeTaskMutation(id)
+    }, [closeTaskMutation])
 
     const updateTask = useCallback(async (id: number, task: ITask) => {
-        dispatch(updateScheduleTask(id, task))
-    }, [dispatch])
-
-    const handleUpdateTask = useCallback((task: ITask) => {
-        updateTask(task)
-        dispatch(updateScheduleTask(task))
-    }, [updateTask, dispatch])
+        updateTaskMutation({ id, task })
+    }, [updateTaskMutation])
 
     if (isLoading || isFetching) return <SpinnerView/>
 
@@ -67,7 +58,7 @@ const ScheduleView: FC = () => {
                         header={t('dueDate', { date: new Date(day) })}
                         tasks={schedule[day]}
                         onTaskClose={closeTask}
-                        onSaveTask={handleUpdateTask}
+                        onSaveTask={updateTask}
                     />)
             }
             <DroppableTaskListWithHeader
@@ -75,14 +66,14 @@ const ScheduleView: FC = () => {
                 header={t('futureTasks')}
                 tasks={schedule.future}
                 onTaskClose={closeTask}
-                onSaveTask={handleUpdateTask}
+                onSaveTask={updateTask}
             />
             <DroppableTaskListWithHeader
                 droppableId="overdue"
                 header={t('overdueTasks')}
                 tasks={schedule.overdue}
                 onTaskClose={closeTask}
-                onSaveTask={handleUpdateTask}
+                onSaveTask={updateTask}
             />
         </DragDropContext>
     )
