@@ -12,7 +12,6 @@ import {
     useUpdateTaskMutation,
     useUpdateTasksOrderAsyncMutation
 } from '../../redux/taskApi'
-import PageLayout from '../common/PageLayout'
 import DroppableTaskListWithHeader from '../Schedule/DroppableTaskListWithHeader'
 import AddNewTask from './AddNewTask'
 import { dateFromRelativeString } from '../../utils/date-from-relative-string'
