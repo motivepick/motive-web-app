@@ -44,7 +44,8 @@ export const taskApi = createApi({
                 url: '/tasks',
                 method: 'POST',
                 body: task
-            })
+            }),
+            invalidatesTags: (result) => result?.dueDate ? ['Schedule'] : []
         }),
         closeTask: builder.mutation<ITask, number>({
             query: (id) => ({
