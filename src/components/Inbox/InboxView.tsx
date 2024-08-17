@@ -5,8 +5,12 @@ import { setCurrentTaskListToInbox, toggleCurrentTaskList } from '../../redux/re
 import { AppDispatch, RootState } from '../../redux/store'
 import {
     useCloseTaskMutation,
-    useCreateTaskMutation, useSearchClosedTasksQuery, useSearchInboxTasksQuery,
-    useUndoCloseTaskMutation, useUpdateTaskMutation, useUpdateTasksOrderAsyncMutation
+    useCreateTaskMutation,
+    useSearchClosedTasksQuery,
+    useSearchInboxTasksQuery,
+    useUndoCloseTaskMutation,
+    useUpdateTaskMutation,
+    useUpdateTasksOrderAsyncMutation
 } from '../../redux/taskApi'
 import PageLayout from '../common/PageLayout'
 import DroppableTaskListWithHeader from '../Schedule/DroppableTaskListWithHeader'
@@ -69,6 +73,8 @@ const InboxView: FC = () => {
         }
     }, [updateTasksOrderAsyncMutation])
 
+    const onToggleOpenClosedTasks = useCallback(() => dispatch(toggleCurrentTaskList()), [dispatch, toggleCurrentTaskList])
+
     const handleAllTasksClick = useCallback(() => {
         const { pathname } = location
         if (pathname === '/') {
@@ -87,7 +93,7 @@ const InboxView: FC = () => {
     return (
         <>
             <AddNewTask onAddNewTask={onAddNewTask}/>
-            <TasksSubtitle numberOfTasks={currentTaskCount} currentList={currentList} onToggleOpenClosedTasks={() => dispatch(toggleCurrentTaskList())}/>
+            <TasksSubtitle numberOfTasks={currentTaskCount} currentList={currentList} onToggleOpenClosedTasks={onToggleOpenClosedTasks}/>
             {!isLoadingInbox ? <DragDropContext onDragEnd={updateTaskPositionIndex}>
                     {currentTaskCount === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                         <img src={t('noTasksImg')} className="d-inline-block align-center" alt={t('noTasksAlt')}/>
