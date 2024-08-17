@@ -21,5 +21,7 @@
   "dueDate": "{{ date, DATE_SHORT_RELATIVE }}",
   "schedule": "Расписание",
   "futureTasks": "Будущие задачи",
-  "overdueTasks": "Просроченные задачи"
+  "overdueTasks": "Просроченные задачи",
+  "noTasksAlt": "Задач нет!",
+  "noTasksImg": "/images/no-tasks-ru.png"
 }

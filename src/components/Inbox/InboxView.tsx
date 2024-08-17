@@ -19,6 +19,7 @@ import {
 import { DragDropContext } from '@hello-pangea/dnd'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import { selectCurrentList, selectTaskLists } from '../../redux/selectors/taskSelectors'
+import { useTranslation } from 'react-i18next'
 
 const InboxView: FC = () => {
     const listId = useSelector(selectCurrentList)
@@ -50,6 +51,8 @@ const InboxView: FC = () => {
         }
     }, [dispatch, updateTaskIndex])
 
+    const { t } = useTranslation()
+
     return (
         <>
             <AddNewTask onAddNewTask={onAddNewTask}/>
@@ -61,7 +64,7 @@ const InboxView: FC = () => {
             />
             {list.initialized ? <DragDropContext onDragEnd={updateTaskPositionIndex}>
                 {list.content.length === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-                    <img src="/images/no-tasks-eng.png" width="400px" height="400px" className="d-inline-block align-center" alt="No Tasks!"/>
+                    <img src={t('noTasksImg')} className="d-inline-block align-center" alt={t('noTasksAlt')}/>
                 </div>}
                 <InfiniteScroll
                     dataLength={list.content.length}

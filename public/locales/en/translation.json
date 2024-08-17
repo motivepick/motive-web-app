@@ -20,5 +20,7 @@
   "dueDate": "{{ date, DATE_SHORT_RELATIVE }}",
   "schedule": "Schedule",
   "futureTasks": "Future Tasks",
-  "overdueTasks": "Overdue Tasks"
+  "overdueTasks": "Overdue Tasks",
+  "noTasksAlt": "No tasks!",
+  "noTasksImg": "/images/no-tasks-en.png"
 }
