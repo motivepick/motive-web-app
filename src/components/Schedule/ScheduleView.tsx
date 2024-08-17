@@ -1,12 +1,12 @@
-// @ts-nocheck
-import React, { FC, useCallback, useEffect } from 'react'
+import React, { FC, useCallback } from 'react'
 import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { closeScheduleTask, setSchedule, updateScheduleTask, updateScheduleTaskPositionIndexAction } from '../../redux/actions/scheduleActions'
+import { updateScheduleTaskPositionIndex } from '../../redux/reducers/scheduleSlice'
+import { RootState } from '../../redux/store'
+import { useCloseTaskMutation, useSearchScheduleQuery, useUpdateTaskMutation } from '../../redux/taskApi'
 import { ITask } from '../../models/appModel'
 import { IScheduleTaskPositionIndex } from '../../models/redux/scheduleActionModel'
-import { selectInitialized, selectSchedule } from '../../redux/selectors/scheduleSelectors'
 import SpinnerView from '../common/Spinner'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import DroppableTaskListWithHeader from './DroppableTaskListWithHeader'
@@ -14,12 +14,11 @@ import DroppableTaskListWithHeader from './DroppableTaskListWithHeader'
 const ScheduleView: FC = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
-    const schedule = useSelector(selectSchedule)
-    const initialized = useSelector(selectInitialized)
 
-    useEffect(() => {
-        dispatch(setSchedule())
-    }, [dispatch])
+    const schedule = useSelector((state: RootState) => state.schedule)
+    const { isLoading, isFetching } = useSearchScheduleQuery()
+    const [updateTaskMutation] = useUpdateTaskMutation()
+    const [closeTaskMutation] = useCloseTaskMutation()
 
     const updateTaskPositionIndex = useCallback((result: DropResult) => {
         const { source, destination } = result
@@ -30,19 +29,19 @@ const ScheduleView: FC = () => {
                 destinationDroppableId: destination!.droppableId,
                 destinationIndex: destination!.index
             }
-            dispatch(updateScheduleTaskPositionIndexAction(scheduleTaskPositionIndex))
+            dispatch(updateScheduleTaskPositionIndex(scheduleTaskPositionIndex))
         }
     }, [dispatch])
 
     const closeTask = useCallback(async (id: number) => {
-        dispatch(closeScheduleTask(id))
-    }, [dispatch])
+        await closeTaskMutation(id)
+    }, [closeTaskMutation])
 
     const updateTask = useCallback(async (id: number, task: ITask) => {
-        dispatch(updateScheduleTask(id, task))
-    }, [dispatch])
+        updateTaskMutation({ id, task })
+    }, [updateTaskMutation])
 
-    if (!initialized) return <SpinnerView/>
+    if (isLoading || isFetching) return <SpinnerView/>
 
     const weekdays = Object
         .keys(schedule)
