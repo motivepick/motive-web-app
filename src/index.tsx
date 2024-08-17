@@ -13,6 +13,7 @@ import InboxView from './components/Inbox/InboxView'
 import PrivacyView from './components/Privacy/PrivacyView'
 import LoginView from './components/Authentication/LoginView'
 import { setTheme } from './utils/theme'
+import Fallback from './components/Fallback'
 
 const container = document.getElementById('root') as Element
 const root = createRoot(container)
@@ -50,7 +51,7 @@ mediaQuery.addEventListener('change', ({ matches }) => setTheme(matches ? 'dark'
 root.render(
     // @ts-ignore
     <Provider store={store}>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Fallback/>}>
             <RouterProvider router={router}/>
         </Suspense>
     </Provider>
