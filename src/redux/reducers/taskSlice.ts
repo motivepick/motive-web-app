@@ -1,57 +1,60 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ITask } from '../../models/appModel'
+import { createSlice } from '@reduxjs/toolkit'
+import { ITask, TASK_LIST } from '../../models/appModel'
 import { taskApi } from '../taskApi'
 
-const INITIAL_STATE: ITask[] = []
+const INITIAL_STATE = {
+    [TASK_LIST.INBOX]: [] as ITask[],
+    [TASK_LIST.CLOSED]: [] as ITask[]
+}
 
 const taskSlice = createSlice({
     name: 'tasks',
     initialState: INITIAL_STATE,
-    reducers: {
-        updateTask(state, action: PayloadAction<ITask>) {
-            const updatedTask = action.payload
-            return state.map(task => task.id === updatedTask.id ? updatedTask : task)
-        },
-        addTask(state, action: PayloadAction<ITask>) {
-            state.push(action.payload)
-        },
-        removeTask(state, action: PayloadAction<number>) {
-            return state.filter(task => task.id !== action.payload)
-        }
-    },
+    reducers: {},
     extraReducers: (builder) => {
-        // builder.addMatcher(
-        //     taskApi.endpoints.searchUserTasks.matchFulfilled,
-        //     (state, { payload }) => {
-        //         return payload
-        //     }
-        // )
         builder.addMatcher(
-            taskApi.endpoints.createTask.matchFulfilled,
-            (state, { payload }) => {
-                state.push(payload)
+            taskApi.endpoints.searchUserTasks.matchFulfilled,
+            (state, { meta, payload }) => {
+                state[meta.arg.originalArgs.list] = state[meta.arg.originalArgs.list].concat(payload.content)
             }
         )
         builder.addMatcher(
-            taskApi.endpoints.updateTask.matchFulfilled,
+            taskApi.endpoints.createTask.matchFulfilled,
             (state, { payload }) => {
-                return state.map(task => task.id === payload.id ? payload : task)
+                state[TASK_LIST.INBOX].unshift(payload)
             }
         )
         builder.addMatcher(
             taskApi.endpoints.closeTask.matchFulfilled,
             (state, { payload }) => {
-                return state.filter(task => task.id !== payload.id)
+                state[TASK_LIST.INBOX] = state[TASK_LIST.INBOX].filter(task => task.id !== payload.id)
+                state[TASK_LIST.CLOSED].unshift(payload)
             }
         )
         builder.addMatcher(
             taskApi.endpoints.undoCloseTask.matchFulfilled,
             (state, { payload }) => {
-                state.push(payload)
+                state[TASK_LIST.CLOSED] = state[TASK_LIST.CLOSED].filter(task => task.id !== payload.id)
+                state[TASK_LIST.INBOX].unshift(payload)
+            }
+        )
+        builder.addMatcher(
+            taskApi.endpoints.updateTask.matchFulfilled,
+            (state, { payload }) => {
+                const currentTaskList = payload.closed ? TASK_LIST.CLOSED : TASK_LIST.INBOX
+                state[currentTaskList] = state[currentTaskList].map(task => task.id === payload.id ? payload : task)
+            }
+        )
+        builder.addMatcher(
+            taskApi.endpoints.updateTasksOrderAsync.matchPending,
+            (state, { meta }) => {
+                const { sourceListType, sourceIndex, destinationListType, destinationIndex } = meta.arg.originalArgs
+                const task = state[sourceListType][sourceIndex]
+                state[sourceListType].splice(sourceIndex, 1)
+                state[destinationListType].splice(destinationIndex, 0, task)
             }
         )
     }
 })
 
-export const { updateTask, addTask, removeTask } = taskSlice.actions
 export default taskSlice.reducer

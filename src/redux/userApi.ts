@@ -3,6 +3,7 @@ import { API_URL } from '../config'
 import { IUser } from '../models/appModel'
 
 export const userApi = createApi({
+    reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({
         baseUrl: API_URL,
         credentials: 'include'

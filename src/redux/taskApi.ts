@@ -45,9 +45,9 @@ export const taskApi = createApi({
                 method: 'PUT'
             })
         }),
-        updateTask: builder.mutation<ITask, { taskId: number, task: ITask }>({
-            query: ({ taskId, task }) => ({
-                url: `/tasks/${taskId}`,
+        updateTask: builder.mutation<ITask, { id: number, task: ITask }>({
+            query: ({ id, task }) => ({
+                url: `/tasks/${id}`,
                 method: 'PUT',
                 body: task
             })
