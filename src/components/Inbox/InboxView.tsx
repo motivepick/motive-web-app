@@ -39,7 +39,7 @@ const InboxView: FC = () => {
     const [offsetInbox, setOffsetInbox] = useState(0)
     const [offsetClosed, setOffsetClosed] = useState(0)
     const { isLoading: isLoadingInbox } = useSearchInboxTasksQuery({ offset: offsetInbox, limit: DEFAULT_LIMIT })
-    const { isLoading: isLoadingClosed } = useSearchClosedTasksQuery({ offset: offsetClosed, limit: DEFAULT_LIMIT })
+    useSearchClosedTasksQuery({ offset: offsetClosed, limit: DEFAULT_LIMIT })
 
     const onAddNewTask = useCallback(async (e: React.KeyboardEvent<HTMLInputElement>) => {
         const task = dateFromRelativeString({ name: (e.target as HTMLInputElement).value.trim() } as ITask)
@@ -86,24 +86,24 @@ const InboxView: FC = () => {
             <AddNewTask onAddNewTask={onAddNewTask}/>
             <TasksSubtitle numberOfTasks={currentTaskCount} currentList={currentList} onToggleOpenClosedTasks={onToggleOpenClosedTasks}/>
             {!isLoadingInbox ? <DragDropContext onDragEnd={updateTaskPositionIndex}>
-                    {currentTaskCount === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
-                        <img src={t('noTasksImg')} className="d-inline-block align-center" alt={t('noTasksAlt')}/>
-                    </div>}
-                    <InfiniteScroll
-                        dataLength={currentTasks.length}
-                        next={loadMore}
-                        hasMore={currentTasks.length < currentTaskCount}
-                        loader={<h4>Loading...</h4>}
-                    >
-                        <DroppableTaskListWithHeader
-                            droppableId={currentList}
-                            isDraggable
-                            tasks={currentTasks}
-                            onSaveTask={updateTask}
-                            onTaskClose={closeOrUndoCloseTask}
-                        />
-                    </InfiniteScroll>
-                </DragDropContext> : <SpinnerView/>}
+                {currentTaskCount === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                    <img src={t('noTasksImg')} className="d-inline-block align-center" alt={t('noTasksAlt')}/>
+                </div>}
+                <InfiniteScroll
+                    dataLength={currentTasks.length}
+                    next={loadMore}
+                    hasMore={currentTasks.length < currentTaskCount}
+                    loader={<h4>Loading...</h4>}
+                >
+                    <DroppableTaskListWithHeader
+                        droppableId={currentList}
+                        isDraggable
+                        tasks={currentTasks}
+                        onSaveTask={updateTask}
+                        onTaskClose={closeOrUndoCloseTask}
+                    />
+                </InfiniteScroll>
+            </DragDropContext> : <SpinnerView/>}
         </>
     )
 }

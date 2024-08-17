@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import { TASK_LIST } from '../../models/appModel'
 import { taskApi } from '../taskApi'
 
@@ -12,9 +12,6 @@ const taskSlice = createSlice({
     name: 'taskLists',
     initialState: INITIAL_STATE,
     reducers: {
-        setCurrentList(state, action: PayloadAction<TASK_LIST>) {
-            state.currentList = action.payload
-        },
         toggleCurrentTaskList(state) {
             state.currentList = state.currentList === TASK_LIST.INBOX ? TASK_LIST.CLOSED : TASK_LIST.INBOX
         },
@@ -37,20 +34,20 @@ const taskSlice = createSlice({
         )
         builder.addMatcher(
             taskApi.endpoints.createTask.matchFulfilled,
-            (state, { payload }) => {
+            (state) => {
                 state.totalElementsINBOX += 1
             }
         )
         builder.addMatcher(
             taskApi.endpoints.closeTask.matchFulfilled,
-            (state, { payload }) => {
+            (state) => {
                 state.totalElementsINBOX -= 1
                 state.totalElementsCLOSED += 1
             }
         )
         builder.addMatcher(
             taskApi.endpoints.undoCloseTask.matchFulfilled,
-            (state, { payload }) => {
+            (state) => {
                 state.totalElementsINBOX += 1
                 state.totalElementsCLOSED -= 1
             }
@@ -58,5 +55,5 @@ const taskSlice = createSlice({
     }
 })
 
-export const { setCurrentList, toggleCurrentTaskList, setCurrentTaskListToInbox } = taskSlice.actions
+export const { toggleCurrentTaskList, setCurrentTaskListToInbox } = taskSlice.actions
 export default taskSlice.reducer
