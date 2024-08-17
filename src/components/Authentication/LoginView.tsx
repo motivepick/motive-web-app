@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { Button, Col, Container, Row } from 'reactstrap'
+import { Button, Col, Row } from 'reactstrap'
 import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../../config'
 import './LoginView.css'
 
@@ -15,7 +15,7 @@ const LoginView: FC<LoginViewProps> = () => {
     const handleLogin = useCallback(() => setDisabled(true), [])
 
     return (
-        <Container>
+        <div className="container-xl">
             <main>
                 <Row style={{ marginTop: '40px', marginBottom: '10px' }}>
                     <Col className="text-center">
@@ -64,7 +64,7 @@ const LoginView: FC<LoginViewProps> = () => {
             </span>
                 <span className="text-muted">  |  <Link to="/privacy">{t('privacyPolicy')}</Link></span>
             </div>
-        </Container>
+        </div>
     )
 }
 

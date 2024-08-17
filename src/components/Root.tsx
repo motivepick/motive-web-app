@@ -1,6 +1,5 @@
 import React, { FC, useCallback } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
-import { Container } from 'reactstrap'
 import { useDispatch } from 'react-redux'
 import { setCurrentTaskListToInbox } from '../redux/reducers/taskListSlice'
 import { AppDispatch } from '../redux/store'
@@ -24,13 +23,13 @@ const Root: FC = () => {
     const { data: user, isLoading } = useFetchUserQuery()
 
     return (
-        <Container>
+        <div className="container-xl">
             {isLoading ? <Spinner/> : <ProtectedRoute isAllowed={!!user} redirectPath="/login">
                 <Navigation isTemporaryUserLoggedIn={user?.temporary} onAllTasksClick={handleAllTasksClick}/>
                 <Outlet/>
                 <Footer/>
             </ProtectedRoute>}
-        </Container>
+        </div>
     )
 }
 

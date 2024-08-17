@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Col, Container, Row } from 'reactstrap'
+import { Button, Col, Row } from 'reactstrap'
 
 const PrivacyView: FC = () =>
-    <Container>
+    <div className="container-xl">
         <main>
             <Row style={{ marginTop: '40px', marginBottom: '10px' }}>
                 <Col className="text-center">
@@ -144,6 +144,6 @@ const PrivacyView: FC = () =>
                 </Col>
             </Row>
         </main>
-    </Container>
+    </div>
 
 export default PrivacyView
