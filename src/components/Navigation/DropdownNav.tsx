@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../../config'
+import { API_URL, GITHUB_AUTH_URL, VK_AUTH_URL } from '../../config'
 
 interface Props {
     isTemporaryUserLoggedIn?: boolean
@@ -10,7 +10,7 @@ const DropdownNav: FC<Props> = ({ isTemporaryUserLoggedIn }) => {
     const { t } = useTranslation()
 
     const handleVkLogin = useCallback(() => window.location.href = VK_AUTH_URL, [])
-    const handleFacebookLogin = useCallback(() => window.location.href = FACEBOOK_AUTH_URL, [])
+    const handleGitHubLogin = useCallback(() => window.location.href = GITHUB_AUTH_URL, [])
     const handleLogout = useCallback(() => window.location.href = `${API_URL}/logout`, [])
 
     return (
@@ -26,8 +26,8 @@ const DropdownNav: FC<Props> = ({ isTemporaryUserLoggedIn }) => {
                         </button>
                     </li>
                     <li>
-                        <button type="button" className="dropdown-item" role="menuitem" onClick={handleFacebookLogin}>
-                            <i className="fa fa-facebook-square" style={{ marginRight: '0.1em' }}/> {t('login.facebook')}
+                        <button type="button" className="dropdown-item" role="menuitem" onClick={handleGitHubLogin}>
+                            <i className="fa fa-github-square" style={{ marginRight: '0.1em' }}/> {t('login.github')}
                         </button>
                     </li>
                 </>}

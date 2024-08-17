@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../../config'
+import { API_URL, GITHUB_AUTH_URL, VK_AUTH_URL } from '../../config'
 import './LoginView.css'
 
 interface LoginViewProps {
@@ -49,11 +49,11 @@ const LoginView: FC<LoginViewProps> = () => {
                             onClick={handleLogin}
                             role="button"
                             className={`btn btn-secondary${disabled ? ' disabled' : ''}`}
-                            href={FACEBOOK_AUTH_URL}
+                            href={GITHUB_AUTH_URL}
                             style={{ margin: '0 0 10px 5px' }}
                         >
-                            <i className="fa fa-facebook-square" style={{ marginRight: '1em' }}/>
-                            {t('login.facebook')}
+                            <i className="fa fa-github-square" style={{ marginRight: '1em' }}/>
+                            {t('login.github')}
                         </a>
                     </div>
                 </div>

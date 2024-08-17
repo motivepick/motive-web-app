@@ -1,7 +1,7 @@
 {
   "welcome": "Milestone",
   "description": "Defeat your laziness",
-  "login.facebook": "Login With Facebook",
+  "login.github": "Login With GitHub",
   "login.vk": "Login With VK",
   "tryWithoutLogin": "Try Without Login",
   "logout": "Logout",
