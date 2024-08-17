@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import * as R from 'ramda'
-import { ITask } from '../models/appModel'
+import { DueDateExtractionResult } from '../models/appModel'
 
 const DAYS_OF_WEEK = {
     0: ['sunday', 'воскресенье'],
@@ -60,12 +60,11 @@ const getValidRelativeString = (taskName: string): string | null => {
     }
 }
 
-export const dateFromRelativeString = (task: ITask): ITask => {
-    const dateStr = getValidRelativeString(task.name)
+export const extractDueDate = (name: string): DueDateExtractionResult => {
+    const dateStr = getValidRelativeString(name)
 
-    if (task.name.toLowerCase() == dateStr) return task
+    if (name.toLowerCase() == dateStr) return { name, dueDate: null }
 
-    const dueDate: DateTime | null =  dateStr ? getDateFromRelativeString(dateStr!).toUTC() : null
-    const taskName = dateStr ? nameWithoutLastWord(task.name, dateStr) : task.name
-    return { ...task, name: taskName, dueDate }
+    const dueDate: DateTime | null = dateStr ? getDateFromRelativeString(dateStr!).toUTC() : null
+    return { name: dateStr ? nameWithoutLastWord(name, dateStr) : name, dueDate }
 }

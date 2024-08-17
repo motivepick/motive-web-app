@@ -61,11 +61,14 @@ export const taskApi = createApi({
             invalidatesTags: (result) => result?.dueDate ? ['Schedule'] : []
         }),
         updateTask: builder.mutation<ITask, { id: number, task: ITask }>({
-            query: ({ id, task }) => ({
-                url: `/tasks/${id}`,
-                method: 'PUT',
-                body: task
-            })
+            query: ({ id, task }) => {
+                const request = { ...task, deleteDueDate: !task.dueDate }
+                return ({
+                    url: `/tasks/${id}`,
+                    method: 'PUT',
+                    body: request
+                })
+            }
         }),
         searchSchedule: builder.query<ISchedule, void>({
             query: () => '/schedule',

@@ -1,12 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit'
 import thunkMiddleware from 'redux-thunk'
-import rootReducer from './reducers'
 import { taskApi } from './taskApi'
 import { userApi } from './userApi'
+import TaskReducer from './reducers/taskSlice'
+import ScheduleReducer from './reducers/scheduleSlice'
+import TaskListsReducer from './reducers/taskListSlice'
 
 export const store = configureStore({
-    reducer: rootReducer,
-    // @ts-ignore
+    reducer: {
+        tasks: TaskReducer,
+        schedule: ScheduleReducer,
+        taskLists: TaskListsReducer,
+        [taskApi.reducerPath]: taskApi.reducer,
+        [userApi.reducerPath]: userApi.reducer
+    },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware()
             .concat(thunkMiddleware)

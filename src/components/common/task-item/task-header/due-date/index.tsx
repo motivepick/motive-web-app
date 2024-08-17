@@ -1,12 +1,13 @@
-import React, { FC, ReactNode } from 'react'
+import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { DateTime } from 'luxon'
 
 import './styles.css'
+import { DateTimeMaybeValid } from 'luxon/src/datetime'
 
 type Props = {
     dimmedStyle: boolean;
-    children: ReactNode;
+    value: DateTimeMaybeValid | null;
 }
 
 const classOf = (dueDate: DateTime | undefined, dimmedStyle: boolean): string => {
@@ -17,10 +18,10 @@ const classOf = (dueDate: DateTime | undefined, dimmedStyle: boolean): string =>
 }
 
 const DueDate: FC<Props> = props => {
-    const { dimmedStyle = false, children } = props
+    const { dimmedStyle = false, value } = props
     const { t } = useTranslation()
-    return children ? <small className={classOf(children as unknown as DateTime, dimmedStyle)}>
-        {t('dueDate', { date: (children as unknown as DateTime).toJSDate() })}
+    return value ? <small className={classOf(value, dimmedStyle)}>
+        {t('dueDate', { date: value.toJSDate() })}
     </small> : null
 }
 

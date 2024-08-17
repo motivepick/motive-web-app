@@ -1,16 +1,15 @@
-import { dateFromRelativeString } from '../date-from-relative-string'
+import { extractDueDate } from '../extractDueDate'
 import { DateTime } from 'luxon'
-import { ITask } from '../../models/appModel'
 
 describe('dateFromRelativeString', () => {
     it.each([
         ['12.12.2022', 'dd.MM.yyyy'],
         ['12.12.22', 'dd.MM.yy']
     ])('should set the dueDate based on the last word in the task name if it is a valid date: "%s"', (date, format) => {
-        const task = { name: `Do something ${date}` } as ITask
+        const name = `Do something ${date}`
         const expectedDate = DateTime.fromFormat(date, format).endOf('day').toUTC()
 
-        const updatedTask = dateFromRelativeString(task)
+        const updatedTask = extractDueDate(name)
         const dueDate = updatedTask.dueDate
 
         expect(dueDate).toEqual(expectedDate)
@@ -22,9 +21,7 @@ describe('dateFromRelativeString', () => {
         ' ',
         ''
     ])('should not change the dueDate if the last word in the task name is not a valid date: "%s"', taskName => {
-        const task = { name: taskName, dueDate: null } as ITask
-
-        const updatedTask = dateFromRelativeString(task)
+        const updatedTask = extractDueDate(taskName)
         const dueDate = updatedTask.dueDate
 
         expect(dueDate).toBeNull()
@@ -39,19 +36,17 @@ describe('dateFromRelativeString', () => {
         ' ',
         ''
     ])('should not change the dueDate if the last word in the task name equals dueDate (because taskName cannot be empty): "%s"', taskName => {
-        const task = { name: taskName, dueDate: null } as ITask
-
-        const updatedTask = dateFromRelativeString(task)
+        const updatedTask = extractDueDate(taskName)
         const dueDate = updatedTask.dueDate
 
         expect(dueDate).toBeNull()
-        expect(updatedTask).toEqual(task)
+        expect(updatedTask).toEqual({ name: taskName, dueDate: null })
     })
 
     it('should set dueDate to end of the day after tomorrow if last word is "послезавтра"', () => {
-        const task = { name: 'Do something послезавтра' } as ITask
+        const name = 'Do something послезавтра'
 
-        const updatedTask = dateFromRelativeString(task)
+        const updatedTask = extractDueDate(name)
         const dueDate = updatedTask.dueDate
 
         expect(dueDate).toEqual(DateTime.local().plus({ days: 2 }).endOf('day').toUTC())
@@ -59,9 +54,9 @@ describe('dateFromRelativeString', () => {
     })
 
     it.each(['today', 'сегодня'])('should set dueDate to end of today if last word is "%s"', dateStr => {
-        const task = { name: `Do something ${dateStr}` } as ITask
+        const name = `Do something ${dateStr}`
 
-        const updatedTask = dateFromRelativeString(task)
+        const updatedTask = extractDueDate(name)
         const dueDate = updatedTask.dueDate
 
         expect(dueDate).toEqual(DateTime.local().endOf('day').toUTC())
@@ -69,9 +64,9 @@ describe('dateFromRelativeString', () => {
     })
 
     it.each(['tomorrow', 'завтра'])('should set dueDate to end of tomorrow if last word is "%s"', dateStr => {
-        const task = { name: `Do something ${dateStr}` } as ITask
+        const name = `Do something ${dateStr}`
 
-        const updatedTask = dateFromRelativeString(task)
+        const updatedTask = extractDueDate(name)
         const dueDate = updatedTask.dueDate
 
         expect(dueDate).toEqual(DateTime.local().plus({ days: 1 }).endOf('day').toUTC())
@@ -105,9 +100,9 @@ describe('dateFromRelativeString', () => {
         ['в субботу', getNextDayOfWeek(6)],
         ['в воскресенье', getNextDayOfWeek(0)]
     ])('should set dueDate to end of day if last words are %s', (lastWords, expectedDate) => {
-        const task = { name: `Do something ${lastWords}` } as ITask
+        const task = `Do something ${lastWords}`
 
-        const updatedTask = dateFromRelativeString(task)
+        const updatedTask = extractDueDate(task)
         const dueDate = updatedTask.dueDate
 
         expect(dueDate).toEqual(expectedDate)

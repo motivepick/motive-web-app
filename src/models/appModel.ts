@@ -16,6 +16,11 @@ export type ITaskNullable = {
     closed?: boolean;
 }
 
+export type DueDateExtractionResult = {
+    name: string;
+    dueDate: DateTime | null;
+}
+
 export type ITaskPositionIndex = {
     sourceListType: TaskListTypeAsLiterals;
     destinationListType: TaskListTypeAsLiterals;

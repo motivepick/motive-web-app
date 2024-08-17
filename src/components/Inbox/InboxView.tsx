@@ -13,7 +13,7 @@ import {
 } from '../../redux/taskApi'
 import DroppableTaskListWithHeader from '../Schedule/DroppableTaskListWithHeader'
 import AddNewTask from './AddNewTask'
-import { dateFromRelativeString } from '../../utils/date-from-relative-string'
+import { extractDueDate } from '../../utils/extractDueDate'
 import SpinnerView from '../common/Spinner'
 import TasksSubtitle from '../common/TasksSubtitle'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -42,7 +42,7 @@ const InboxView: FC = () => {
     useSearchClosedTasksQuery({ offset: offsetClosed, limit: DEFAULT_LIMIT })
 
     const onAddNewTask = useCallback(async (e: React.KeyboardEvent<HTMLInputElement>) => {
-        const task = dateFromRelativeString({ name: (e.target as HTMLInputElement).value.trim() } as ITask)
+        const task = extractDueDate((e.target as HTMLInputElement).value.trim())
         dispatch(setCurrentTaskListToInbox())
         createTaskMutation(task)
     }, [dispatch, setCurrentTaskListToInbox, createTaskMutation])

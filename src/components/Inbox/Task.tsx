@@ -1,6 +1,5 @@
-// @ts-nocheck
 import { DateTime } from 'luxon'
-import React, { FC, MouseEvent, useCallback, useState } from 'react'
+import React, { FC, FormEvent, MouseEvent, PropsWithChildren, useCallback, useState } from 'react'
 import { Draggable, DraggableProps } from '@hello-pangea/dnd'
 import { useTranslation } from 'react-i18next'
 import { Form, FormGroup } from 'reactstrap'
@@ -9,7 +8,7 @@ import DueDate from '../common/task-item/task-header/due-date'
 import { Title } from '../common/task-item/task-header/title'
 import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../config'
 import { ITaskNullable } from '../../models/appModel'
-import { dateFromRelativeString } from '../../utils/date-from-relative-string'
+import { extractDueDate } from '../../utils/extractDueDate'
 
 import { CustomInput } from './CustomInput'
 
@@ -22,13 +21,13 @@ interface TaskItemProps {
     detailsShown: boolean
     name: string
     description?: string
-    dueDate?: DateTimeMaybeValid | null
+    dueDate: DateTimeMaybeValid | null
     closed: boolean
     handleTaskClick: (e: MouseEvent<HTMLElement>) => void
     handleTaskClose: () => Promise<void>
     saveName: (name: string) => string
     saveDescription: (description: string) => string
-    saveDate: (dueDate: string) => DateTimeMaybeValid
+    saveDate: (dueDate: string) => string
 }
 
 const TaskItem: FC<TaskItemProps> = props => {
@@ -41,12 +40,12 @@ const TaskItem: FC<TaskItemProps> = props => {
                     <CheckMark toggled={closed} onToggle={handleTaskClose}/>
                     <div className="task-body">
                         <Title dimmedStyle={closed}>{name}</Title>
-                        <DueDate dimmedStyle={closed}>{dueDate}</DueDate>
+                        <DueDate dimmedStyle={closed} value={dueDate}/>
                     </div>
                 </div>
 
                 {detailsShown &&
-                    <Form className="task-form" onSubmit={e => e.preventDefault()}>
+                    <Form className="task-form" onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()}>
                         <FormGroup>
                             <CustomInput type="text" value={name} onSave={saveName} maxLength={TASK_NAME_LIMIT}/>
                         </FormGroup>
@@ -75,7 +74,7 @@ interface DraggableWrapperProps {
     isDraggable: boolean
 }
 
-const DraggableWrapper: FC<DraggableWrapperProps> = ({ id, index, isDraggable, children }) =>
+const DraggableWrapper: FC<PropsWithChildren<DraggableWrapperProps>> = ({ id, index, isDraggable, children }) =>
     isDraggable ? (
         <Draggable draggableId={id.toString()} index={index}>
             {(provided) => (
@@ -84,7 +83,7 @@ const DraggableWrapper: FC<DraggableWrapperProps> = ({ id, index, isDraggable, c
                 </div>
             )}
         </Draggable>
-    ) : children
+    ) : <>{children}</>
 
 const isTaskToggle = (target: any) => {
     const tagName = target.tagName.toLowerCase()
@@ -95,8 +94,8 @@ const isTaskToggle = (target: any) => {
 interface Props extends DraggableProps {
     id: number
     name: string
-    description?: string | null
-    dueDate?: DateTime | string | null
+    description?: string
+    dueDate?: string
     closed: boolean
     isDraggable: boolean
     saveTask: (id: number, task: ITaskNullable) => void
@@ -120,7 +119,7 @@ const Task: FC<Props> = props => {
     }, [])
 
     const saveName = useCallback((name: string) => {
-        const task = dateFromRelativeString({ name: name ? name.trim() : '' })
+        const task = extractDueDate(name ? name.trim() : '')
         saveTask(id, task)
         return task.name
     }, [id, saveTask])
@@ -132,9 +131,9 @@ const Task: FC<Props> = props => {
     }, [id, saveTask])
 
     const saveDate = useCallback((dueDate: string) => {
-        const task = { dueDate: DateTime.fromISO(dueDate).endOf('day').toUTC() }
+        const task = { dueDate: dueDate ? DateTime.fromISO(dueDate).endOf('day').toUTC() : '' }
         saveTask(id, task)
-        return task.dueDate
+        return typeof task.dueDate === 'string' ? '' : task.dueDate.toFormat('yyyy-MM-dd')
     }, [id, saveTask])
 
     return (
