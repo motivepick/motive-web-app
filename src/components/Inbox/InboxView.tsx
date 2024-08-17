@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentTaskListToInbox, toggleCurrentTaskList } from '../../redux/reducers/taskListSlice'
 import { AppDispatch, RootState } from '../../redux/store'
@@ -21,6 +21,7 @@ import { DragDropContext, OnDragEndResponder } from '@hello-pangea/dnd'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import { ITask, TASK_LIST } from '../../models/appModel'
 import { useTranslation } from 'react-i18next'
+import { DEFAULT_LIMIT } from '../../config'
 
 const InboxView: FC = () => {
     const currentList = useSelector((state: RootState) => state.taskLists.currentList)
@@ -37,8 +38,8 @@ const InboxView: FC = () => {
 
     const [offsetInbox, setOffsetInbox] = useState(0)
     const [offsetClosed, setOffsetClosed] = useState(0)
-    const { isLoading: isLoadingInbox } = useSearchInboxTasksQuery({ offset: offsetInbox, limit: 20 })
-    const { isLoading: isLoadingClosed } = useSearchClosedTasksQuery({ offset: offsetClosed, limit: 20 })
+    const { isLoading: isLoadingInbox } = useSearchInboxTasksQuery({ offset: offsetInbox, limit: DEFAULT_LIMIT })
+    const { isLoading: isLoadingClosed } = useSearchClosedTasksQuery({ offset: offsetClosed, limit: DEFAULT_LIMIT })
 
     const onAddNewTask = useCallback(async (e: React.KeyboardEvent<HTMLInputElement>) => {
         const task = dateFromRelativeString({ name: (e.target as HTMLInputElement).value.trim() } as ITask)
@@ -74,9 +75,9 @@ const InboxView: FC = () => {
 
     const loadMore = useCallback(() => {
         if (currentList === TASK_LIST.INBOX) {
-            setOffsetInbox(offsetInbox + 20)
+            setOffsetInbox(offsetInbox + DEFAULT_LIMIT)
         } else {
-            setOffsetClosed(offsetClosed + 20)
+            setOffsetClosed(offsetClosed + DEFAULT_LIMIT)
         }
     }, [offsetInbox, offsetClosed, currentList])
     const { t } = useTranslation()

@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { StrictMode, Suspense } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { createRoot } from 'react-dom/client'
@@ -49,10 +49,11 @@ setTheme(mediaQuery.matches ? 'dark' : 'light')
 mediaQuery.addEventListener('change', ({ matches }) => setTheme(matches ? 'dark' : 'light'))
 
 root.render(
-    // @ts-ignore
-    <Provider store={store}>
-        <Suspense fallback={<Fallback/>}>
-            <RouterProvider router={router}/>
-        </Suspense>
-    </Provider>
+    <StrictMode>
+        <Provider store={store}>
+            <Suspense fallback={<Fallback/>}>
+                <RouterProvider router={router}/>
+            </Suspense>
+        </Provider>
+    </StrictMode>
 )

@@ -58,7 +58,7 @@ export const taskApi = createApi({
                 url: `/tasks/${id}/undo-closing`,
                 method: 'PUT'
             }),
-            invalidatesTags: ['Schedule']
+            invalidatesTags: (result) => result?.dueDate ? ['Schedule'] : []
         }),
         updateTask: builder.mutation<ITask, { id: number, task: ITask }>({
             query: ({ id, task }) => ({
