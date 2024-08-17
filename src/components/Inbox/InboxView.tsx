@@ -19,7 +19,7 @@ import TasksSubtitle from '../common/TasksSubtitle'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { DragDropContext, OnDragEndResponder } from '@hello-pangea/dnd'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
-import { ITask, TASK_LIST } from '../../models/appModel'
+import { TASK_LIST, UpdateTaskRequest } from '../../models/appModel'
 import { useTranslation } from 'react-i18next'
 import { DEFAULT_LIMIT } from '../../config'
 
@@ -55,8 +55,8 @@ const InboxView: FC = () => {
         }
     }, [currentList, closeTaskMutation, undoCloseTaskMutation])
 
-    const updateTask = useCallback(async (id: number, task: ITask) => {
-        updateTaskMutation({ id, task })
+    const updateTask = useCallback(async (id: number, request: UpdateTaskRequest) => {
+        updateTaskMutation({ id, request })
     }, [updateTaskMutation])
 
     const updateTaskPositionIndex: OnDragEndResponder = useCallback((result) => {

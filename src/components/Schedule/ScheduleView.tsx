@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { updateScheduleTaskPositionIndex } from '../../redux/reducers/scheduleSlice'
 import { RootState } from '../../redux/store'
 import { useCloseTaskMutation, useSearchScheduleQuery, useUpdateTaskMutation } from '../../redux/taskApi'
-import { ITask } from '../../models/appModel'
+import { UpdateTaskRequest } from '../../models/appModel'
 import { IScheduleTaskPositionIndex } from '../../models/redux/scheduleActionModel'
 import SpinnerView from '../common/Spinner'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
@@ -37,8 +37,8 @@ const ScheduleView: FC = () => {
         await closeTaskMutation(id)
     }, [closeTaskMutation])
 
-    const updateTask = useCallback(async (id: number, task: ITask) => {
-        updateTaskMutation({ id, task })
+    const updateTask = useCallback(async (id: number, request: UpdateTaskRequest) => {
+        updateTaskMutation({ id, request })
     }, [updateTaskMutation])
 
     if (isLoading || isFetching) return <SpinnerView/>

@@ -8,11 +8,12 @@ export type ITask = {
     closed: boolean;
 }
 
-export type ITaskNullable = {
+export type UpdateTaskRequest = {
     id?: number;
     name?: string;
     description?: string | null;
-    dueDate?: DateTime | string | null;
+    dueDate?: DateTime | null;
+    deleteDueDate?: boolean
     closed?: boolean;
 }
 

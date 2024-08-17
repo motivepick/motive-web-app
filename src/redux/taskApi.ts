@@ -1,11 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import {
-    ITask,
-    ISchedule,
-    IScheduleFutureAndOverdue,
-    ITaskPositionIndex,
-    TaskListTypeAsLiterals
-} from '../models/appModel'
+import { ISchedule, IScheduleFutureAndOverdue, ITask, ITaskPositionIndex, TaskListTypeAsLiterals, UpdateTaskRequest } from '../models/appModel'
 import { API_URL } from '../config'
 import { ISearchScheduleWeekResponse, ISearchUserTasksResponse } from '../models/redux/taskServiceModel'
 
@@ -60,15 +54,12 @@ export const taskApi = createApi({
             }),
             invalidatesTags: (result) => result?.dueDate ? ['Schedule'] : []
         }),
-        updateTask: builder.mutation<ITask, { id: number, task: ITask }>({
-            query: ({ id, task }) => {
-                const request = { ...task, deleteDueDate: !task.dueDate }
-                return ({
-                    url: `/tasks/${id}`,
-                    method: 'PUT',
-                    body: request
-                })
-            }
+        updateTask: builder.mutation<ITask, { id: number, request: UpdateTaskRequest }>({
+            query: ({ id, request }) => ({
+                url: `/tasks/${id}`,
+                method: 'PUT',
+                body: request
+            })
         }),
         searchSchedule: builder.query<ISchedule, void>({
             query: () => '/schedule',

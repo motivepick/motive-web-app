@@ -7,7 +7,7 @@ import { CheckMark } from '../common/task-item/task-header/check-mark'
 import DueDate from '../common/task-item/task-header/due-date'
 import { Title } from '../common/task-item/task-header/title'
 import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../config'
-import { ITaskNullable } from '../../models/appModel'
+import { UpdateTaskRequest } from '../../models/appModel'
 import { extractDueDate } from '../../utils/extractDueDate'
 
 import { CustomInput } from './CustomInput'
@@ -98,7 +98,7 @@ interface Props extends DraggableProps {
     dueDate?: string
     closed: boolean
     isDraggable: boolean
-    saveTask: (id: number, task: ITaskNullable) => void
+    saveTask: (id: number, task: UpdateTaskRequest) => void
     onTaskClose: (id: number) => void
 }
 
@@ -125,15 +125,15 @@ const Task: FC<Props> = props => {
     }, [id, saveTask])
 
     const saveDescription = useCallback((description: string) => {
-        const task = { description }
+        const task: UpdateTaskRequest = { description }
         saveTask(id, task)
-        return task.description
+        return task.description ?? ''
     }, [id, saveTask])
 
     const saveDate = useCallback((dueDate: string) => {
-        const task = { dueDate: dueDate ? DateTime.fromISO(dueDate).endOf('day').toUTC() : '' }
+        const task: UpdateTaskRequest = { dueDate: dueDate ? DateTime.fromISO(dueDate).endOf('day').toUTC() : null, deleteDueDate: !dueDate }
         saveTask(id, task)
-        return typeof task.dueDate === 'string' ? '' : task.dueDate.toFormat('yyyy-MM-dd')
+        return task.dueDate?.toFormat('yyyy-MM-dd') ?? ''
     }, [id, saveTask])
 
     return (
