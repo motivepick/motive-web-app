@@ -1,5 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { ISchedule, IScheduleFutureAndOverdue, ITask, ITaskPositionIndex, TaskListTypeAsLiterals, UpdateTaskRequest } from '../models/appModel'
+import {
+    CreateTaskRequest,
+    ISchedule,
+    IScheduleFutureAndOverdue,
+    ITask,
+    ITaskPositionIndex,
+    TaskListTypeAsLiterals,
+    UpdateTaskRequest
+} from '../models/appModel'
 import { API_URL } from '../config'
 import { ISearchScheduleWeekResponse, ISearchUserTasksResponse } from '../models/redux/taskServiceModel'
 
@@ -33,7 +41,7 @@ export const taskApi = createApi({
                 body: taskPositionIndex
             })
         }),
-        createTask: builder.mutation<ITask, Partial<ITask>>({
+        createTask: builder.mutation<ITask, CreateTaskRequest>({
             query: (task) => ({
                 url: '/tasks',
                 method: 'POST',

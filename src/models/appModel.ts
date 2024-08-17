@@ -4,8 +4,14 @@ export type ITask = {
     id: number;
     name: string;
     description: string | null;
-    dueDate: DateTime | string | null;
+    dueDate: string | null;
     closed: boolean;
+}
+
+export type CreateTaskRequest = {
+    name?: string;
+    description?: string | null;
+    dueDate?: DateTime | null;
 }
 
 export type UpdateTaskRequest = {

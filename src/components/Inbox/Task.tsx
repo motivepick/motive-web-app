@@ -20,7 +20,7 @@ const DUE_DATE_FORMAT = 'yyyy-MM-dd'
 interface TaskItemProps {
     detailsShown: boolean
     name: string
-    description?: string
+    description?: string | null
     dueDate: DateTimeMaybeValid | null
     closed: boolean
     handleTaskClick: (e: MouseEvent<HTMLElement>) => void
@@ -94,8 +94,8 @@ const isTaskToggle = (target: any) => {
 interface Props extends DraggableProps {
     id: number
     name: string
-    description?: string
-    dueDate?: string
+    description?: string | null
+    dueDate?: string | null
     closed: boolean
     isDraggable: boolean
     saveTask: (id: number, task: UpdateTaskRequest) => void

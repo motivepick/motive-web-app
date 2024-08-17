@@ -1,6 +1,5 @@
-// @ts-nocheck
-import { Droppable } from '@hello-pangea/dnd'
-import React from 'react'
+import { DraggableChildrenFn, Droppable } from '@hello-pangea/dnd'
+import React, { FC } from 'react'
 import { ITask, TASK_LIST, UpdateTaskRequest } from '../../models/appModel'
 import ScheduleHeader from '../common/ScheduleHeader'
 import Task from '.././Inbox/Task'
@@ -14,36 +13,37 @@ interface SectionedDroppableTaskListProps {
     onTaskClose: (id: number) => void
 }
 
-const DroppableTaskListWithHeader: React.FC<SectionedDroppableTaskListProps> = ({ droppableId, header, isDraggable, tasks, onTaskClose, onSaveTask }) => {
+const noop: DraggableChildrenFn = () => null
+
+const DroppableTaskListWithHeader: FC<SectionedDroppableTaskListProps> = ({ droppableId, header, isDraggable, tasks, onTaskClose, onSaveTask }) => {
     if (tasks.length === 0) return null
-
-    const fakeChildrenBecauseTypesAreWrongInDragAndDropLibrary = null
-
-    return <>
-        {header && <ScheduleHeader>{header}</ScheduleHeader>}
-        <Droppable droppableId={droppableId}>
-            {provided => <div {...provided.droppableProps} ref={provided.innerRef}>
-                {tasks.map((task, index) =>
-                    <Task
-                        draggableId={task.id}
-                        isDraggable={isDraggable || false}
-                        key={task.id}
-                        index={index}
-                        id={task.id!}
-                        name={task.name!}
-                        description={task.description}
-                        dueDate={task.dueDate}
-                        closed={droppableId === TASK_LIST.CLOSED}
-                        onTaskClose={onTaskClose}
-                        saveTask={onSaveTask}
-                    >
-                        {fakeChildrenBecauseTypesAreWrongInDragAndDropLibrary}
-                    </Task>
-                )}
-                {provided.placeholder}
-            </div>}
-        </Droppable>
-    </>
+    return (
+        <>
+            {header && <ScheduleHeader>{header}</ScheduleHeader>}
+            <Droppable droppableId={droppableId}>
+                {provided => <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {tasks.map((task, index) =>
+                        <Task
+                            draggableId={task.id.toString()}
+                            isDraggable={isDraggable || false}
+                            key={task.id}
+                            index={index}
+                            id={task.id!}
+                            name={task.name!}
+                            description={task.description}
+                            dueDate={task.dueDate}
+                            closed={droppableId === TASK_LIST.CLOSED}
+                            onTaskClose={onTaskClose}
+                            saveTask={onSaveTask}
+                        >
+                            {noop}
+                        </Task>
+                    )}
+                    {provided.placeholder}
+                </div>}
+            </Droppable>
+        </>
+    )
 }
 
 export default DroppableTaskListWithHeader
