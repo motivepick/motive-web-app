@@ -1,5 +1,4 @@
 import React, { FC, useCallback, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCurrentTaskListToInbox, toggleCurrentTaskList } from '../../redux/reducers/taskListSlice'
 import { AppDispatch, RootState } from '../../redux/store'
@@ -24,7 +23,6 @@ import { ITask, TASK_LIST } from '../../models/appModel'
 import { useTranslation } from 'react-i18next'
 
 const InboxView: FC = () => {
-    const location = useLocation()
     const currentList = useSelector((state: RootState) => state.taskLists.currentList)
     const currentTaskCount = useSelector((state: RootState) => state.taskLists[`totalElements${state.taskLists.currentList}`])
     const currentTasks = useSelector((state: RootState) => state.tasks[state.taskLists.currentList])
@@ -73,13 +71,6 @@ const InboxView: FC = () => {
     }, [updateTasksOrderAsyncMutation])
 
     const onToggleOpenClosedTasks = useCallback(() => dispatch(toggleCurrentTaskList()), [dispatch, toggleCurrentTaskList])
-
-    const handleAllTasksClick = useCallback(() => {
-        const { pathname } = location
-        if (pathname === '/') {
-            dispatch(setCurrentTaskListToInbox())
-        }
-    }, [dispatch, setCurrentTaskListToInbox])
 
     const loadMore = useCallback(() => {
         if (currentList === TASK_LIST.INBOX) {
