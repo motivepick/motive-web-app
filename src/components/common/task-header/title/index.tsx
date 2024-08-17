@@ -1,7 +1,6 @@
 import React, { PropsWithChildren } from 'react'
-import WithLinks from '../../../WithLinks'
-
 import './styles.css'
+import WithLinks from '../../WithLinks'
 
 type TitleProps = {
     dimmedStyle: boolean;

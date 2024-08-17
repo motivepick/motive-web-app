@@ -1,7 +1,6 @@
 import React, { FC, KeyboardEvent, useCallback, useRef } from 'react'
 import { isBrowser } from 'react-device-detect'
 import { useTranslation } from 'react-i18next'
-import { Col, Input, Row } from 'reactstrap'
 
 interface AddNewTaskProps {
     onAddNewTask: (event: KeyboardEvent<HTMLInputElement>) => Promise<void>
@@ -11,7 +10,7 @@ const AddNewTask: FC<AddNewTaskProps> = ({ onAddNewTask }) => {
     const { t } = useTranslation()
     const inputRef = useRef<HTMLInputElement>(null)
 
-    const handleKeyPress = useCallback(async (e: KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = useCallback(async (e: KeyboardEvent<HTMLInputElement>) => {
         const input = e.target as HTMLInputElement
         if (e.key === 'Enter' && input.value.trim() !== '') {
             input.disabled = true
@@ -26,17 +25,18 @@ const AddNewTask: FC<AddNewTaskProps> = ({ onAddNewTask }) => {
     }, [onAddNewTask])
 
     return (
-        <Row style={{ marginTop: '10px' }}>
-            <Col>
-                <Input
+        <div className="row" style={{ marginTop: '10px' }}>
+            <div className="col">
+                <input
+                    className="form-control"
                     type="text"
                     placeholder={t('new.task')}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyDown}
                     autoFocus={isBrowser}
-                    innerRef={inputRef}
+                    ref={inputRef}
                 />
-            </Col>
-        </Row>
+            </div>
+        </div>
     )
 }
 

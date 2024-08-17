@@ -2,10 +2,9 @@ import { DateTime } from 'luxon'
 import React, { FC, FormEvent, MouseEvent, PropsWithChildren, useCallback, useState } from 'react'
 import { Draggable, DraggableProps } from '@hello-pangea/dnd'
 import { useTranslation } from 'react-i18next'
-import { Form, FormGroup } from 'reactstrap'
-import { CheckMark } from '../common/task-item/task-header/check-mark'
-import DueDate from '../common/task-item/task-header/due-date'
-import { Title } from '../common/task-item/task-header/title'
+import { CheckMark } from '../common/task-header/check-mark'
+import DueDate from '../common/task-header/due-date'
+import { Title } from '../common/task-header/title'
 import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../config'
 import { UpdateTaskRequest } from '../../models/appModel'
 import { extractDueDate } from '../../utils/extractDueDate'
@@ -45,14 +44,14 @@ const TaskItem: FC<TaskItemProps> = props => {
                 </div>
 
                 {detailsShown &&
-                    <Form className="task-form" onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()}>
-                        <FormGroup>
+                    <form className="task-form" onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()}>
+                        <div className="mb-3">
                             <CustomInput type="text" value={name} onSave={saveName} maxLength={TASK_NAME_LIMIT}/>
-                        </FormGroup>
-                        <FormGroup>
+                        </div>
+                        <div className="mb-3">
                             <CustomInput type="date" value={dueDate && dueDate.toFormat(DUE_DATE_FORMAT)} onSave={saveDate} maxLength={DUE_DATE_FORMAT.length}/>
-                        </FormGroup>
-                        <FormGroup className="task-form-description">
+                        </div>
+                        <div className="mb-3 task-form-description">
                             <CustomInput
                                 type="textarea"
                                 placeholder={t('task.description')}
@@ -60,8 +59,8 @@ const TaskItem: FC<TaskItemProps> = props => {
                                 onSave={saveDescription}
                                 maxLength={TASK_DESCRIPTION_LIMIT}
                             />
-                        </FormGroup>
-                    </Form>
+                        </div>
+                    </form>
                 }
             </div>
         </div>

@@ -1,5 +1,4 @@
 import React, { MouseEventHandler } from 'react'
-import { Button } from 'reactstrap'
 
 import './styles.css'
 
@@ -22,8 +21,8 @@ const UntoggledCheckMark = <div className="task-check-mark-element circle incomp
 export const CheckMark: React.FC<CheckMarkProps> = props => {
     const { onToggle, toggled } = props
     return (
-        <Button color="link" onClick={onToggle}>
+        <button className="btn btn-link" onClick={onToggle}>
             {toggled ? ToggledCheckMark : UntoggledCheckMark}
-        </Button>
+        </button>
     )
 }

@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useRef, useState } from 'react'
 import Textarea from 'react-textarea-autosize'
-import { Input } from 'reactstrap'
 
 interface Props {
     value?: string | null;
@@ -16,7 +15,7 @@ export const CustomInput: FC<Props> = (props) => {
 
     const taskNameInput = useRef<HTMLInputElement | null>(null)
 
-    const handleValueChange = useCallback(({ target }: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleValueChange = useCallback(({ target }: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>) => {
         setValue(target.value)
     }, [])
 
@@ -43,15 +42,16 @@ export const CustomInput: FC<Props> = (props) => {
         )
     }
     return (
-        <Input
+        <input
             type={type}
             placeholder={placeholder}
             value={value || ''}
+            className="form-control"
             onChange={handleValueChange}
             onBlur={() => onSave(value!)}
             maxLength={maxLength}
-            onKeyPress={(target: React.KeyboardEvent) => target.key === 'Enter' && blurAndSave(value!)}
-            innerRef={(input: HTMLInputElement) => taskNameInput.current = input}
+            onKeyDown={(target: React.KeyboardEvent) => target.key === 'Enter' && blurAndSave(value!)}
+            ref={(input: HTMLInputElement) => taskNameInput.current = input}
         />
     )
 }

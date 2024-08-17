@@ -1,22 +1,21 @@
 import React, { FC } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Col, Row } from 'reactstrap'
 
 const PrivacyView: FC = () =>
     <div className="container-xl">
         <main>
-            <Row style={{ marginTop: '40px', marginBottom: '10px' }}>
-                <Col className="text-center">
-                    <img src="/logo.png" alt="Milestone Logo" width={'64px'} height={'64px'}/>
-                </Col>
-            </Row>
-            <Row style={{ marginTop: '20px', marginBottom: '10px' }}>
-                <Col className="text-center">
+            <div className="row" style={{ marginTop: '40px', marginBottom: '10px' }}>
+                <div className="col text-center">
+                    <img src="/logo.png" alt="Milestone Logo"/>
+                </div>
+            </div>
+            <div className="row" style={{ marginTop: '20px', marginBottom: '10px' }}>
+                <div className="col text-center">
                     <h1>Privacy Policy</h1>
-                </Col>
-            </Row>
-            <Row style={{ fontSize: '14px' }}>
-                <Col sm="12" md={{ size: 6, offset: 3 }}>
+                </div>
+            </div>
+            <div className="row" style={{ fontSize: '14px' }}>
+                <div className="col-sm-12 col-md-6 offset-md-3">
                     <p>At Milestone, accessible from <a
                         href="https://milestone.yaskovdev.com">https://milestone.yaskovdev.com</a>,
                         one of our main priorities is the
@@ -136,13 +135,13 @@ const PrivacyView: FC = () =>
 
                     <p>By using our website, you hereby consent to our Privacy Policy and agree to its
                         terms.</p>
-                </Col>
-            </Row>
-            <Row style={{ marginTop: '30px', marginBottom: '10px' }}>
-                <Col className="text-center">
-                    <Button color={'primary'} tag={() => <Link to="/">Go to Main Page</Link>}/>
-                </Col>
-            </Row>
+                </div>
+            </div>
+            <div className="row" style={{ marginTop: '30px', marginBottom: '10px' }}>
+                <div className="col text-center">
+                    <Link to="/">Go to Main Page</Link>
+                </div>
+            </div>
         </main>
     </div>
 

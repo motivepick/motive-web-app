@@ -1,7 +1,6 @@
 import React, { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { Button, Col, Row } from 'reactstrap'
 import { API_URL, FACEBOOK_AUTH_URL, VK_AUTH_URL } from '../../config'
 import './LoginView.css'
 
@@ -17,44 +16,60 @@ const LoginView: FC<LoginViewProps> = () => {
     return (
         <div className="container-xl">
             <main>
-                <Row style={{ marginTop: '40px', marginBottom: '10px' }}>
-                    <Col className="text-center">
-                        <img src="/logo.png" alt="Milestone Logo" width={'64px'} height={'64px'}/>
-                    </Col>
-                </Row>
-                <Row style={{ marginTop: '20px', marginBottom: '10px' }}>
-                    <Col className="text-center">
+                <div className="row" style={{ marginTop: '40px', marginBottom: '10px' }}>
+                    <div className="col text-center">
+                        <img src="/logo.png" alt="Milestone Logo"/>
+                    </div>
+                </div>
+                <div className="row" style={{ marginTop: '20px', marginBottom: '10px' }}>
+                    <div className="col text-center">
                         <h1>{t('welcome')}</h1>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col className="text-center">
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col text-center">
                         <small>{t('description')}</small>
-                    </Col>
-                </Row>
-                <Row style={{ marginTop: '30px', marginBottom: '10px' }}>
-                    <Col className="text-center">
-                        <Button disabled={disabled} onClick={handleLogin} color="primary" href={VK_AUTH_URL}
-                                style={{ margin: '0 5px 10px 0' }}>
+                    </div>
+                </div>
+                <div className="row" style={{ marginTop: '30px', marginBottom: '10px' }}>
+                    <div className="col text-center">
+                        <a
+                            aria-disabled={disabled}
+                            onClick={handleLogin}
+                            role="button"
+                            className={`btn btn-primary${disabled ? ' disabled' : ''}`}
+                            href={VK_AUTH_URL}
+                            style={{ margin: '0 5px 10px 0' }}
+                        >
                             <i className="fa fa-vk" style={{ marginRight: '1em' }}/>
                             {t('login.vk')}
-                        </Button>
-                        <Button disabled={disabled} onClick={handleLogin} color="secondary"
-                                href={FACEBOOK_AUTH_URL} style={{ margin: '0 0 10px 5px' }}>
+                        </a>
+                        <a
+                            aria-disabled={disabled}
+                            onClick={handleLogin}
+                            role="button"
+                            className={`btn btn-secondary${disabled ? ' disabled' : ''}`}
+                            href={FACEBOOK_AUTH_URL}
+                            style={{ margin: '0 0 10px 5px' }}
+                        >
                             <i className="fa fa-facebook-square" style={{ marginRight: '1em' }}/>
                             {t('login.facebook')}
-                        </Button>
-                    </Col>
-                </Row>
-                <Row style={{ marginTop: '10px', marginBottom: '10px' }}>
-                    <Col className="text-center">
-                        <Button disabled={disabled} onClick={handleLogin} color="link"
-                                href={`${API_URL}/temporary/login`}
-                                style={{ margin: '0 5px 10px 0' }}>
+                        </a>
+                    </div>
+                </div>
+                <div className="row" style={{ marginTop: '10px', marginBottom: '10px' }}>
+                    <div className="col text-center">
+                        <a
+                            aria-disabled={disabled}
+                            onClick={handleLogin}
+                            className={`btn btn-link${disabled ? ' disabled' : ''}`}
+                            href={`${API_URL}/temporary/login`}
+                            style={{ margin: '0 5px 10px 0' }}
+                        >
                             {t('tryWithoutLogin')}
-                        </Button>
-                    </Col>
-                </Row>
+                        </a>
+                    </div>
+                </div>
             </main>
             <div className="footer">
             <span className="text-muted">
@@ -62,7 +77,7 @@ const LoginView: FC<LoginViewProps> = () => {
                      {t('contactUs')}
                  </a>
             </span>
-                <span className="text-muted">  |  <Link to="/privacy">{t('privacyPolicy')}</Link></span>
+                <span className="text-muted"> | <Link to="/privacy">{t('privacyPolicy')}</Link></span>
             </div>
         </div>
     )

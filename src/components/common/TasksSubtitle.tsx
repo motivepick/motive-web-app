@@ -1,6 +1,5 @@
 import React, { MouseEventHandler } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row } from 'reactstrap'
 import { TASK_LIST, TaskListTypeAsLiterals } from '../../models/appModel'
 import './TasksSubtitle.css'
 
@@ -15,14 +14,14 @@ const TasksSubtitle: React.FC<Props> = props => {
     const { t } = useTranslation()
     const { showNumberOfTasks, numberOfTasks, currentList, onToggleOpenClosedTasks } = props
     return (
-        <Row className="task-subtitle">
-            <Col xs={5} style={{ color: '#8E8E93' }}>{showNumberOfTasks !== false && t('numberOfTasks', { count: numberOfTasks })}</Col>
-            <Col xs={7} style={{ color: '#EC445A' }} className={'text-end'}>
+        <div className="row task-subtitle">
+            <div className="col-5" style={{ color: '#8E8E93' }}>{showNumberOfTasks !== false && t('numberOfTasks', { count: numberOfTasks })}</div>
+            <div className="col-7 text-end" style={{ color: '#EC445A' }}>
                 <a onClick={onToggleOpenClosedTasks} style={{ cursor: 'pointer' }}>
                     {t(currentList === TASK_LIST.CLOSED ? 'showOpenTasks' : 'showClosedTasks')}
                 </a>
-            </Col>
-        </Row>
+            </div>
+        </div>
     )
 }
 
