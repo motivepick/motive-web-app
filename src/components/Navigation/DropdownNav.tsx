@@ -21,13 +21,13 @@ const DropdownNav: FC<Props> = ({ isTemporaryUserLoggedIn }) => {
             <ul className="dropdown-menu dropdown-menu-end">
                 {isTemporaryUserLoggedIn && <>
                     <li>
-                        <button type="button" className="dropdown-item" role="menuitem" onClick={handleVkLogin}>
-                            <i className="fa fa-vk" style={{ marginRight: '0.1em' }}/> {t('login.vk')}
+                        <button type="button" className="dropdown-item" role="menuitem" onClick={handleGitHubLogin}>
+                            <i className="fa fa-github" style={{ marginRight: '0.1em' }}/> {t('login.github')}
                         </button>
                     </li>
                     <li>
-                        <button type="button" className="dropdown-item" role="menuitem" onClick={handleGitHubLogin}>
-                            <i className="fa fa-github-square" style={{ marginRight: '0.1em' }}/> {t('login.github')}
+                        <button type="button" className="dropdown-item" role="menuitem" onClick={handleVkLogin}>
+                            <i className="fa fa-vk" style={{ marginRight: '0.1em' }}/> {t('login.vk')}
                         </button>
                     </li>
                 </>}
