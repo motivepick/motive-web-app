@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { API_URL, GITHUB_AUTH_URL, VK_AUTH_URL } from '../../config'
 import './LoginView.css'
+import Icon from '../Icon'
 
 interface LoginViewProps {
     disabled?: boolean
@@ -41,7 +42,7 @@ const LoginView: FC<LoginViewProps> = () => {
                             href={GITHUB_AUTH_URL}
                             style={{ margin: '0 5px 10px 0' }}
                         >
-                            <i className="fa fa-github" style={{ marginRight: '1em' }}/>
+                            <Icon icon="fa-brands fa-github" style={{ marginRight: '0.5em' }}/>
                             {t('login.github')}
                         </a>
                         <a
@@ -52,7 +53,7 @@ const LoginView: FC<LoginViewProps> = () => {
                             href={VK_AUTH_URL}
                             style={{ margin: '0 0 10px 5px' }}
                         >
-                            <i className="fa fa-vk" style={{ marginRight: '1em' }}/>
+                            <Icon icon="fa-brands fa-vk" style={{ marginRight: '0.5em' }}/>
                             {t('login.vk')}
                         </a>
                     </div>

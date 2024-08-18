@@ -1,6 +1,7 @@
 import React, { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { API_URL, GITHUB_AUTH_URL, VK_AUTH_URL } from '../../config'
+import Icon from '../Icon'
 
 interface Props {
     isTemporaryUserLoggedIn?: boolean
@@ -16,24 +17,24 @@ const DropdownNav: FC<Props> = ({ isTemporaryUserLoggedIn }) => {
     return (
         <li className="nav-item dropdown">
             <a href="#" className="nav-link" aria-expanded="false" data-bs-toggle="dropdown">
-                <i className="fa fa-bars"/>
+                <Icon icon="fa-solid fa-bars"/>
             </a>
             <ul className="dropdown-menu dropdown-menu-end">
                 {isTemporaryUserLoggedIn && <>
                     <li>
                         <button type="button" className="dropdown-item" role="menuitem" onClick={handleGitHubLogin}>
-                            <i className="fa fa-github" style={{ marginRight: '0.1em' }}/> {t('login.github')}
+                            <Icon icon="fa-brands fa-github" style={{ marginRight: '0.1em' }}/> {t('login.github')}
                         </button>
                     </li>
                     <li>
                         <button type="button" className="dropdown-item" role="menuitem" onClick={handleVkLogin}>
-                            <i className="fa fa-vk" style={{ marginRight: '0.1em' }}/> {t('login.vk')}
+                            <Icon icon="fa-brands fa-vk" style={{ marginRight: '0.1em' }}/> {t('login.vk')}
                         </button>
                     </li>
                 </>}
                 <li>
                     <button type="button" className="text-danger dropdown-item" role="menuitem" onClick={handleLogout}>
-                        <i className="fa fa-sign-out" style={{ marginRight: '0.3em' }}/>
+                        <Icon icon="fa-solid fa-right-from-bracket" style={{ marginRight: '0.2em' }}/>
                         {isTemporaryUserLoggedIn ? t('deleteTasksAndLogout') : t('logout')}
                     </button>
                 </li>
