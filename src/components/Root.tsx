@@ -1,7 +1,7 @@
 import React, { FC, useCallback } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setCurrentTaskListToInbox } from '../redux/reducers/taskListSlice'
+import { setTaskListIdToInbox } from '../redux/reducers/taskListsSlice'
 import { AppDispatch } from '../redux/store'
 import Navigation from './Navigation/Navigation'
 import Footer from './common/Footer'
@@ -16,9 +16,9 @@ const Root: FC = () => {
     const handleAllTasksClick = useCallback(() => {
         const { pathname } = location
         if (pathname === '/') {
-            dispatch(setCurrentTaskListToInbox())
+            dispatch(setTaskListIdToInbox())
         }
-    }, [dispatch, setCurrentTaskListToInbox])
+    }, [dispatch, setTaskListIdToInbox])
 
     const { data: user, isLoading } = useFetchUserQuery()
 

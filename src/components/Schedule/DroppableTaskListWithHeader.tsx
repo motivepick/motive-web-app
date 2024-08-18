@@ -1,6 +1,6 @@
 import { DraggableChildrenFn, Droppable } from '@hello-pangea/dnd'
 import React, { FC } from 'react'
-import { ITask, TASK_LIST, UpdateTaskRequest } from '../../models/appModel'
+import { ITask, TASK_LIST_ID, UpdateTaskRequest } from '../../models/appModel'
 import ScheduleHeader from '../common/ScheduleHeader'
 import Task from '.././Inbox/Task'
 
@@ -43,7 +43,7 @@ const DroppableTaskListWithHeader: FC<SectionedDroppableTaskListProps> = ({
                             name={task.name!}
                             description={task.description}
                             dueDate={task.dueDate}
-                            closed={droppableId === TASK_LIST.CLOSED}
+                            closed={droppableId === TASK_LIST_ID.CLOSED}
                             onTaskClose={onTaskClose}
                             saveTask={onSaveTask}
                         >

@@ -1,22 +1,24 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { TASK_LIST } from '../../models/appModel'
+import { TASK_LIST_ID } from '../../models/appModel'
 import { taskApi } from '../taskApi'
 
 const INITIAL_STATE = {
-    currentList: TASK_LIST.INBOX,
+    taskListId: TASK_LIST_ID.INBOX,
     totalElementsINBOX: 0,
     totalElementsCLOSED: 0
 }
 
-const taskSlice = createSlice({
+const TASK_LIST_IDS_TO_TOGGLE = [TASK_LIST_ID.INBOX, TASK_LIST_ID.CLOSED]
+
+const taskListsSlice = createSlice({
     name: 'taskLists',
     initialState: INITIAL_STATE,
     reducers: {
-        toggleCurrentTaskList(state) {
-            state.currentList = state.currentList === TASK_LIST.INBOX ? TASK_LIST.CLOSED : TASK_LIST.INBOX
+        toggleTaskListId(state) {
+            state.taskListId = TASK_LIST_IDS_TO_TOGGLE[(TASK_LIST_IDS_TO_TOGGLE.indexOf(state.taskListId) + 1) % TASK_LIST_IDS_TO_TOGGLE.length]
         },
-        setCurrentTaskListToInbox(state) {
-            state.currentList = TASK_LIST.INBOX
+        setTaskListIdToInbox(state) {
+            state.taskListId = TASK_LIST_ID.INBOX
         }
     },
     extraReducers: (builder) => {
@@ -46,7 +48,7 @@ const taskSlice = createSlice({
             }
         )
         builder.addMatcher(
-            taskApi.endpoints.undoCloseTask.matchFulfilled,
+            taskApi.endpoints.reopenTask.matchFulfilled,
             (state) => {
                 state.totalElementsINBOX += 1
                 state.totalElementsCLOSED -= 1
@@ -55,5 +57,5 @@ const taskSlice = createSlice({
     }
 })
 
-export const { toggleCurrentTaskList, setCurrentTaskListToInbox } = taskSlice.actions
-export default taskSlice.reducer
+export const { toggleTaskListId, setTaskListIdToInbox } = taskListsSlice.actions
+export default taskListsSlice.reducer

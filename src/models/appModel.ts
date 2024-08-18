@@ -29,20 +29,18 @@ export type DueDateExtractionResult = {
 }
 
 export type ITaskPositionIndex = {
-    sourceListType: TaskListTypeAsLiterals;
-    destinationListType: TaskListTypeAsLiterals;
+    sourceListType: TaskListIdAsLiterals;
+    destinationListType: TaskListIdAsLiterals;
     sourceIndex: number;
     destinationIndex: number;
 }
 
-export enum TASK_LIST {
-    // eslint-disable-next-line no-unused-vars
+export enum TASK_LIST_ID {
     INBOX = 'INBOX',
-    // eslint-disable-next-line no-unused-vars
     CLOSED = 'CLOSED'
 }
 
-export type TaskListTypeAsLiterals = `${TASK_LIST}`
+export type TaskListIdAsLiterals = `${TASK_LIST_ID}`
 
 export type IUser = {
     id: number;

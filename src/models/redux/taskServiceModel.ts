@@ -1,16 +1,4 @@
-import { DateTime } from 'luxon'
 import { IScheduleWeek, ITask } from '../appModel'
-
-export type ICreateTaskRequest = {
-    name: string;
-    dueDate?: DateTime;
-}
-
-export type IUpdateTaskRequest = {
-    name?: string;
-    description?: string;
-    dueDate?: DateTime;
-}
 
 export type ISort = {
     sorted: boolean;

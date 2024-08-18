@@ -5,7 +5,6 @@ import {
     IScheduleFutureAndOverdue,
     ITask,
     ITaskPositionIndex,
-    TaskListTypeAsLiterals,
     UpdateTaskRequest
 } from '../models/appModel'
 import { API_URL } from '../config'
@@ -16,12 +15,6 @@ export const taskApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: API_URL, credentials: 'include' }),
     tagTypes: ['Schedule'],
     endpoints: (builder) => ({
-        searchUserTasks: builder.query<ISearchUserTasksResponse, { list: TaskListTypeAsLiterals, offset: number, limit: number }>({
-            query: ({ list, offset, limit }) => ({
-                url: `/task-lists/${list}`,
-                params: { offset, limit }
-            })
-        }),
         searchInboxTasks: builder.query<ISearchUserTasksResponse, { offset: number, limit: number }>({
             query: ({ offset, limit }) => ({
                 url: '/task-lists/INBOX',
@@ -55,7 +48,7 @@ export const taskApi = createApi({
                 method: 'PUT'
             })
         }),
-        undoCloseTask: builder.mutation<ITask, number>({
+        reopenTask: builder.mutation<ITask, number>({
             query: (id) => ({
                 url: `/tasks/${id}/undo-closing`,
                 method: 'PUT'
@@ -82,13 +75,12 @@ export const taskApi = createApi({
 })
 
 export const {
-    useSearchUserTasksQuery,
     useSearchInboxTasksQuery,
     useSearchClosedTasksQuery,
     useUpdateTasksOrderAsyncMutation,
     useCreateTaskMutation,
     useCloseTaskMutation,
-    useUndoCloseTaskMutation,
+    useReopenTaskMutation,
     useUpdateTaskMutation,
     useSearchScheduleQuery
 } = taskApi

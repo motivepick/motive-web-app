@@ -1,13 +1,13 @@
 import React, { FC, useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCurrentTaskListToInbox, toggleCurrentTaskList } from '../../redux/reducers/taskListSlice'
+import { setTaskListIdToInbox, toggleTaskListId } from '../../redux/reducers/taskListsSlice'
 import { AppDispatch, RootState } from '../../redux/store'
 import {
     useCloseTaskMutation,
     useCreateTaskMutation,
     useSearchClosedTasksQuery,
     useSearchInboxTasksQuery,
-    useUndoCloseTaskMutation,
+    useReopenTaskMutation,
     useUpdateTaskMutation,
     useUpdateTasksOrderAsyncMutation
 } from '../../redux/taskApi'
@@ -19,18 +19,18 @@ import TasksSubtitle from '../common/TasksSubtitle'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { DragDropContext, OnDragEndResponder } from '@hello-pangea/dnd'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
-import { TASK_LIST, UpdateTaskRequest } from '../../models/appModel'
+import { TASK_LIST_ID, UpdateTaskRequest } from '../../models/appModel'
 import { useTranslation } from 'react-i18next'
 import { DEFAULT_LIMIT } from '../../config'
 
 const InboxView: FC = () => {
-    const currentList = useSelector((state: RootState) => state.taskLists.currentList)
-    const currentTaskCount = useSelector((state: RootState) => state.taskLists[`totalElements${state.taskLists.currentList}`])
-    const currentTasks = useSelector((state: RootState) => state.tasks[state.taskLists.currentList])
+    const taskListId = useSelector((state: RootState) => state.taskLists.taskListId)
+    const currentTaskCount = useSelector((state: RootState) => state.taskLists[`totalElements${state.taskLists.taskListId}`])
+    const currentTasks = useSelector((state: RootState) => state.tasks[state.taskLists.taskListId])
 
     const [createTaskMutation] = useCreateTaskMutation()
     const [closeTaskMutation] = useCloseTaskMutation()
-    const [undoCloseTaskMutation] = useUndoCloseTaskMutation()
+    const [reopenTaskMutation] = useReopenTaskMutation()
     const [updateTaskMutation] = useUpdateTaskMutation()
     const [updateTasksOrderAsyncMutation] = useUpdateTasksOrderAsyncMutation()
 
@@ -43,17 +43,17 @@ const InboxView: FC = () => {
 
     const onAddNewTask = useCallback(async (e: React.KeyboardEvent<HTMLInputElement>) => {
         const task = extractDueDate((e.target as HTMLInputElement).value.trim())
-        dispatch(setCurrentTaskListToInbox())
+        dispatch(setTaskListIdToInbox())
         createTaskMutation(task)
-    }, [dispatch, setCurrentTaskListToInbox, createTaskMutation])
+    }, [dispatch, setTaskListIdToInbox, createTaskMutation])
 
-    const closeOrUndoCloseTask = useCallback(async (id: number) => {
-        if (currentList === TASK_LIST.INBOX) {
+    const closeOrReopenTask = useCallback(async (id: number) => {
+        if (taskListId === TASK_LIST_ID.INBOX) {
             closeTaskMutation(id)
         } else {
-            undoCloseTaskMutation(id)
+            reopenTaskMutation(id)
         }
-    }, [currentList, closeTaskMutation, undoCloseTaskMutation])
+    }, [taskListId, closeTaskMutation, reopenTaskMutation])
 
     const updateTask = useCallback(async (id: number, request: UpdateTaskRequest) => {
         updateTaskMutation({ id, request })
@@ -63,28 +63,28 @@ const InboxView: FC = () => {
         const { source, destination } = result
         if (userReallyChangedOrder(source, destination!)) {
             updateTasksOrderAsyncMutation({
-                sourceListType: TASK_LIST[source.droppableId as keyof typeof TASK_LIST],
+                sourceListType: TASK_LIST_ID[source.droppableId as keyof typeof TASK_LIST_ID],
                 sourceIndex: source.index,
-                destinationListType: TASK_LIST[source.droppableId as keyof typeof TASK_LIST],
+                destinationListType: TASK_LIST_ID[source.droppableId as keyof typeof TASK_LIST_ID],
                 destinationIndex: destination!.index
             })
         }
     }, [updateTasksOrderAsyncMutation])
 
-    const onToggleOpenClosedTasks = useCallback(() => dispatch(toggleCurrentTaskList()), [dispatch, toggleCurrentTaskList])
+    const onToggleOpenClosedTasks = useCallback(() => dispatch(toggleTaskListId()), [dispatch, toggleTaskListId])
 
     const loadMore = useCallback(() => {
-        if (currentList === TASK_LIST.INBOX) {
+        if (taskListId === TASK_LIST_ID.INBOX) {
             setOffsetInbox(offsetInbox + DEFAULT_LIMIT)
         } else {
             setOffsetClosed(offsetClosed + DEFAULT_LIMIT)
         }
-    }, [offsetInbox, offsetClosed, currentList])
+    }, [offsetInbox, offsetClosed, taskListId])
     const { t } = useTranslation()
     return (
         <>
             <AddNewTask onAddNewTask={onAddNewTask}/>
-            <TasksSubtitle numberOfTasks={currentTaskCount} currentList={currentList} onToggleOpenClosedTasks={onToggleOpenClosedTasks}/>
+            <TasksSubtitle numberOfTasks={currentTaskCount} taskListId={taskListId} onToggleOpenClosedTasks={onToggleOpenClosedTasks}/>
             {!isLoadingInbox ? <DragDropContext onDragEnd={updateTaskPositionIndex}>
                 {currentTaskCount === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                     <img src={t('noTasksImg')} className="d-inline-block align-center" alt={t('noTasksAlt')}/>
@@ -96,11 +96,11 @@ const InboxView: FC = () => {
                     loader={<h4>Loading...</h4>}
                 >
                     <DroppableTaskListWithHeader
-                        droppableId={currentList}
+                        droppableId={taskListId}
                         isDraggable
                         tasks={currentTasks}
                         onSaveTask={updateTask}
-                        onTaskClose={closeOrUndoCloseTask}
+                        onTaskClose={closeOrReopenTask}
                     />
                 </InfiniteScroll>
             </DragDropContext> : <SpinnerView/>}

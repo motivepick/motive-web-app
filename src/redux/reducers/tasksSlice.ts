@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { ITask, TASK_LIST } from '../../models/appModel'
+import { ITask, TASK_LIST_ID } from '../../models/appModel'
 import { taskApi } from '../taskApi'
 
 const INITIAL_STATE = {
-    [TASK_LIST.INBOX]: [] as ITask[],
-    [TASK_LIST.CLOSED]: [] as ITask[]
+    [TASK_LIST_ID.INBOX]: [] as ITask[],
+    [TASK_LIST_ID.CLOSED]: [] as ITask[]
 }
 
-const taskSlice = createSlice({
+const tasksSlice = createSlice({
     name: 'tasks',
     initialState: INITIAL_STATE,
     reducers: {},
@@ -27,28 +27,28 @@ const taskSlice = createSlice({
         builder.addMatcher(
             taskApi.endpoints.createTask.matchFulfilled,
             (state, { payload }) => {
-                state[TASK_LIST.INBOX].unshift(payload)
+                state[TASK_LIST_ID.INBOX].unshift(payload)
             }
         )
         builder.addMatcher(
             taskApi.endpoints.closeTask.matchFulfilled,
             (state, { payload }) => {
-                state[TASK_LIST.INBOX] = state[TASK_LIST.INBOX].filter(task => task.id !== payload.id)
-                state[TASK_LIST.CLOSED].unshift(payload)
+                state[TASK_LIST_ID.INBOX] = state[TASK_LIST_ID.INBOX].filter(task => task.id !== payload.id)
+                state[TASK_LIST_ID.CLOSED].unshift(payload)
             }
         )
         builder.addMatcher(
-            taskApi.endpoints.undoCloseTask.matchFulfilled,
+            taskApi.endpoints.reopenTask.matchFulfilled,
             (state, { payload }) => {
-                state[TASK_LIST.CLOSED] = state[TASK_LIST.CLOSED].filter(task => task.id !== payload.id)
-                state[TASK_LIST.INBOX].unshift(payload)
+                state[TASK_LIST_ID.CLOSED] = state[TASK_LIST_ID.CLOSED].filter(task => task.id !== payload.id)
+                state[TASK_LIST_ID.INBOX].unshift(payload)
             }
         )
         builder.addMatcher(
             taskApi.endpoints.updateTask.matchFulfilled,
             (state, { payload }) => {
-                const currentTaskList = payload.closed ? TASK_LIST.CLOSED : TASK_LIST.INBOX
-                state[currentTaskList] = state[currentTaskList].map(task => task.id === payload.id ? payload : task)
+                const taskListId = payload.closed ? TASK_LIST_ID.CLOSED : TASK_LIST_ID.INBOX
+                state[taskListId] = state[taskListId].map(task => task.id === payload.id ? payload : task)
             }
         )
         builder.addMatcher(
@@ -63,4 +63,4 @@ const taskSlice = createSlice({
     }
 })
 
-export default taskSlice.reducer
+export default tasksSlice.reducer
