@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import React, { FC, useCallback } from 'react'
 import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
 import { useTranslation } from 'react-i18next'
@@ -8,7 +9,7 @@ import { useCloseTaskMutation, useSearchScheduleQuery, useUpdateTaskMutation } f
 import { UpdateTaskRequest } from '../../models/appModel'
 import { IScheduleTaskPositionIndex } from '../../models/redux/scheduleActionModel'
 import SpinnerView from '../common/Spinner'
-import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
+import { userChangedLists, userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import DroppableTaskListWithHeader from './DroppableTaskListWithHeader'
 
 const ScheduleView: FC = () => {
@@ -29,9 +30,19 @@ const ScheduleView: FC = () => {
                 destinationDroppableId: destination!.droppableId,
                 destinationIndex: destination!.index
             }
+
+            const newDay = destination!.droppableId
+            if (userChangedLists(source, destination as DraggableLocation) && newDay !== 'overdue') {
+                const taskId = parseInt(result.draggableId)
+                const dueDate = newDay === 'future'
+                    ? DateTime.local().plus({ weeks: 1 }).endOf('day').toUTC()
+                    : DateTime.fromISO(newDay!).toUTC()
+                updateTaskMutation({ id: taskId, request: { dueDate } })
+            }
+
             dispatch(updateScheduleTaskPositionIndex(scheduleTaskPositionIndex))
         }
-    }, [dispatch])
+    }, [dispatch, updateTaskMutation])
 
     const closeTask = useCallback(async (id: number) => {
         await closeTaskMutation(id)
@@ -54,6 +65,7 @@ const ScheduleView: FC = () => {
                     <DroppableTaskListWithHeader
                         key={day}
                         droppableId={day}
+                        isDraggable
                         header={t('dueDate', { date: new Date(day) })}
                         tasks={schedule[day]}
                         onTaskClose={closeTask}
@@ -62,6 +74,7 @@ const ScheduleView: FC = () => {
             }
             <DroppableTaskListWithHeader
                 droppableId="future"
+                isDraggable
                 header={t('futureTasks')}
                 tasks={schedule.future}
                 onTaskClose={closeTask}
@@ -69,6 +82,8 @@ const ScheduleView: FC = () => {
             />
             <DroppableTaskListWithHeader
                 droppableId="overdue"
+                isDraggable
+                isDropDisabled
                 header={t('overdueTasks')}
                 tasks={schedule.overdue}
                 onTaskClose={closeTask}

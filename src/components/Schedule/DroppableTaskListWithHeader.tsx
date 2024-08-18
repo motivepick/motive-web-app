@@ -8,6 +8,7 @@ interface SectionedDroppableTaskListProps {
     droppableId: string
     header?: string
     isDraggable?: boolean
+    isDropDisabled?: boolean
     tasks: ITask[]
     onSaveTask: (id: number, request: UpdateTaskRequest) => void
     onTaskClose: (id: number) => void
@@ -15,12 +16,20 @@ interface SectionedDroppableTaskListProps {
 
 const noop: DraggableChildrenFn = () => null
 
-const DroppableTaskListWithHeader: FC<SectionedDroppableTaskListProps> = ({ droppableId, header, isDraggable, tasks, onTaskClose, onSaveTask }) => {
+const DroppableTaskListWithHeader: FC<SectionedDroppableTaskListProps> = ({
+        droppableId,
+        header,
+        isDraggable,
+        isDropDisabled,
+        tasks,
+        onTaskClose,
+        onSaveTask
+    }) => {
     if (tasks.length === 0) return null
     return (
         <>
             {header && <ScheduleHeader>{header}</ScheduleHeader>}
-            <Droppable droppableId={droppableId}>
+            <Droppable droppableId={droppableId} isDropDisabled={isDropDisabled || false}>
                 {provided => <div {...provided.droppableProps} ref={provided.innerRef}>
                     {tasks.map((task, index) =>
                         <Task
