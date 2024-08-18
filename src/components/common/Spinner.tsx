@@ -7,7 +7,7 @@ const Spinner: FC = () => {
         <div className="row" style={{ marginTop: '150px', marginBottom: '10px' }}>
             <div className="col text-center">
                 <div className="spinner-grow text-secondary" role="status">
-                    <span className="sr-only">{t('loading')}</span>
+                    <span className="visually-hidden">{t('loading')}</span>
                 </div>
             </div>
         </div>
