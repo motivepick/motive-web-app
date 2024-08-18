@@ -37,23 +37,23 @@ const LoginView: FC<LoginViewProps> = () => {
                             aria-disabled={disabled}
                             onClick={handleLogin}
                             role="button"
-                            className={`btn btn-primary${disabled ? ' disabled' : ''}`}
-                            href={VK_AUTH_URL}
+                            className={`btn btn-secondary${disabled ? ' disabled' : ''}`}
+                            href={GITHUB_AUTH_URL}
                             style={{ margin: '0 5px 10px 0' }}
                         >
-                            <i className="fa fa-vk" style={{ marginRight: '1em' }}/>
-                            {t('login.vk')}
+                            <i className="fa fa-github" style={{ marginRight: '1em' }}/>
+                            {t('login.github')}
                         </a>
                         <a
                             aria-disabled={disabled}
                             onClick={handleLogin}
                             role="button"
-                            className={`btn btn-secondary${disabled ? ' disabled' : ''}`}
-                            href={GITHUB_AUTH_URL}
+                            className={`btn btn-primary${disabled ? ' disabled' : ''}`}
+                            href={VK_AUTH_URL}
                             style={{ margin: '0 0 10px 5px' }}
                         >
-                            <i className="fa fa-github-square" style={{ marginRight: '1em' }}/>
-                            {t('login.github')}
+                            <i className="fa fa-vk" style={{ marginRight: '1em' }}/>
+                            {t('login.vk')}
                         </a>
                     </div>
                 </div>
