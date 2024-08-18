@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import React, { FC, useCallback } from 'react'
+import React, { FC, useCallback, useState } from 'react'
 import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,6 +15,8 @@ import DroppableTaskListWithHeader from './DroppableTaskListWithHeader'
 const ScheduleView: FC = () => {
     const { t } = useTranslation()
     const dispatch = useDispatch()
+
+    const [showEmptyLists, setShowEmptyLists] = useState(false)
 
     const schedule = useSelector((state: RootState) => state.schedule)
     const { isLoading, isFetching } = useSearchScheduleQuery()
@@ -41,8 +43,9 @@ const ScheduleView: FC = () => {
             }
 
             dispatch(updateScheduleTaskPositionIndex(scheduleTaskPositionIndex))
+            setShowEmptyLists(false)
         }
-    }, [dispatch, updateTaskMutation])
+    }, [dispatch, updateTaskMutation, setShowEmptyLists])
 
     const closeTask = useCallback(async (id: number) => {
         await closeTaskMutation(id)
@@ -52,20 +55,24 @@ const ScheduleView: FC = () => {
         updateTaskMutation({ id, request })
     }, [updateTaskMutation])
 
+    const onDragStart = useCallback(() => setShowEmptyLists(true), [setShowEmptyLists])
+
     if (isLoading || isFetching) return <SpinnerView/>
 
     const weekdays = Object
         .keys(schedule)
-        .filter(day => !['future', 'overdue'].includes(day) && schedule[day].length > 0)
+        .filter(day => !['future', 'overdue'].includes(day))
 
+    // https://github.com/atlassian/react-beautiful-dnd/blob/master/docs/guides/responders.md#timing
     return (
-        <DragDropContext onDragEnd={updateTaskPositionIndex}>
+        <DragDropContext onDragEnd={updateTaskPositionIndex} onBeforeCapture={onDragStart}>
             {
                 weekdays.map(day =>
                     <DroppableTaskListWithHeader
                         key={day}
                         droppableId={day}
                         isDraggable
+                        showEmptyList={showEmptyLists}
                         header={t('dueDate', { date: new Date(day) })}
                         tasks={schedule[day]}
                         onTaskClose={closeTask}
@@ -75,6 +82,7 @@ const ScheduleView: FC = () => {
             <DroppableTaskListWithHeader
                 droppableId="future"
                 isDraggable
+                showEmptyList={showEmptyLists}
                 header={t('futureTasks')}
                 tasks={schedule.future}
                 onTaskClose={closeTask}
