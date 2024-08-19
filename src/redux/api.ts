@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { CreateTaskRequest, ISchedule, IScheduleFutureAndOverdue, ITask, ITaskPositionIndex, IUser, UpdateTaskRequest } from '../models/appModel'
 import { API_URL } from '../config'
-import { ISearchScheduleWeekResponse, ISearchUserTasksResponse } from '../models/redux/taskServiceModel'
+import { IFetchScheduleWeekResponse, ISearchUserTasksResponse } from '../models/redux/taskServiceModel'
 
 export const api = createApi({
     reducerPath: 'api',
@@ -11,17 +11,26 @@ export const api = createApi({
         fetchUser: builder.query<IUser, void>({
             query: () => '/user'
         }),
-        searchInboxTasks: builder.query<ISearchUserTasksResponse, { offset: number, limit: number }>({
+        fetchInboxTasks: builder.query<ISearchUserTasksResponse, { offset: number, limit: number }>({
             query: ({ offset, limit }) => ({
                 url: '/task-lists/INBOX',
                 params: { offset, limit }
             })
         }),
-        searchClosedTasks: builder.query<ISearchUserTasksResponse, { offset: number, limit: number }>({
+        fetchClosedTasks: builder.query<ISearchUserTasksResponse, { offset: number, limit: number }>({
             query: ({ offset, limit }) => ({
                 url: '/task-lists/CLOSED',
                 params: { offset, limit }
             })
+        }),
+        fetchSchedule: builder.query<ISchedule, void>({
+            query: () => '/schedule',
+            transformResponse: (response: IScheduleFutureAndOverdue & IFetchScheduleWeekResponse) => ({
+                ...response.week,
+                future: response.future,
+                overdue: response.overdue
+            }),
+            providesTags: ['Schedule']
         }),
         updateTasksOrderAsync: builder.mutation<void, ITaskPositionIndex>({
             query: (taskPositionIndex) => ({
@@ -57,27 +66,18 @@ export const api = createApi({
                 method: 'PUT',
                 body: request
             })
-        }),
-        searchSchedule: builder.query<ISchedule, void>({
-            query: () => '/schedule',
-            transformResponse: (response: IScheduleFutureAndOverdue & ISearchScheduleWeekResponse) => ({
-                ...response.week,
-                future: response.future,
-                overdue: response.overdue
-            }),
-            providesTags: ['Schedule']
         })
     })
 })
 
 export const {
     useFetchUserQuery,
-    useSearchInboxTasksQuery,
-    useSearchClosedTasksQuery,
+    useFetchInboxTasksQuery,
+    useFetchClosedTasksQuery,
     useUpdateTasksOrderAsyncMutation,
     useCreateTaskMutation,
     useCloseTaskMutation,
     useReopenTaskMutation,
     useUpdateTaskMutation,
-    useSearchScheduleQuery
+    useFetchScheduleQuery
 } = api

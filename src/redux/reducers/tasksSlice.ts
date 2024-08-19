@@ -14,13 +14,13 @@ const tasksSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addMatcher(
-                api.endpoints.searchInboxTasks.matchFulfilled,
+                api.endpoints.fetchInboxTasks.matchFulfilled,
                 (state, { payload }) => {
                     state.INBOX = state.INBOX.concat(payload.content)
                 }
             )
             .addMatcher(
-                api.endpoints.searchClosedTasks.matchFulfilled,
+                api.endpoints.fetchClosedTasks.matchFulfilled,
                 (state, { payload }) => {
                     state.CLOSED = state.CLOSED.concat(payload.content)
                 }

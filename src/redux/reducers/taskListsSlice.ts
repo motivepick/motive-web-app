@@ -24,13 +24,13 @@ const taskListsSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addMatcher(
-                api.endpoints.searchInboxTasks.matchFulfilled,
+                api.endpoints.fetchInboxTasks.matchFulfilled,
                 (state, { payload }) => {
                     state.totalElementsINBOX = payload.page.totalElements
                 }
             )
             .addMatcher(
-                api.endpoints.searchClosedTasks.matchFulfilled,
+                api.endpoints.fetchClosedTasks.matchFulfilled,
                 (state, { payload }) => {
                     state.totalElementsCLOSED = payload.page.totalElements
                 }

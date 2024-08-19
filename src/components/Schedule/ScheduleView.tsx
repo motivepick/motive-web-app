@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateScheduleTaskPositionIndex } from '../../redux/reducers/scheduleSlice'
 import { RootState } from '../../redux/store'
-import { useCloseTaskMutation, useSearchScheduleQuery, useUpdateTaskMutation } from '../../redux/api'
+import { useCloseTaskMutation, useFetchScheduleQuery, useUpdateTaskMutation } from '../../redux/api'
 import { UpdateTaskRequest } from '../../models/appModel'
 import { IScheduleTaskPositionIndex } from '../../models/redux/scheduleActionModel'
 import SpinnerView from '../common/Spinner'
@@ -19,7 +19,7 @@ const ScheduleView: FC = () => {
     const [showEmptyLists, setShowEmptyLists] = useState(false)
 
     const schedule = useSelector((state: RootState) => state.schedule)
-    const { isLoading, isFetching } = useSearchScheduleQuery()
+    const { isLoading, isFetching } = useFetchScheduleQuery()
     const [updateTaskMutation] = useUpdateTaskMutation()
     const [closeTaskMutation] = useCloseTaskMutation()
 

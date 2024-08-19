@@ -5,8 +5,8 @@ import { AppDispatch, RootState } from '../../redux/store'
 import {
     useCloseTaskMutation,
     useCreateTaskMutation,
-    useSearchClosedTasksQuery,
-    useSearchInboxTasksQuery,
+    useFetchClosedTasksQuery,
+    useFetchInboxTasksQuery,
     useReopenTaskMutation,
     useUpdateTaskMutation,
     useUpdateTasksOrderAsyncMutation
@@ -38,8 +38,8 @@ const InboxView: FC = () => {
 
     const [offsetInbox, setOffsetInbox] = useState(0)
     const [offsetClosed, setOffsetClosed] = useState(0)
-    const { isLoading: isLoadingInbox } = useSearchInboxTasksQuery({ offset: offsetInbox, limit: DEFAULT_LIMIT })
-    useSearchClosedTasksQuery({ offset: offsetClosed, limit: DEFAULT_LIMIT })
+    const { isLoading: isLoadingInbox } = useFetchInboxTasksQuery({ offset: offsetInbox, limit: DEFAULT_LIMIT })
+    useFetchClosedTasksQuery({ offset: offsetClosed, limit: DEFAULT_LIMIT })
 
     const onAddNewTask = useCallback(async (e: React.KeyboardEvent<HTMLInputElement>) => {
         const task = extractDueDate((e.target as HTMLInputElement).value.trim())

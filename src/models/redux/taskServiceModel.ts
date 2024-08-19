@@ -37,6 +37,6 @@ export type ISearchUserTasksResponse = {
     empty: boolean;
 }
 
-export type ISearchScheduleWeekResponse = {
+export type IFetchScheduleWeekResponse = {
     week: IScheduleWeek;
 }

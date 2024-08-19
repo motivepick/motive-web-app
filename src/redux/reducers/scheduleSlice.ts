@@ -35,7 +35,7 @@ const scheduleSlice = createSlice({
                 }
             )
             .addMatcher(
-                api.endpoints.searchSchedule.matchFulfilled,
+                api.endpoints.fetchSchedule.matchFulfilled,
                 (state, { payload }) => {
                     Object.assign(state, payload)
                 }
