@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit'
-import thunkMiddleware from 'redux-thunk'
 import { taskApi } from './taskApi'
 import { userApi } from './userApi'
 import tasksReducer from './reducers/tasksSlice'
@@ -15,9 +14,8 @@ export const store = configureStore({
         [taskApi.reducerPath]: taskApi.reducer,
         [userApi.reducerPath]: userApi.reducer
     },
-    middleware: (getDefaultMiddleware) =>
+    middleware: getDefaultMiddleware =>
         getDefaultMiddleware()
-            .concat(thunkMiddleware)
             .concat(userApi.middleware)
             .concat(taskApi.middleware),
     devTools: REDUX_DEV_TOOLS_ENABLED
