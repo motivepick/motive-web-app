@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { TASK_LIST_ID } from '../../models/appModel'
-import { taskApi } from '../taskApi'
+import { api } from '../api'
 
 const INITIAL_STATE = {
     taskListId: TASK_LIST_ID.INBOX,
@@ -22,38 +22,39 @@ const taskListsSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addMatcher(
-            taskApi.endpoints.searchInboxTasks.matchFulfilled,
-            (state, { payload }) => {
-                state.totalElementsINBOX = payload.page.totalElements
-            }
-        )
-        builder.addMatcher(
-            taskApi.endpoints.searchClosedTasks.matchFulfilled,
-            (state, { payload }) => {
-                state.totalElementsCLOSED = payload.page.totalElements
-            }
-        )
-        builder.addMatcher(
-            taskApi.endpoints.createTask.matchFulfilled,
-            (state) => {
-                state.totalElementsINBOX += 1
-            }
-        )
-        builder.addMatcher(
-            taskApi.endpoints.closeTask.matchFulfilled,
-            (state) => {
-                state.totalElementsINBOX -= 1
-                state.totalElementsCLOSED += 1
-            }
-        )
-        builder.addMatcher(
-            taskApi.endpoints.reopenTask.matchFulfilled,
-            (state) => {
-                state.totalElementsINBOX += 1
-                state.totalElementsCLOSED -= 1
-            }
-        )
+        builder
+            .addMatcher(
+                api.endpoints.searchInboxTasks.matchFulfilled,
+                (state, { payload }) => {
+                    state.totalElementsINBOX = payload.page.totalElements
+                }
+            )
+            .addMatcher(
+                api.endpoints.searchClosedTasks.matchFulfilled,
+                (state, { payload }) => {
+                    state.totalElementsCLOSED = payload.page.totalElements
+                }
+            )
+            .addMatcher(
+                api.endpoints.createTask.matchFulfilled,
+                (state) => {
+                    state.totalElementsINBOX += 1
+                }
+            )
+            .addMatcher(
+                api.endpoints.closeTask.matchFulfilled,
+                (state) => {
+                    state.totalElementsINBOX -= 1
+                    state.totalElementsCLOSED += 1
+                }
+            )
+            .addMatcher(
+                api.endpoints.reopenTask.matchFulfilled,
+                (state) => {
+                    state.totalElementsINBOX += 1
+                    state.totalElementsCLOSED -= 1
+                }
+            )
     }
 })
 

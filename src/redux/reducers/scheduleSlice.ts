@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ISchedule } from '../../models/appModel'
 import { IScheduleTaskPositionIndex } from '../../models/redux/scheduleActionModel'
-import { taskApi } from '../taskApi'
+import { api } from '../api'
 
 const INITIAL_STATE: ISchedule = { overdue: [], future: [] }
 
@@ -17,28 +17,29 @@ const scheduleSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addMatcher(
-            taskApi.endpoints.updateTask.matchFulfilled,
-            (state, { payload }) => {
-                Object.keys(state).forEach(day => {
-                    state[day] = state[day].map(task => task.id === payload.id ? payload : task)
-                })
-            }
-        )
-        builder.addMatcher(
-            taskApi.endpoints.closeTask.matchFulfilled,
-            (state, { payload }) => {
-                Object.keys(state).forEach(day => {
-                    state[day] = state[day].filter(task => task.id !== payload.id)
-                })
-            }
-        )
-        builder.addMatcher(
-            taskApi.endpoints.searchSchedule.matchFulfilled,
-            (state, { payload }) => {
-                Object.assign(state, payload)
-            }
-        )
+        builder
+            .addMatcher(
+                api.endpoints.updateTask.matchFulfilled,
+                (state, { payload }) => {
+                    Object.keys(state).forEach(day => {
+                        state[day] = state[day].map(task => task.id === payload.id ? payload : task)
+                    })
+                }
+            )
+            .addMatcher(
+                api.endpoints.closeTask.matchFulfilled,
+                (state, { payload }) => {
+                    Object.keys(state).forEach(day => {
+                        state[day] = state[day].filter(task => task.id !== payload.id)
+                    })
+                }
+            )
+            .addMatcher(
+                api.endpoints.searchSchedule.matchFulfilled,
+                (state, { payload }) => {
+                    Object.assign(state, payload)
+                }
+            )
     }
 })
 

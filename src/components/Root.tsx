@@ -5,7 +5,7 @@ import { setTaskListIdToInbox } from '../redux/reducers/taskListsSlice'
 import { AppDispatch } from '../redux/store'
 import Navigation from './Navigation/Navigation'
 import Footer from './common/Footer'
-import { useFetchUserQuery } from '../redux/userApi'
+import { useFetchUserQuery } from '../redux/api'
 import Spinner from './common/Spinner'
 import ProtectedRoute from './ProtectedRoute'
 

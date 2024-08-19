@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { taskApi } from './taskApi'
-import { userApi } from './userApi'
+import { api } from './api'
 import tasksReducer from './reducers/tasksSlice'
 import scheduleReducer from './reducers/scheduleSlice'
 import taskListsReducer from './reducers/taskListsSlice'
@@ -11,13 +10,9 @@ export const store = configureStore({
         tasks: tasksReducer,
         schedule: scheduleReducer,
         taskLists: taskListsReducer,
-        [taskApi.reducerPath]: taskApi.reducer,
-        [userApi.reducerPath]: userApi.reducer
+        [api.reducerPath]: api.reducer
     },
-    middleware: getDefaultMiddleware =>
-        getDefaultMiddleware()
-            .concat(userApi.middleware)
-            .concat(taskApi.middleware),
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(api.middleware),
     devTools: REDUX_DEV_TOOLS_ENABLED
 })
 

@@ -10,7 +10,7 @@ import {
     useReopenTaskMutation,
     useUpdateTaskMutation,
     useUpdateTasksOrderAsyncMutation
-} from '../../redux/taskApi'
+} from '../../redux/api'
 import DroppableTaskListWithHeader from '../Schedule/DroppableTaskListWithHeader'
 import AddNewTask from './AddNewTask'
 import { extractDueDate } from '../../utils/extractDueDate'

@@ -1,20 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import {
-    CreateTaskRequest,
-    ISchedule,
-    IScheduleFutureAndOverdue,
-    ITask,
-    ITaskPositionIndex,
-    UpdateTaskRequest
-} from '../models/appModel'
+import { CreateTaskRequest, ISchedule, IScheduleFutureAndOverdue, ITask, ITaskPositionIndex, IUser, UpdateTaskRequest } from '../models/appModel'
 import { API_URL } from '../config'
 import { ISearchScheduleWeekResponse, ISearchUserTasksResponse } from '../models/redux/taskServiceModel'
 
-export const taskApi = createApi({
-    reducerPath: 'taskApi',
+export const api = createApi({
+    reducerPath: 'api',
     baseQuery: fetchBaseQuery({ baseUrl: API_URL, credentials: 'include' }),
     tagTypes: ['Schedule'],
     endpoints: (builder) => ({
+        fetchUser: builder.query<IUser, void>({
+            query: () => '/user'
+        }),
         searchInboxTasks: builder.query<ISearchUserTasksResponse, { offset: number, limit: number }>({
             query: ({ offset, limit }) => ({
                 url: '/task-lists/INBOX',
@@ -50,7 +46,7 @@ export const taskApi = createApi({
         }),
         reopenTask: builder.mutation<ITask, number>({
             query: (id) => ({
-                url: `/tasks/${id}/undo-closing`,
+                url: `/tasks/${id}/reopen`,
                 method: 'PUT'
             }),
             invalidatesTags: (result) => result?.dueDate ? ['Schedule'] : []
@@ -75,6 +71,7 @@ export const taskApi = createApi({
 })
 
 export const {
+    useFetchUserQuery,
     useSearchInboxTasksQuery,
     useSearchClosedTasksQuery,
     useUpdateTasksOrderAsyncMutation,
@@ -83,4 +80,4 @@ export const {
     useReopenTaskMutation,
     useUpdateTaskMutation,
     useSearchScheduleQuery
-} = taskApi
+} = api
