@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import { string } from 'prop-types'
 
 export type ITask = {
     id: number;
@@ -59,3 +60,19 @@ export type IScheduleWeek = {
 }
 
 export type ISchedule = IScheduleFutureAndOverdue & IScheduleWeek;
+
+export type TaskListState = {
+    initialized: boolean
+    totalElements: number
+    allIds: number[]
+}
+
+export type TaskListsState = {
+    taskListId: string
+    taskLists: { [key: string]: TaskListState }
+    byId: { [key: number]: ITask }
+}
+
+export type TasksState = {
+    [key: string]: ITask[]
+}

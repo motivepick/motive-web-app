@@ -1,12 +1,11 @@
 import React, { FC, useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setTaskListIdToInbox, toggleTaskListId } from '../../redux/reducers/taskListsSlice'
-import { AppDispatch, RootState } from '../../redux/store'
+import { setTaskListId, toggleTaskListId } from '../../redux/reducers/taskListsSlice'
+import { AppDispatch } from '../../redux/store'
 import {
     useCloseTaskMutation,
     useCreateTaskMutation,
-    useFetchClosedTasksQuery,
-    useFetchInboxTasksQuery,
+    useFetchTaskListQuery,
     useReopenTaskMutation,
     useUpdateTaskMutation,
     useUpdateTasksOrderAsyncMutation
@@ -22,11 +21,13 @@ import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import { TASK_LIST_ID, UpdateTaskRequest } from '../../models/appModel'
 import { useTranslation } from 'react-i18next'
 import { DEFAULT_LIMIT } from '../../config'
+import { selectTaskListId, selectTaskListInitialized, selectTaskListTasks, selectTotalElements } from '../../redux/selectors/selectors'
 
 const InboxView: FC = () => {
-    const taskListId = useSelector((state: RootState) => state.taskLists.taskListId)
-    const currentTaskCount = useSelector((state: RootState) => state.taskLists[`totalElements${state.taskLists.taskListId}`])
-    const currentTasks = useSelector((state: RootState) => state.tasks[state.taskLists.taskListId])
+    const taskListId = useSelector(selectTaskListId)
+    const initialized = useSelector(selectTaskListInitialized)
+    const currentTaskCount = useSelector(selectTotalElements)
+    const currentTasks = useSelector(selectTaskListTasks)
 
     const [createTaskMutation] = useCreateTaskMutation()
     const [closeTaskMutation] = useCloseTaskMutation()
@@ -38,14 +39,13 @@ const InboxView: FC = () => {
 
     const [offsetInbox, setOffsetInbox] = useState(0)
     const [offsetClosed, setOffsetClosed] = useState(0)
-    const { isLoading: isLoadingInbox } = useFetchInboxTasksQuery({ offset: offsetInbox, limit: DEFAULT_LIMIT })
-    useFetchClosedTasksQuery({ offset: offsetClosed, limit: DEFAULT_LIMIT })
+    useFetchTaskListQuery({ taskListId, offset: taskListId === TASK_LIST_ID.INBOX ? offsetInbox : offsetClosed, limit: DEFAULT_LIMIT })
 
     const onAddNewTask = useCallback(async (e: React.KeyboardEvent<HTMLInputElement>) => {
         const task = extractDueDate((e.target as HTMLInputElement).value.trim())
-        dispatch(setTaskListIdToInbox())
+        dispatch(setTaskListId(TASK_LIST_ID.INBOX))
         createTaskMutation(task)
-    }, [dispatch, setTaskListIdToInbox, createTaskMutation])
+    }, [dispatch, setTaskListId, createTaskMutation])
 
     const closeOrReopenTask = useCallback(async (id: number) => {
         if (taskListId === TASK_LIST_ID.INBOX) {
@@ -85,7 +85,7 @@ const InboxView: FC = () => {
         <>
             <AddNewTask onAddNewTask={onAddNewTask}/>
             <TasksSubtitle numberOfTasks={currentTaskCount} taskListId={taskListId} onToggleOpenClosedTasks={onToggleOpenClosedTasks}/>
-            {!isLoadingInbox ? <DragDropContext onDragEnd={updateTaskPositionIndex}>
+            {initialized ? <DragDropContext onDragEnd={updateTaskPositionIndex}>
                 {currentTaskCount === 0 && <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                     <img src={t('noTasksImg')} className="d-inline-block align-center" alt={t('noTasksAlt')}/>
                 </div>}

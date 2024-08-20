@@ -1,12 +1,12 @@
 import React, { MouseEventHandler } from 'react'
 import { useTranslation } from 'react-i18next'
-import { TASK_LIST_ID, TaskListIdAsLiterals } from '../../models/appModel'
+import { TASK_LIST_ID } from '../../models/appModel'
 import './TasksSubtitle.css'
 
 interface Props {
     showNumberOfTasks?: boolean
     numberOfTasks: number;
-    taskListId: TaskListIdAsLiterals;
+    taskListId: string;
     onToggleOpenClosedTasks: MouseEventHandler;
 }
 

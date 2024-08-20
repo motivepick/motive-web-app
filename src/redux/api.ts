@@ -1,5 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { CreateTaskRequest, ISchedule, IScheduleFutureAndOverdue, ITask, ITaskPositionIndex, IUser, UpdateTaskRequest } from '../models/appModel'
+import {
+    CreateTaskRequest,
+    ISchedule,
+    IScheduleFutureAndOverdue,
+    ITask,
+    ITaskPositionIndex,
+    IUser,
+    UpdateTaskRequest
+} from '../models/appModel'
 import { API_URL } from '../config'
 import { IFetchScheduleWeekResponse, ISearchUserTasksResponse } from '../models/redux/taskServiceModel'
 
@@ -11,15 +19,9 @@ export const api = createApi({
         fetchUser: builder.query<IUser, void>({
             query: () => '/user'
         }),
-        fetchInboxTasks: builder.query<ISearchUserTasksResponse, { offset: number, limit: number }>({
-            query: ({ offset, limit }) => ({
-                url: '/task-lists/INBOX',
-                params: { offset, limit }
-            })
-        }),
-        fetchClosedTasks: builder.query<ISearchUserTasksResponse, { offset: number, limit: number }>({
-            query: ({ offset, limit }) => ({
-                url: '/task-lists/CLOSED',
+        fetchTaskList: builder.query<ISearchUserTasksResponse, { taskListId: string, offset: number, limit: number }>({
+            query: ({ taskListId, offset, limit }) => ({
+                url: `/task-lists/${taskListId}`,
                 params: { offset, limit }
             })
         }),
@@ -72,8 +74,7 @@ export const api = createApi({
 
 export const {
     useFetchUserQuery,
-    useFetchInboxTasksQuery,
-    useFetchClosedTasksQuery,
+    useFetchTaskListQuery,
     useUpdateTasksOrderAsyncMutation,
     useCreateTaskMutation,
     useCloseTaskMutation,

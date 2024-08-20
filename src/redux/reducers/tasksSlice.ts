@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { ITask, TASK_LIST_ID } from '../../models/appModel'
+import { ITask, TASK_LIST_ID, TasksState } from '../../models/appModel'
 import { api } from '../api'
 
 const INITIAL_STATE = {
@@ -9,20 +9,15 @@ const INITIAL_STATE = {
 
 const tasksSlice = createSlice({
     name: 'tasks',
-    initialState: INITIAL_STATE,
+    initialState: INITIAL_STATE as TasksState,
     reducers: {},
     extraReducers: (builder) => {
         builder
             .addMatcher(
-                api.endpoints.fetchInboxTasks.matchFulfilled,
-                (state, { payload }) => {
-                    state.INBOX = state.INBOX.concat(payload.content)
-                }
-            )
-            .addMatcher(
-                api.endpoints.fetchClosedTasks.matchFulfilled,
-                (state, { payload }) => {
-                    state.CLOSED = state.CLOSED.concat(payload.content)
+                api.endpoints.fetchTaskList.matchFulfilled,
+                (state, { payload, meta }) => {
+                    const { taskListId } = meta.arg.originalArgs
+                    state[taskListId] = state[taskListId].concat(payload.content)
                 }
             )
             .addMatcher(
