@@ -19,12 +19,6 @@ export const api = createApi({
         fetchUser: builder.query<IUser, void>({
             query: () => '/user'
         }),
-        fetchTaskList: builder.query<ISearchUserTasksResponse, { taskListId: string, offset: number, limit: number }>({
-            query: ({ taskListId, offset, limit }) => ({
-                url: `/task-lists/${taskListId}`,
-                params: { offset, limit }
-            })
-        }),
         fetchSchedule: builder.query<ISchedule, void>({
             query: () => '/schedule',
             transformResponse: (response: IScheduleFutureAndOverdue & IFetchScheduleWeekResponse) => ({
@@ -74,7 +68,6 @@ export const api = createApi({
 
 export const {
     useFetchUserQuery,
-    useFetchTaskListQuery,
     useUpdateTasksOrderAsyncMutation,
     useCreateTaskMutation,
     useCloseTaskMutation,

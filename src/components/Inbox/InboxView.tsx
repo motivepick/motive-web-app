@@ -1,15 +1,8 @@
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setTaskListId, toggleTaskListId } from '../../redux/reducers/taskListsSlice'
+import { fetchTaskLists, setTaskListId, toggleTaskListId } from '../../redux/reducers/tasksSlice'
 import { AppDispatch } from '../../redux/store'
-import {
-    useCloseTaskMutation,
-    useCreateTaskMutation,
-    useFetchTaskListQuery,
-    useReopenTaskMutation,
-    useUpdateTaskMutation,
-    useUpdateTasksOrderAsyncMutation
-} from '../../redux/api'
+import { useCloseTaskMutation, useCreateTaskMutation, useReopenTaskMutation, useUpdateTaskMutation, useUpdateTasksOrderAsyncMutation } from '../../redux/api'
 import DroppableTaskListWithHeader from '../Schedule/DroppableTaskListWithHeader'
 import AddNewTask from './AddNewTask'
 import { extractDueDate } from '../../utils/extractDueDate'
@@ -20,14 +13,15 @@ import { DragDropContext, OnDragEndResponder } from '@hello-pangea/dnd'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import { TASK_LIST_ID, UpdateTaskRequest } from '../../models/appModel'
 import { useTranslation } from 'react-i18next'
+import { selectTaskListId, selectTaskListInitialized, selectTaskListLength, selectTaskListTasks, selectTotalElements } from '../../redux/selectors/selectors'
 import { DEFAULT_LIMIT } from '../../config'
-import { selectTaskListId, selectTaskListInitialized, selectTaskListTasks, selectTotalElements } from '../../redux/selectors/selectors'
 
 const InboxView: FC = () => {
     const taskListId = useSelector(selectTaskListId)
     const initialized = useSelector(selectTaskListInitialized)
     const currentTaskCount = useSelector(selectTotalElements)
     const currentTasks = useSelector(selectTaskListTasks)
+    const taskListLength = useSelector(selectTaskListLength)
 
     const [createTaskMutation] = useCreateTaskMutation()
     const [closeTaskMutation] = useCloseTaskMutation()
@@ -36,10 +30,6 @@ const InboxView: FC = () => {
     const [updateTasksOrderAsyncMutation] = useUpdateTasksOrderAsyncMutation()
 
     const dispatch = useDispatch<AppDispatch>()
-
-    const [offsetInbox, setOffsetInbox] = useState(0)
-    const [offsetClosed, setOffsetClosed] = useState(0)
-    useFetchTaskListQuery({ taskListId, offset: taskListId === TASK_LIST_ID.INBOX ? offsetInbox : offsetClosed, limit: DEFAULT_LIMIT })
 
     const onAddNewTask = useCallback(async (e: React.KeyboardEvent<HTMLInputElement>) => {
         const task = extractDueDate((e.target as HTMLInputElement).value.trim())
@@ -73,13 +63,10 @@ const InboxView: FC = () => {
 
     const onToggleOpenClosedTasks = useCallback(() => dispatch(toggleTaskListId()), [dispatch, toggleTaskListId])
 
-    const loadMore = useCallback(() => {
-        if (taskListId === TASK_LIST_ID.INBOX) {
-            setOffsetInbox(offsetInbox + DEFAULT_LIMIT)
-        } else {
-            setOffsetClosed(offsetClosed + DEFAULT_LIMIT)
-        }
-    }, [offsetInbox, offsetClosed, taskListId])
+    useEffect(() => {
+        if (!initialized) dispatch(fetchTaskLists({ type: taskListId, offset: 0, limit: DEFAULT_LIMIT }))
+    }, [taskListId])
+
     const { t } = useTranslation()
     return (
         <>
@@ -91,7 +78,7 @@ const InboxView: FC = () => {
                 </div>}
                 <InfiniteScroll
                     dataLength={currentTasks.length}
-                    next={loadMore}
+                    next={() => dispatch(fetchTaskLists({ type: taskListId, offset: taskListLength, limit: DEFAULT_LIMIT }))}
                     hasMore={currentTasks.length < currentTaskCount}
                     loader={<h4>Loading...</h4>}
                 >

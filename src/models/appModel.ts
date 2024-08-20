@@ -1,5 +1,4 @@
 import { DateTime } from 'luxon'
-import { string } from 'prop-types'
 
 export type ITask = {
     id: number;
@@ -73,6 +72,8 @@ export type TaskListsState = {
     byId: { [key: number]: ITask }
 }
 
-export type TasksState = {
-    [key: string]: ITask[]
+export type FetchTaskListQueryParams = {
+    type: string,
+    offset: number,
+    limit: number
 }

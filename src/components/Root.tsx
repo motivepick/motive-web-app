@@ -1,7 +1,7 @@
 import React, { FC, useCallback } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setTaskListId } from '../redux/reducers/taskListsSlice'
+import { setTaskListId } from '../redux/reducers/tasksSlice'
 import { AppDispatch } from '../redux/store'
 import Navigation from './Navigation/Navigation'
 import Footer from './common/Footer'

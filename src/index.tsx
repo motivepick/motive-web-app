@@ -53,11 +53,9 @@ mediaQuery.addEventListener('change', ({ matches }) => setTheme(matches ? 'dark'
 library.add(faBars, faRightFromBracket, faGithub, faVk)
 
 root.render(
-    <StrictMode>
         <Provider store={store}>
             <Suspense fallback={<Fallback/>}>
                 <RouterProvider router={router}/>
             </Suspense>
         </Provider>
-    </StrictMode>
 )
