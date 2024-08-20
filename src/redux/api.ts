@@ -1,15 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import {
-    CreateTaskRequest,
-    ISchedule,
-    IScheduleFutureAndOverdue,
-    ITask,
-    ITaskPositionIndex,
-    IUser,
-    UpdateTaskRequest
-} from '../models/appModel'
+import { CreateTaskRequest, ISchedule, IScheduleFutureAndOverdue, ITask, ITaskPositionIndex, IUser, UpdateTaskRequest } from '../models/appModel'
 import { API_URL } from '../config'
-import { IFetchScheduleWeekResponse, ISearchUserTasksResponse } from '../models/redux/taskServiceModel'
+import { IFetchScheduleWeekResponse } from '../models/redux/taskServiceModel'
 
 export const api = createApi({
     reducerPath: 'api',

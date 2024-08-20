@@ -29,8 +29,8 @@ export type DueDateExtractionResult = {
 }
 
 export type ITaskPositionIndex = {
-    sourceListType: TaskListIdAsLiterals;
-    destinationListType: TaskListIdAsLiterals;
+    sourceListType: string;
+    destinationListType: string;
     sourceIndex: number;
     destinationIndex: number;
 }
@@ -39,8 +39,6 @@ export enum TASK_LIST_ID {
     INBOX = 'INBOX',
     CLOSED = 'CLOSED'
 }
-
-export type TaskListIdAsLiterals = `${TASK_LIST_ID}`
 
 export type IUser = {
     id: number;
@@ -61,7 +59,7 @@ export type IScheduleWeek = {
 export type ISchedule = IScheduleFutureAndOverdue & IScheduleWeek;
 
 export type TaskListState = {
-    initialized: boolean
+    status: 'IDLE' | 'PENDING' | 'SUCCEEDED' | 'FAILED'
     totalElements: number
     allIds: number[]
 }
