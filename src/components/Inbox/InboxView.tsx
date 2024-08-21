@@ -12,7 +12,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { DragDropContext, OnDragEndResponder } from '@hello-pangea/dnd'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import { TASK_LIST_ID, UpdateTaskRequest } from '../../models/appModel'
-import { selectTaskListId, selectTaskListLength, selectTaskListStatus, selectTaskListTasks, selectTotalElements } from '../../redux/selectors/selectors'
+import { selectTaskListId, selectTaskListLength, selectTaskListStatus, selectTaskListTasks, selectTaskListTotalElements } from '../../redux/selectors/selectors'
 import { DEFAULT_LIMIT } from '../../config'
 import NoTasksImage from '../common/NoTasksImage'
 
@@ -64,7 +64,7 @@ const InboxView: FC = () => {
         if (taskListStatus === 'IDLE') dispatch(fetchTaskLists({ type: taskListId, offset: 0, limit: DEFAULT_LIMIT }))
     }, [taskListStatus, taskListId])
 
-    const taskListTotalElements = useSelector(selectTotalElements)
+    const taskListTotalElements = useSelector(selectTaskListTotalElements)
     const taskListTasks = useSelector(selectTaskListTasks)
     const taskListLength = useSelector(selectTaskListLength)
 
