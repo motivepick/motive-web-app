@@ -72,7 +72,7 @@ const InboxView: FC = () => {
         <>
             <AddNewTask onAddNewTask={onAddNewTask}/>
             <TasksSubtitle numberOfTasks={taskListTotalElements} taskListId={taskListId} onToggleOpenClosedTasks={onToggleOpenClosedTasks}/>
-            {taskListStatus === 'IDLE' ? <SpinnerView/> :
+            {taskListStatus === 'PENDING' && taskListLength === 0 ? <SpinnerView/> :
                 <DragDropContext onDragEnd={updateTaskPositionIndex}>
                     {taskListStatus === 'SUCCEEDED' && taskListTotalElements === 0 && <NoTasksImage/>}
                     <InfiniteScroll
