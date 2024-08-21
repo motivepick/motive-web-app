@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ISchedule } from '../../models/appModel'
-import { IScheduleTaskPositionIndex } from '../../models/redux/scheduleActionModel'
+import { ISchedule, IScheduleTaskPositionIndex } from '../../models/appModel'
 import { api } from '../api'
 
 const INITIAL_STATE: ISchedule = { overdue: [], future: [] }

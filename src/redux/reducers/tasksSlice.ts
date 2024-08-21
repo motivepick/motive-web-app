@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { FetchTaskListQueryParams, TASK_LIST_ID, TaskListsState } from '../../models/appModel'
+import { FetchTaskListQueryParams, ISearchUserTasksResponse, TASK_LIST_ID, TaskListsState } from '../../models/appModel'
 import { api } from '../api'
 import { AppDispatch, RootState } from '../store'
 import fetchClient from '../../fetchClient'
-import { ISearchUserTasksResponse } from '../../models/redux/taskServiceModel'
 import { selectTaskListStatus } from '../selectors/selectors'
 
 const INITIAL_STATE = {
