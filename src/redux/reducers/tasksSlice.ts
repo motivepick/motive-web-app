@@ -62,16 +62,20 @@ const tasksSlice = createSlice({
                 state.byId[payload.id] = payload
             })
             .addMatcher(api.endpoints.closeTask.matchFulfilled, (state, { payload }) => {
-                state.taskLists[TASK_LIST_ID.CLOSED].totalElements += 1
                 state.taskLists[TASK_LIST_ID.INBOX].totalElements -= 1
-                state.taskLists[TASK_LIST_ID.CLOSED].allIds.unshift(payload.id)
                 state.taskLists[TASK_LIST_ID.INBOX].allIds = state.taskLists[TASK_LIST_ID.INBOX].allIds.filter(it => it != payload.id)
+                if (state.taskLists[TASK_LIST_ID.CLOSED].status === 'SUCCEEDED') {
+                    state.taskLists[TASK_LIST_ID.CLOSED].totalElements += 1
+                    state.taskLists[TASK_LIST_ID.CLOSED].allIds.unshift(payload.id)
+                }
             })
             .addMatcher(api.endpoints.reopenTask.matchFulfilled, (state, { payload }) => {
-                state.taskLists[TASK_LIST_ID.INBOX].totalElements += 1
                 state.taskLists[TASK_LIST_ID.CLOSED].totalElements -= 1
-                state.taskLists[TASK_LIST_ID.INBOX].allIds.unshift(payload.id)
                 state.taskLists[TASK_LIST_ID.CLOSED].allIds = state.taskLists[TASK_LIST_ID.CLOSED].allIds.filter(it => it != payload.id)
+                if (state.taskLists[TASK_LIST_ID.INBOX].status === 'SUCCEEDED') {
+                    state.taskLists[TASK_LIST_ID.INBOX].totalElements += 1
+                    state.taskLists[TASK_LIST_ID.INBOX].allIds.unshift(payload.id)
+                }
             })
             .addMatcher(api.endpoints.updateTask.matchFulfilled, (state, { payload }) => {
                 state.byId[payload.id] = payload
