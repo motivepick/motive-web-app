@@ -9,7 +9,6 @@ interface SectionedDroppableTaskListProps {
     header?: string
     isDraggable?: boolean
     isDropDisabled?: boolean
-    showEmptyList?: boolean
     tasks: ITask[]
     onSaveTask: (id: number, request: UpdateTaskRequest) => void
     onTaskClose: (id: number) => void
@@ -22,12 +21,11 @@ const DroppableTaskListWithHeader: FC<SectionedDroppableTaskListProps> = ({
         header,
         isDraggable,
         isDropDisabled,
-        showEmptyList,
         tasks,
         onTaskClose,
         onSaveTask
     }) => {
-    if (!showEmptyList && tasks.length === 0) return null
+    if (tasks.length === 0) return null
     return (
         <>
             {header && <ScheduleHeader>{header}</ScheduleHeader>}
