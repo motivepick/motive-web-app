@@ -81,13 +81,14 @@ const InboxView: FC = () => {
                         hasMore={taskListTasks.length < taskListTotalElements}
                         loader={<h4>Loading...</h4>}
                     >
-                        <DroppableTaskListWithHeader
-                            droppableId={taskListId}
-                            isDraggable
-                            tasks={taskListTasks}
-                            onSaveTask={updateTask}
-                            onTaskClose={closeOrReopenTask}
-                        />
+                        {taskListTasks.length > 0 &&
+                            <DroppableTaskListWithHeader
+                                droppableId={taskListId}
+                                isDraggable
+                                tasks={taskListTasks}
+                                onSaveTask={updateTask}
+                                onTaskClose={closeOrReopenTask}
+                            />}
                     </InfiniteScroll>
                 </DragDropContext>}
         </>
