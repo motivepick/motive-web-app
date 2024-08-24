@@ -24,7 +24,7 @@ export const CustomInput: FC<Props> = (props) => {
         }, 500)
         useEffect(() => () => {
             debounced.flush()
-        }, [debounced])
+        }, [])
         useEffect(() => {
             const handleBeforeUnload = (event: BeforeUnloadEvent) => {
                 if (debounced.isPending()) {
