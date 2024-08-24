@@ -1,8 +1,10 @@
-import { DraggableChildrenFn, Droppable, DroppableProvided } from '@hello-pangea/dnd'
+import { DraggableChildrenFn, Droppable, DroppableProvided, DroppableStateSnapshot } from '@hello-pangea/dnd'
 import React, { FC } from 'react'
 import { ITask, TASK_LIST_ID, UpdateTaskRequest } from '../../models/appModel'
 import ScheduleHeader from '../common/ScheduleHeader'
 import Task from '.././Inbox/Task'
+
+import './DroppableTaskListWithHeader.css'
 
 interface SectionedDroppableTaskListProps {
     droppableId: string
@@ -15,6 +17,12 @@ interface SectionedDroppableTaskListProps {
 }
 
 const noop: DraggableChildrenFn = () => null
+
+const getBackgroundColorClassName = (dropSnapshot: DroppableStateSnapshot): string => {
+    if (dropSnapshot.isDraggingOver) return 'dragging-over'
+    if (dropSnapshot.draggingFromThisWith) return 'dragging-from'
+    return ''
+}
 
 const TaskList = ({
                       droppableId,
@@ -53,7 +61,12 @@ const DroppableTaskListWithHeader: FC<SectionedDroppableTaskListProps> = (props)
         <>
             {header && <ScheduleHeader>{header}</ScheduleHeader>}
             <Droppable droppableId={droppableId} isDropDisabled={isDropDisabled || false}>
-                {provided => <TaskList {...provided} {...props} />}
+                {(dropProvided: DroppableProvided, dropSnapshot: DroppableStateSnapshot) =>
+                    header
+                        ? <div className={`task-list-container ${getBackgroundColorClassName(dropSnapshot)}`}>
+                            <TaskList {...dropProvided} {...props} />
+                        </div>
+                        : <TaskList {...dropProvided} {...props} />}
             </Droppable>
         </>
     )
