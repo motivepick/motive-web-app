@@ -1,5 +1,6 @@
-import React, { FC, useCallback, useRef, useState } from 'react'
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import Textarea from 'react-textarea-autosize'
+import { useDebouncedCallback } from 'use-debounce'
 
 interface Props {
     value?: string | null;
@@ -28,14 +29,30 @@ export const CustomInput: FC<Props> = (props) => {
     }, [onSave])
 
     if (type === 'textarea') {
+        const debounced = useDebouncedCallback(({ target }: React.ChangeEvent<HTMLTextAreaElement>) => {
+            onSave(target.value)
+        }, 500)
+        useEffect(() => {
+            const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+                if (debounced.isPending()) {
+                    event.preventDefault()
+                }
+            }
+            window.addEventListener('beforeunload', handleBeforeUnload)
+            return () => {
+                window.removeEventListener('beforeunload', handleBeforeUnload)
+            }
+        }, [])
         return (
             <Textarea
                 placeholder={placeholder}
                 value={value || ''}
-                onChange={handleValueChange}
+                onChange={e => {
+                    handleValueChange(e)
+                    debounced(e)
+                }}
                 minRows={3}
                 maxRows={15}
-                onBlur={() => onSave(value!)}
                 className="form-control"
                 maxLength={maxLength}
             />

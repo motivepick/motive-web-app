@@ -9,7 +9,7 @@ import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../config'
 import { UpdateTaskRequest } from '../../models/appModel'
 import { extractDueDate } from '../../utils/extractDueDate'
 
-import { CustomInput } from './CustomInput'
+import { CustomInput } from '../common/CustomInput'
 
 import './Task.css'
 import { DateTimeMaybeValid } from 'luxon/src/datetime'
