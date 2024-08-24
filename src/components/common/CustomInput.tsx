@@ -3,15 +3,16 @@ import Textarea from 'react-textarea-autosize'
 import { useDebouncedCallback } from 'use-debounce'
 
 interface Props {
-    value?: string | null;
-    type: string;
-    placeholder?: string;
-    maxLength: number;
-    onSave: (value: string) => string;
+    value?: string | null
+    type: string
+    placeholder?: string
+    maxLength: number
+    onSave: (value: string) => string
+    onForceSave?: (value: string) => void
 }
 
 export const CustomInput: FC<Props> = (props) => {
-    const { type, placeholder, maxLength, onSave } = props
+    const { type, placeholder, maxLength, onSave, onForceSave } = props
     const [value, setValue] = useState(props.value)
 
     const handleValueChange = useCallback(({ target }: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>) => {
@@ -26,16 +27,16 @@ export const CustomInput: FC<Props> = (props) => {
             debounced.flush()
         }, [])
         useEffect(() => {
-            const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-                if (debounced.isPending()) {
-                    event.preventDefault()
+            const handleVisibilityChange = () => {
+                if (document.visibilityState === 'hidden' && debounced.isPending() && onForceSave) {
+                    onForceSave(value || '')
                 }
             }
-            window.addEventListener('beforeunload', handleBeforeUnload)
+            window.addEventListener('visibilitychange', handleVisibilityChange)
             return () => {
-                window.removeEventListener('beforeunload', handleBeforeUnload)
+                window.removeEventListener('visibilitychange', handleVisibilityChange)
             }
-        }, [])
+        }, [value])
         return (
             <Textarea
                 placeholder={placeholder}

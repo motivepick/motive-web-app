@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { CheckMark } from '../common/task-header/check-mark'
 import DueDate from '../common/task-header/due-date'
 import { Title } from '../common/task-header/title'
-import { TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../config'
+import { API_URL, TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../config'
 import { UpdateTaskRequest } from '../../models/appModel'
 import { extractDueDate } from '../../utils/extractDueDate'
 
@@ -18,6 +18,7 @@ const DUE_DATE_FORMAT = 'yyyy-MM-dd'
 
 interface TaskItemProps {
     detailsShown: boolean
+    id: number
     name: string
     description?: string | null
     dueDate: DateTimeMaybeValid | null
@@ -30,8 +31,11 @@ interface TaskItemProps {
 }
 
 const TaskItem: FC<TaskItemProps> = props => {
-    const { name, description, dueDate, closed, detailsShown, handleTaskClick, handleTaskClose, saveName, saveDescription, saveDate } = props
+    const { id, name, description, dueDate, closed, detailsShown, handleTaskClick, handleTaskClose, saveName, saveDescription, saveDate } = props
     const { t } = useTranslation()
+    const forceSaveDescription = useCallback((value: string) => {
+        navigator.sendBeacon(`${API_URL}/tasks/${id}`, new Blob([JSON.stringify({ description: value })], { type: 'application/json' }))
+    }, [id])
     return (
         <div className="task-container">
             <div className="task" onClick={handleTaskClick}>
@@ -57,6 +61,7 @@ const TaskItem: FC<TaskItemProps> = props => {
                                 placeholder={t('task.description')}
                                 value={description}
                                 onSave={saveDescription}
+                                onForceSave={forceSaveDescription}
                                 maxLength={TASK_DESCRIPTION_LIMIT}
                             />
                         </div>
@@ -138,6 +143,7 @@ const Task: FC<Props> = props => {
     return (
         <DraggableWrapper id={id} index={index} isDraggable={isDraggable}>
             <TaskItem
+                id={id}
                 name={name}
                 description={description}
                 dueDate={dueDate ? DateTime.fromISO(dueDate) : null}
