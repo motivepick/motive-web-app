@@ -32,6 +32,9 @@ export const CustomInput: FC<Props> = (props) => {
         const debounced = useDebouncedCallback(({ target }: React.ChangeEvent<HTMLTextAreaElement>) => {
             onSave(target.value)
         }, 500)
+        useEffect(() => () => {
+            debounced.flush()
+        }, [debounced])
         useEffect(() => {
             const handleBeforeUnload = (event: BeforeUnloadEvent) => {
                 if (debounced.isPending()) {
