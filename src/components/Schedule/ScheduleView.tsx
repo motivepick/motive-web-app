@@ -34,7 +34,7 @@ const ScheduleView: FC = () => {
             if (userChangedLists(source, destination as DraggableLocation) && newDay !== 'overdue') {
                 const taskId = parseInt(result.draggableId)
                 const dueDate = newDay === 'future'
-                    ? DateTime.local().plus({ weeks: 1 }).endOf('day').toUTC()
+                    ? DateTime.utc().plus({ weeks: 1 }).endOf('day').toUTC()
                     : DateTime.fromISO(newDay!).toUTC()
                 updateTaskMutation({ id: taskId, request: { dueDate } })
             }
