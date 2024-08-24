@@ -1,10 +1,12 @@
 import i18n from '../i18n'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 import translation from '../../public/locales/en/translation.json'
 
 i18n.addResources('en', 'translation', translation)
 
 const formatDateShort = (date: Date, lng: string) => i18n.t('dueDate', { date: date, lng: lng })
+
+Settings.now = () => DateTime.fromJSDate(new Date('2024-08-25T00:59:59.999999999+03:00')).valueOf()
 
 describe('i18n', () => {
     const yesterdayTodayOrTomorrow: ReadonlyArray<readonly [string, Date]> = [
@@ -28,5 +30,23 @@ describe('i18n', () => {
         const date = new Date(2022, 0, 1)
         const formattedDate = formatDateShort(date, 'en')
         expect(formattedDate).toEqual('01.01.2022')
+    })
+
+    it('should format end of yesterday as "yesterday"', () => {
+        const date = new Date('2024-08-24T23:59:59.999999999+03:00')
+        const formattedDate = formatDateShort(date, 'en')
+        expect(formattedDate).toEqual('yesterday')
+    })
+
+    it('should format end of today as "today"', () => {
+        const date = new Date('2024-08-25T23:59:59.999999999+03:00')
+        const formattedDate = formatDateShort(date, 'en')
+        expect(formattedDate).toEqual('today')
+    })
+
+    it('should format end of tomorrow as "tomorrow"', () => {
+        const date = new Date('2024-08-26T23:59:59.999999999+03:00')
+        const formattedDate = formatDateShort(date, 'en')
+        expect(formattedDate).toEqual('tomorrow')
     })
 })

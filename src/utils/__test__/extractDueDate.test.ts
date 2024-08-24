@@ -91,15 +91,15 @@ describe('dateFromRelativeString', () => {
         ['on Thursday', getNextDayOfWeek(4)],
         ['on Friday', getNextDayOfWeek(5)],
         ['on Saturday', getNextDayOfWeek(6)],
-        ['on Sunday', getNextDayOfWeek(0)],
+        ['on Sunday', getNextDayOfWeek(7)],
         ['в понедельник', getNextDayOfWeek(1)],
         ['во вторник', getNextDayOfWeek(2)],
         ['в среду', getNextDayOfWeek(3)],
         ['в четверг', getNextDayOfWeek(4)],
         ['в пятницу', getNextDayOfWeek(5)],
         ['в субботу', getNextDayOfWeek(6)],
-        ['в воскресенье', getNextDayOfWeek(0)]
-    ])('should set dueDate to end of day if last words are %s', (lastWords, expectedDate) => {
+        ['в воскресенье', getNextDayOfWeek(7)]
+    ])('should set dueDate to end of day if last words are "%s"', (lastWords, expectedDate) => {
         const task = `Do something ${lastWords}`
 
         const updatedTask = extractDueDate(task)

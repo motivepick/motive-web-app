@@ -10,6 +10,7 @@ import {
     UpdateTaskRequest
 } from '../models/appModel'
 import { API_URL } from '../config'
+import { DateTime } from 'luxon'
 
 export const api = createApi({
     reducerPath: 'api',
@@ -20,7 +21,7 @@ export const api = createApi({
             query: () => '/user'
         }),
         fetchSchedule: builder.query<ISchedule, void>({
-            query: () => '/schedule',
+            query: () => ({ url: '/schedule', params: { timeZone: DateTime.local().toFormat('ZZZZ') } }),
             transformResponse: (response: IScheduleFutureAndOverdue & IFetchScheduleWeekResponse) => ({
                 ...response.week,
                 future: response.future,
