@@ -14,19 +14,9 @@ export const CustomInput: FC<Props> = (props) => {
     const { type, placeholder, maxLength, onSave } = props
     const [value, setValue] = useState(props.value)
 
-    const taskNameInput = useRef<HTMLInputElement | null>(null)
-
     const handleValueChange = useCallback(({ target }: React.ChangeEvent<HTMLTextAreaElement> | React.ChangeEvent<HTMLInputElement>) => {
         setValue(target.value)
     }, [])
-
-    const blurAndSave = useCallback((value: string) => {
-        const valueAfterSave = onSave(value)
-        if (valueAfterSave) {
-            setValue(valueAfterSave)
-        }
-        taskNameInput.current?.blur()
-    }, [onSave])
 
     if (type === 'textarea') {
         const debounced = useDebouncedCallback(({ target }: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -61,6 +51,16 @@ export const CustomInput: FC<Props> = (props) => {
             />
         )
     }
+
+    const taskNameInput = useRef<HTMLInputElement | null>(null)
+    const blurAndSave = useCallback((value: string) => {
+        const valueAfterSave = onSave(value)
+        if (valueAfterSave) {
+            setValue(valueAfterSave)
+        }
+        taskNameInput.current?.blur()
+    }, [onSave])
+
     return (
         <input
             type={type}
