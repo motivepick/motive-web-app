@@ -21,7 +21,7 @@ const DueDate: FC<Props> = props => {
     const { dimmedStyle = false, value } = props
     const { t } = useTranslation()
     return value ? <small className={classOf(value, dimmedStyle)}>
-        {t('dueDate', { date: value.toJSDate() })}
+        {t('dueDate', { date: value.toISODate() })}
     </small> : null
 }
 

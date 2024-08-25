@@ -60,13 +60,13 @@ const ScheduleView: FC = () => {
     return (
         <DragDropContext onDragEnd={updateTaskPositionIndex}>
             {
-                weekdays.map(day =>
+                weekdays.map(date =>
                     <DroppableTaskListWithHeader
-                        key={day}
-                        droppableId={day}
+                        key={date}
+                        droppableId={date}
                         isDraggable
-                        header={t('dueDate', { date: new Date(day) })}
-                        tasks={schedule[day]}
+                        header={t('dueDate', { date })}
+                        tasks={schedule[date]}
                         onTaskClose={closeTask}
                         onSaveTask={updateTask}
                     />)

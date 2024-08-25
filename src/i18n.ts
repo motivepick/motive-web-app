@@ -33,7 +33,7 @@ i18n
     .then(() => document.documentElement.lang = i18n.resolvedLanguage || i18n.language)
 
 i18n.services.formatter?.add('DATE_SHORT_RELATIVE', (value, lng) => {
-    const date = DateTime.fromJSDate(value)
+    const date = DateTime.fromISO(value)
     const dayDiff = date.endOf('day').diff(DateTime.local().endOf('day'), 'days').days
     if (-1 <= dayDiff && dayDiff <= 1) return i18n.t('yesterdayTodayOrTomorrow', { val: dayDiff, numeric: 'auto' })
     return date.setLocale(lng as string).toFormat(1 < dayDiff && dayDiff <= 6 ? 'cccc' : 'dd.MM.yyyy')
