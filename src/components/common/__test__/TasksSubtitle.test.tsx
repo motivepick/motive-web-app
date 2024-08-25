@@ -5,16 +5,9 @@ import TasksSubtitle from '../TasksSubtitle'
 import { TASK_LIST_ID } from '../../../models/appModel'
 
 jest.mock('react-i18next', () => ({
-    useTranslation: () => {
-        return {
-            t: (str: string) => str,
-            i18n: {}
-        }
-    },
-    initReactI18next: {
-        type: '3rdParty',
-        init: () => ({})
-    }
+    useTranslation: () => ({
+        t: (str: string) => str
+    })
 }))
 
 describe('TasksSubtitle', () => {
