@@ -68,29 +68,34 @@ const InboxView: FC = () => {
     const taskListTasks = useSelector(selectTaskListTasks)
     const taskListLength = useSelector(selectTaskListLength)
 
+    const initialized = ['SUCCEEDED', 'FAILED'].includes(taskListStatus) || taskListLength > 0
     return (
         <>
             <AddNewTask onAddNewTask={onAddNewTask}/>
-            <TasksSubtitle numberOfTasks={taskListTotalElements} taskListId={taskListId} onToggleOpenClosedTasks={onToggleOpenClosedTasks}/>
-            {taskListStatus === 'PENDING' && taskListLength === 0 ? <SpinnerView/> :
-                <DragDropContext onDragEnd={updateTaskPositionIndex}>
-                    {taskListStatus === 'SUCCEEDED' && taskListTotalElements === 0 && <NoTasksImage/>}
-                    <InfiniteScroll
-                        dataLength={taskListTasks.length}
-                        next={() => dispatch(fetchTaskLists({ type: taskListId, offset: taskListLength, limit: DEFAULT_LIMIT }))}
-                        hasMore={taskListTasks.length < taskListTotalElements}
-                        loader={<h4>Loading...</h4>}
-                    >
-                        {taskListTasks.length > 0 &&
-                            <DroppableTaskListWithHeader
-                                droppableId={taskListId}
-                                isDraggable
-                                tasks={taskListTasks}
-                                onSaveTask={updateTask}
-                                onTaskClose={closeOrReopenTask}
-                            />}
-                    </InfiniteScroll>
-                </DragDropContext>}
+            <TasksSubtitle
+                showNumberOfTasks={initialized}
+                numberOfTasks={taskListTotalElements}
+                taskListId={taskListId}
+                onToggleOpenClosedTasks={onToggleOpenClosedTasks}
+            />
+            {initialized ? <DragDropContext onDragEnd={updateTaskPositionIndex}>
+                {taskListStatus === 'SUCCEEDED' && taskListTotalElements === 0 && <NoTasksImage/>}
+                <InfiniteScroll
+                    dataLength={taskListTasks.length}
+                    next={() => dispatch(fetchTaskLists({ type: taskListId, offset: taskListLength, limit: DEFAULT_LIMIT }))}
+                    hasMore={taskListTasks.length < taskListTotalElements}
+                    loader={<h4>Loading...</h4>}
+                >
+                    {taskListTasks.length > 0 &&
+                        <DroppableTaskListWithHeader
+                            droppableId={taskListId}
+                            isDraggable
+                            tasks={taskListTasks}
+                            onSaveTask={updateTask}
+                            onTaskClose={closeOrReopenTask}
+                        />}
+                </InfiniteScroll>
+            </DragDropContext> : <SpinnerView/>}
         </>
     )
 }

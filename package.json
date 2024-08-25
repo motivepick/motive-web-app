@@ -46,6 +46,9 @@
     "lint": "./node_modules/.bin/eslint ./src --ext .js"
   },
   "devDependencies": {
+    "@testing-library/dom": "10.4.0",
+    "@testing-library/jest-dom": "6.5.0",
+    "@testing-library/react": "16.0.0",
     "@types/jest": "29.5.12",
     "@types/luxon": "3.4.2",
     "@types/node": "16.7.0",
