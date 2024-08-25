@@ -15,7 +15,7 @@
     border-radius: 3px;
     transition: background-color 0.2s ease, opacity 0.1s ease;
     user-select: none;
-    min-height: 2.5em;
+    min-height: 64px;
 }
 
 [data-bs-theme=light] .task-list-container {
