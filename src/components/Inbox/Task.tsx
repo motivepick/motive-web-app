@@ -3,7 +3,6 @@ import React, { FC, FormEvent, MouseEvent, PropsWithChildren, useCallback, useSt
 import { Draggable, DraggableProps } from '@hello-pangea/dnd'
 import { useTranslation } from 'react-i18next'
 import { CheckMark } from '../common/task-header/check-mark'
-import DueDate from '../common/task-header/due-date'
 import { Title } from '../common/task-header/title'
 import { API_URL, TASK_DESCRIPTION_LIMIT, TASK_NAME_LIMIT } from '../../config'
 import { UpdateTaskRequest } from '../../models/appModel'
@@ -13,6 +12,7 @@ import { CustomInput } from '../common/CustomInput'
 
 import './Task.css'
 import { DateTimeMaybeValid } from 'luxon/src/datetime'
+import TaskStatusBar from './TaskStatusBar'
 
 const DUE_DATE_FORMAT = 'yyyy-MM-dd'
 
@@ -43,7 +43,7 @@ const TaskItem: FC<TaskItemProps> = props => {
                     <CheckMark toggled={closed} onToggle={handleTaskClose}/>
                     <div className="task-body">
                         <Title dimmedStyle={closed}>{name}</Title>
-                        <DueDate dimmedStyle={closed} value={dueDate}/>
+                        <TaskStatusBar description={description} dueDate={dueDate} closed={closed}/>
                     </div>
                 </div>
 

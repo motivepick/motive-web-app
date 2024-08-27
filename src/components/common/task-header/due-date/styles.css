@@ -5,3 +5,9 @@
 .dimmed a {
     color: #8E8E93;
 }
+
+.small-gap {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
