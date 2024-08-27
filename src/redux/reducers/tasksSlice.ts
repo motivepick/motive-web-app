@@ -3,9 +3,9 @@ import { FetchTaskListQueryParams, ISearchUserTasksResponse, TASK_LIST_ID, TaskL
 import { api } from '../api'
 import { AppDispatch, RootState } from '../store'
 import fetchClient from '../../fetchClient'
-import { selectTaskListStatus } from '../selectors/selectors'
+import { selectTaskList } from '../selectors/selectors'
 
-const INITIAL_STATE = {
+const INITIAL_STATE: TaskListsState = {
     taskListId: TASK_LIST_ID.INBOX,
     taskLists: {
         [TASK_LIST_ID.INBOX]: { status: 'IDLE', totalElements: 0, allIds: [] },
@@ -24,35 +24,42 @@ export const fetchTaskLists = createAppAsyncThunk('tasks/fetchTaskList', async (
         return response.data
     },
     {
-        condition: ({ offset }, { getState }) => selectTaskListStatus(getState()) === 'IDLE' || offset > 0
+        condition: ({ type, offset }, { getState }) => selectTaskList(getState(), type).status === 'IDLE' || offset > 0
     }
 )
 
 const tasksSlice = createSlice({
     name: 'tasks',
-    initialState: INITIAL_STATE as TaskListsState,
+    initialState: INITIAL_STATE,
     reducers: {
         setTaskListId: (state, { payload }) => {
             state.taskListId = payload
         },
         toggleTaskListId: (state) => {
             state.taskListId = TASK_LIST_IDS_TO_TOGGLE[(TASK_LIST_IDS_TO_TOGGLE.indexOf(state.taskListId) + 1) % TASK_LIST_IDS_TO_TOGGLE.length]
+        },
+        resetTaskLists: (state) => {
+            state.taskLists = INITIAL_STATE.taskLists
+            state.byId = INITIAL_STATE.byId
         }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchTaskLists.pending, (state) => {
-                state.taskLists[state.taskListId].status = 'PENDING'
+            .addCase(fetchTaskLists.pending, (state, { meta }) => {
+                const taskListId = meta.arg.type
+                state.taskLists[taskListId].status = 'PENDING'
             })
-            .addCase(fetchTaskLists.fulfilled, (state, { payload }) => {
-                const taskList = state.taskLists[state.taskListId]
+            .addCase(fetchTaskLists.fulfilled, (state, { payload, meta }) => {
+                const taskListId = meta.arg.type
+                const taskList = state.taskLists[taskListId]
                 taskList.status = 'SUCCEEDED'
                 taskList.totalElements = payload.page.totalElements
                 taskList.allIds.push(...payload.content.map(it => it.id))
                 payload.content.forEach(it => state.byId[it.id] = it)
             })
-            .addCase(fetchTaskLists.rejected, (state) => {
-                state.taskLists[state.taskListId].status = 'FAILED'
+            .addCase(fetchTaskLists.rejected, (state, { meta }) => {
+                const taskListId = meta.arg.type
+                state.taskLists[taskListId].status = 'FAILED'
             })
             .addMatcher(api.endpoints.createTask.matchFulfilled, (state, { payload }) => {
                 const taskList = state.taskLists[TASK_LIST_ID.INBOX]
@@ -87,5 +94,5 @@ const tasksSlice = createSlice({
     }
 })
 
-export const { toggleTaskListId, setTaskListId } = tasksSlice.actions
+export const { toggleTaskListId, setTaskListId, resetTaskLists } = tasksSlice.actions
 export default tasksSlice.reducer

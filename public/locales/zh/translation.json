@@ -6,6 +6,7 @@
   "tryWithoutLogin": "Try Without Login",
   "logout": "登出",
   "deleteTasksAndLogout": "Delete Tasks And Logout",
+  "synchronize": "Synchronize",
   "loading": "載入中",
   "new.task": "有什麼要做的?",
   "task.description": "更多細節",

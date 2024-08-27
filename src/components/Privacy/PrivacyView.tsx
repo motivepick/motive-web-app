@@ -99,7 +99,7 @@ const PrivacyView: FC = () =>
                     <p>Note that Milestone has no access to or control over these cookies that are used by
                         third-party advertisers.</p>
 
-                    <h3 className="text-center">Third Pary Privacy Policies</h3>
+                    <h3 className="text-center">Third Party Privacy Policies</h3>
 
                     <p>Milestone's Privacy Policy does not apply to other advertisers or websites. Thus, we are
                         advising you to consult the respective Privacy Policies of these third-party ad servers

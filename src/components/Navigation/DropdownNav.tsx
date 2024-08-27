@@ -4,10 +4,11 @@ import { API_URL, GITHUB_AUTH_URL, VK_AUTH_URL } from '../../config'
 import Icon from '../Icon'
 
 interface Props {
+    onSynchronize: () => void
     isTemporaryUserLoggedIn?: boolean
 }
 
-const DropdownNav: FC<Props> = ({ isTemporaryUserLoggedIn }) => {
+const DropdownNav: FC<Props> = ({ onSynchronize, isTemporaryUserLoggedIn }) => {
     const { t } = useTranslation()
 
     const handleVkLogin = useCallback(() => window.location.href = VK_AUTH_URL, [])
@@ -20,6 +21,11 @@ const DropdownNav: FC<Props> = ({ isTemporaryUserLoggedIn }) => {
                 <Icon icon="fa-solid fa-bars"/>
             </a>
             <ul className="dropdown-menu dropdown-menu-end">
+                <li>
+                    <button type="button" className="dropdown-item" role="menuitem" onClick={onSynchronize}>
+                        <Icon icon="fa-solid fa-rotate"/> {t('synchronize')}
+                    </button>
+                </li>
                 {isTemporaryUserLoggedIn && <>
                     <li>
                         <button type="button" className="dropdown-item" role="menuitem" onClick={handleGitHubLogin}>

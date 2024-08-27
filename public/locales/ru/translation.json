@@ -6,6 +6,7 @@
   "tryWithoutLogin": "Попробовать без логина",
   "logout": "Выйти",
   "deleteTasksAndLogout": "Удалить задачи и выйти",
+  "synchronize": "Синхронизировать",
   "loading": "Загрузка...",
   "new.task": "О чём нужно не забыть?",
   "task.description": "Дополнительные подробности",

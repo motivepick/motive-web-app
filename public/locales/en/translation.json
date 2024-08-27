@@ -6,6 +6,7 @@
   "tryWithoutLogin": "Try Without Login",
   "logout": "Logout",
   "deleteTasksAndLogout": "Delete Tasks And Logout",
+  "synchronize": "Synchronize",
   "loading": "Loading...",
   "new.task": "What should I not forget?",
   "task.description": "Additional Details",

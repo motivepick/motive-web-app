@@ -14,7 +14,7 @@ import LoginView from './components/Authentication/LoginView'
 import { setTheme } from './utils/theme'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import Fallback from './components/Fallback'
-import { faBars, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faRightFromBracket, faRotate } from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faVk } from '@fortawesome/free-brands-svg-icons'
 
 const container = document.getElementById('root') as Element
@@ -50,7 +50,7 @@ const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 setTheme(mediaQuery.matches ? 'dark' : 'light')
 mediaQuery.addEventListener('change', ({ matches }) => setTheme(matches ? 'dark' : 'light'))
 
-library.add(faBars, faRightFromBracket, faGithub, faVk)
+library.add(faBars, faRightFromBracket, faGithub, faVk, faRotate)
 
 root.render(
     <StrictMode>

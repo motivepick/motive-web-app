@@ -1,7 +1,6 @@
 import { RootState } from '../store'
 
-const selectTaskList = (state: RootState) => state.tasks.taskLists[selectTaskListId(state)]
-
+export const selectTaskList = (state: RootState, taskListId?: string) => state.tasks.taskLists[taskListId ?? selectTaskListId(state)]
 export const selectTaskListId = (state: RootState) => state.tasks.taskListId
 export const selectTaskListStatus = (state: RootState) => selectTaskList(state).status
 export const selectTaskListLength = (state: RootState) => selectTaskList(state).allIds.length
