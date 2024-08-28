@@ -9,7 +9,7 @@ import { DateTimeMaybeValid } from 'luxon/src/datetime'
 
 type Props = {
     dimmedStyle: boolean
-    value?: DateTimeMaybeValid | null
+    value: DateTimeMaybeValid
 }
 
 const classOf = (dueDate: DateTime | undefined, dimmedStyle: boolean): string => {
@@ -22,9 +22,11 @@ const classOf = (dueDate: DateTime | undefined, dimmedStyle: boolean): string =>
 const DueDate: FC<Props> = props => {
     const { dimmedStyle = false, value } = props
     const { t } = useTranslation()
-    return value ? <span className={classOf(value, dimmedStyle)}>
+    return (
+        <span style={{ flexShrink: 0 }} className={classOf(value, dimmedStyle)}>
             <FontAwesomeIcon icon={faCalendar}/> {t('dueDate', { date: value.toISODate() })}
-    </span> : null
+        </span>
+    )
 }
 
 export default DueDate

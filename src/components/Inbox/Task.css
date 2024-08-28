@@ -10,12 +10,6 @@
     cursor: pointer;
 }
 
-.big-gap {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-}
-
 .task-body {
     overflow: hidden;
     cursor: pointer;
