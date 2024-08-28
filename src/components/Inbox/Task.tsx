@@ -48,7 +48,7 @@ const TaskItem: FC<TaskItemProps> = props => {
                 </div>
 
                 {detailsShown &&
-                    <form className="task-form" onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()}>
+                    <form className="task-form" onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()} data-testid="task-form">
                         <div className="mb-3">
                             <CustomInput type="text" value={name} onSave={saveName} maxLength={TASK_NAME_LIMIT}/>
                         </div>
