@@ -1,4 +1,4 @@
-import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { faNoteSticky } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { DateTimeMaybeValid } from 'luxon/src/datetime'
 import React, { FC } from 'react'
@@ -17,7 +17,7 @@ const TaskStatusBar: FC<TaskItemProps> = props => {
     return (
         <small className='big-gap text-secondary'>
             <DueDate dimmedStyle={closed} value={dueDate}/>
-            <span>{description ? <FontAwesomeIcon icon={faBars}/> : null}</span>
+            <span>{description ? <FontAwesomeIcon icon={faNoteSticky}/> : null}</span>
         </small>
     )
 }
