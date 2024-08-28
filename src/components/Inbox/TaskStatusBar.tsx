@@ -17,7 +17,10 @@ const TaskStatusBar: FC<TaskItemProps> = props => {
     return (
         <div className="text-secondary" style={{ display: 'flex', gap: '16px', fontSize: '.875em' }}>
             {dueDate && <DueDate dimmedStyle={closed} value={dueDate}/>}
-            {description && <span style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', maxWidth: '400px' }}>
+            {description && <span
+                className={closed ? 'dimmed' : ''}
+                style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflow: 'hidden', maxWidth: '500px' }}
+            >
                 <FontAwesomeIcon icon={faNoteSticky} data-testid="description-icon"/> {description}
             </span>}
         </div>
