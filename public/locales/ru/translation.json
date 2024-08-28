@@ -20,6 +20,7 @@
   "allTasks": "Задачи",
   "yesterdayTodayOrTomorrow": "{{ val, relativetime(day) }}",
   "dueDate": "{{ date, DATE_SHORT_RELATIVE }}",
+  "hasDescription": "заметка",
   "schedule": "Расписание",
   "futureTasks": "Будущие задачи",
   "overdueTasks": "Просроченные задачи",

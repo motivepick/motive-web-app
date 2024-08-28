@@ -22,8 +22,8 @@ const classOf = (dueDate: DateTime | undefined, dimmedStyle: boolean): string =>
 const DueDate: FC<Props> = props => {
     const { dimmedStyle = false, value } = props
     const { t } = useTranslation()
-    return value ? <span className={`small-gap ${classOf(value, dimmedStyle)}`}>
-            <FontAwesomeIcon icon={faCalendar}/>{t('dueDate', { date: value.toISODate() })}
+    return value ? <span className={classOf(value, dimmedStyle)}>
+            <FontAwesomeIcon icon={faCalendar}/> {t('dueDate', { date: value.toISODate() })}
     </span> : null
 }
 

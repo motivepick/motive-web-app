@@ -18,6 +18,7 @@
   "allTasks": "Tasks",
   "yesterdayTodayOrTomorrow": "{{ val, relativetime(day) }}",
   "dueDate": "{{ date, DATE_SHORT_RELATIVE }}",
+  "hasDescription": "note",
   "schedule": "Schedule",
   "futureTasks": "Future Tasks",
   "overdueTasks": "Overdue Tasks",
