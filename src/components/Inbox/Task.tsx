@@ -18,7 +18,6 @@ const DUE_DATE_FORMAT = 'yyyy-MM-dd'
 
 interface TaskItemProps {
     detailsShown: boolean
-    id: number
     name: string
     description?: string | null
     dueDate: DateTimeMaybeValid | null
@@ -27,15 +26,25 @@ interface TaskItemProps {
     handleTaskClose: () => Promise<void>
     saveName: (name: string) => string
     saveDescription: (description: string) => string
+    forceSaveDescription: (description: string) => void
     saveDate: (dueDate: string) => string
 }
 
 const TaskItem: FC<TaskItemProps> = props => {
-    const { id, name, description, dueDate, closed, detailsShown, handleTaskClick, handleTaskClose, saveName, saveDescription, saveDate } = props
+    const {
+        name,
+        description,
+        dueDate,
+        closed,
+        detailsShown,
+        handleTaskClick,
+        handleTaskClose,
+        saveName,
+        saveDescription,
+        forceSaveDescription,
+        saveDate
+    } = props
     const { t } = useTranslation()
-    const forceSaveDescription = useCallback((value: string) => {
-        navigator.sendBeacon(`${API_URL}/tasks/${id}`, new Blob([JSON.stringify({ description: value })], { type: 'application/json' }))
-    }, [id])
     return (
         <div className="task-container">
             <div className="task" onClick={handleTaskClick}>
@@ -89,10 +98,12 @@ const DraggableWrapper: FC<PropsWithChildren<DraggableWrapperProps>> = ({ id, in
         </Draggable>
     ) : <>{children}</>
 
+const none = <T, >(arr: T[], callback: (value: T, index: number, array: T[]) => unknown): boolean => !arr.some(callback)
+
 const className = (target: any) => target.className instanceof SVGAnimatedString ? target.className.baseVal : target.className ?? ''
 
 const isTaskToggle = (target: any): boolean =>
-    target === null || (['complete-circle', 'incomplete-circle', 'task-form'].every(it => !className(target).includes(it)) && isTaskToggle(target.parentNode))
+    target === null || (none(['complete-circle', 'incomplete-circle', 'task-form'], it => className(target).includes(it)) && isTaskToggle(target.parentNode))
 
 interface Props extends DraggableProps {
     id: number
@@ -133,6 +144,10 @@ const Task: FC<Props> = props => {
         return task.description ?? ''
     }, [id, saveTask])
 
+    const forceSaveDescription = useCallback((value: string) => {
+        navigator.sendBeacon(`${API_URL}/tasks/${id}`, new Blob([JSON.stringify({ description: value })], { type: 'application/json' }))
+    }, [id])
+
     const saveDate = useCallback((dueDate: string) => {
         const task: UpdateTaskRequest = { dueDate: dueDate ? DateTime.fromISO(dueDate).endOf('day').toUTC() : null, deleteDueDate: !dueDate }
         saveTask(id, task)
@@ -142,7 +157,6 @@ const Task: FC<Props> = props => {
     return (
         <DraggableWrapper id={id} index={index} isDraggable={isDraggable}>
             <TaskItem
-                id={id}
                 name={name}
                 description={description}
                 dueDate={dueDate ? DateTime.fromISO(dueDate) : null}
@@ -152,6 +166,7 @@ const Task: FC<Props> = props => {
                 handleTaskClose={handleTaskClose}
                 saveName={saveName}
                 saveDescription={saveDescription}
+                forceSaveDescription={forceSaveDescription}
                 saveDate={saveDate}
             />
         </DraggableWrapper>
