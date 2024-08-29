@@ -14,7 +14,7 @@ export const CheckMark: React.FC<CheckMarkProps> = props => {
     const { onToggle, toggled } = props
     return (
         <button className={`btn btn-link ${toggled ? 'complete-circle' : 'incomplete-circle'}`} onClick={onToggle}>
-            <FontAwesomeIcon icon={toggled ? faCircleCheck : faCircle} size="xl" data-testid="check-mark-icon" />
+            <FontAwesomeIcon icon={toggled ? faCircleCheck : faCircle} size="xl" data-testid="check-mark-icon"/>
         </button>
     )
 }
