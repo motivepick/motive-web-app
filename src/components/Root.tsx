@@ -5,7 +5,7 @@ import { fetchTaskLists, resetTaskLists, setTaskListId } from '../redux/reducers
 import { AppDispatch } from '../redux/store'
 import Navigation from './Navigation/Navigation'
 import Footer from './common/Footer'
-import { useFetchUserQuery } from '../redux/api'
+import { api, useFetchUserQuery } from '../redux/api'
 import Spinner from './common/Spinner'
 import ProtectedRoute from './ProtectedRoute'
 import { TASK_LIST_ID } from '../models/appModel'
@@ -23,7 +23,8 @@ const Root: FC = () => {
     }, [dispatch, setTaskListId])
 
     const handleSynchronize = useCallback(() => {
-        dispatch(resetTaskLists());
+        dispatch(resetTaskLists())
+        dispatch(api.util.invalidateTags(['Schedule']));
         [TASK_LIST_ID.INBOX, TASK_LIST_ID.CLOSED].forEach(taskListId => fetchTaskLists({ type: taskListId, offset: 0, limit: DEFAULT_LIMIT }))
     }, [])
 
