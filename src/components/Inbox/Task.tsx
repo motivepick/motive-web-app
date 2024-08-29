@@ -89,13 +89,10 @@ const DraggableWrapper: FC<PropsWithChildren<DraggableWrapperProps>> = ({ id, in
         </Draggable>
     ) : <>{children}</>
 
-const isCheckMark = (target: any) => {
-    const className = target.className instanceof SVGAnimatedString ? target.className.baseVal : target.className ?? ''
-    return className.includes('complete-circle') || className.includes('incomplete-circle')
-}
+const className = (target: any) => target.className instanceof SVGAnimatedString ? target.className.baseVal : target.className ?? ''
 
 const isTaskToggle = (target: any): boolean =>
-    target === null || (!isCheckMark(target) && isTaskToggle(target.parentNode))
+    target === null || (['complete-circle', 'incomplete-circle', 'task-form'].every(it => !className(target).includes(it)) && isTaskToggle(target.parentNode))
 
 interface Props extends DraggableProps {
     id: number

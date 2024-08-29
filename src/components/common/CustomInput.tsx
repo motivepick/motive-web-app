@@ -73,6 +73,7 @@ export const CustomInput: FC<Props> = (props) => {
             maxLength={maxLength}
             onKeyDown={(target: React.KeyboardEvent) => target.key === 'Enter' && blurAndSave(value!)}
             ref={(input: HTMLInputElement) => taskNameInput.current = input}
+            data-testid={`input-${type}`}
         />
     )
 }

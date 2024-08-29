@@ -36,8 +36,15 @@ describe('Task', () => {
 
     it('does not open task form when the check mark icon is clicked', () => {
         render(task())
-        const descriptionIcon = screen.getByTestId('check-mark-icon')
-        fireEvent.click(descriptionIcon)
+        const checkMarkIcon = screen.getByTestId('check-mark-icon')
+        fireEvent.click(checkMarkIcon)
         expect(screen.queryByTestId('task-form')).not.toBeInTheDocument()
+    })
+
+    it('does not close task form when an element on the form is clicked', () => {
+        render(task())
+        fireEvent.click(screen.getByTestId('description-icon'))
+        fireEvent.click(screen.getByTestId('input-text'))
+        expect(screen.queryByTestId('task-form')).toBeInTheDocument()
     })
 })
