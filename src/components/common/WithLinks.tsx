@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react'
+import React, { FC, PropsWithChildren } from 'react'
 import Linkify from 'react-linkify'
 
 /**
@@ -11,6 +11,6 @@ const componentDecorator = (href: string, text: string, key: number) => (
     </a>
 )
 
-const WithLinks: React.FC<PropsWithChildren<unknown>> = ({ children }) => <Linkify componentDecorator={componentDecorator}>{children}</Linkify>
+ const WithLinks: FC<PropsWithChildren> = ({ children }) => <Linkify componentDecorator={componentDecorator}>{children}</Linkify>
 
 export default WithLinks
