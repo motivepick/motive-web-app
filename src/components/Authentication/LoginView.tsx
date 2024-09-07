@@ -1,5 +1,5 @@
-import React, { FC, useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import React, { FC, PropsWithChildren, useCallback, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { API_URL, GITHUB_AUTH_URL, VK_AUTH_URL } from '../../config'
 import './LoginView.css'
@@ -8,6 +8,16 @@ import Icon from '../Icon'
 interface LoginViewProps {
     disabled?: boolean
 }
+
+interface Props {
+    to?: string
+    title?: string
+}
+
+export const LinkText: FC<PropsWithChildren<Props>> = (props) =>
+    <a href={props.to || '#'} target="_blank" rel="noreferrer" title={props.title || ''}>
+        {props.children}
+    </a>
 
 const LoginView: FC<LoginViewProps> = () => {
     const { t } = useTranslation()
@@ -29,7 +39,7 @@ const LoginView: FC<LoginViewProps> = () => {
                 </div>
                 <div className="row">
                     <div className="col text-center">
-                        <small>{t('description')}</small>
+                        <small><Trans i18nKey="description" components={{ 'link1': <LinkText to="https://github.com/motivepick/motive-web-app"/> }}/></small>
                     </div>
                 </div>
                 <div className="row" style={{ marginTop: '30px', marginBottom: '10px' }}>

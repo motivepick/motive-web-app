@@ -1,6 +1,6 @@
 {
   "welcome": "Milestone",
-  "description": "Defeat your laziness",
+  "description": "A simple, <link1>open-source</link1> TODO list application designed to help you organize tasks efficiently",
   "login.github": "Login With GitHub",
   "login.vk": "Login With VK",
   "tryWithoutLogin": "Try Without Login",
