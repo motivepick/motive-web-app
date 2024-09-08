@@ -16,7 +16,7 @@ const TaskInputWithSuggestion: FC<TaskInputWithSuggestionProps> = ({ onSubmit, p
     const [gptAsked, setGptAsked] = React.useState(false)
     const [gptIndex, setGptIndex] = React.useState(-1)
     const [isLoading, setIsLoading] = React.useState(false)
-    const [rephraseTask] = useRephraseTaskMutation();
+    const [rephraseTask] = useRephraseTaskMutation()
 
     const submitTask = useCallback(async (e: KeyboardEvent<HTMLInputElement>) => {
         const input = e.target as HTMLInputElement
