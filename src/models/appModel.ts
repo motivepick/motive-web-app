@@ -63,6 +63,11 @@ export enum TASK_LIST_ID {
     CLOSED = 'CLOSED'
 }
 
+export type IRephrasedTask = {
+    original: string
+    rephrased: string
+}
+
 export type IUser = {
     id: number
     accountId: string

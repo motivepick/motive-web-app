@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import {
     CreateTaskRequest,
     IFetchScheduleWeekResponse,
+    IRephrasedTask,
     ISchedule,
     IScheduleFutureAndOverdue,
     ITask,
@@ -17,6 +18,13 @@ export const api = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: API_URL, credentials: 'include' }),
     tagTypes: ['Schedule'],
     endpoints: (builder) => ({
+        rephraseTask: builder.mutation<IRephrasedTask, string>({
+            query: (originalTask) => ({
+                url: '/rephrase',
+                method: 'POST',
+                body: originalTask
+            })
+        }),
         fetchUser: builder.query<IUser, void>({
             query: () => '/user'
         }),
@@ -68,6 +76,7 @@ export const api = createApi({
 })
 
 export const {
+    useRephraseTaskMutation,
     useFetchUserQuery,
     useUpdateTasksOrderAsyncMutation,
     useCreateTaskMutation,
