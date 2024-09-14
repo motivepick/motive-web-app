@@ -1,6 +1,7 @@
 # Milestone Web App [![Build Status](https://github.com/motivepick/motive-web-app/actions/workflows/master_milestone-web-app.yml/badge.svg)](https://github.com/motivepick/motive-web-app/actions/workflows/master_milestone-web-app.yml)
 
-The service that is going to defeat the laziness.
+A simple, [open-source](https://github.com/motivepick/motive-web-app) TODO list application designed to help you
+organize tasks efficiently.
 
 Try it out at [https://milestone.yaskovdev.com](https://milestone.yaskovdev.com).
 
