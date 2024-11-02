@@ -102,8 +102,10 @@ const none = <T, >(arr: T[], callback: (value: T, index: number, array: T[]) => 
 
 const className = (target: any) => target.className instanceof SVGAnimatedString ? target.className.baseVal : target.className ?? ''
 
+const isAnchor = (target: any): boolean => target instanceof HTMLAnchorElement
+
 const isTaskToggle = (target: any): boolean =>
-    target === null || (none(['complete-circle', 'incomplete-circle', 'task-form'], it => className(target).includes(it)) && isTaskToggle(target.parentNode))
+    target === null || !isAnchor(target) && (none(['complete-circle', 'incomplete-circle', 'task-form'], it => className(target).includes(it)) && isTaskToggle(target.parentNode))
 
 interface Props extends DraggableProps {
     id: number
