@@ -16,6 +16,8 @@ import TaskStatusBar from './TaskStatusBar'
 
 const DUE_DATE_FORMAT = 'yyyy-MM-dd'
 
+const CONTROL_CLASS_NAMES = ['complete-circle', 'incomplete-circle', 'task-form']
+
 interface TaskItemProps {
     detailsShown: boolean
     name: string
@@ -105,7 +107,7 @@ const className = (target: any) => target.className instanceof SVGAnimatedString
 const isAnchor = (target: any): boolean => target instanceof HTMLAnchorElement
 
 const isTaskToggle = (target: any): boolean =>
-    target === null || !isAnchor(target) && (none(['complete-circle', 'incomplete-circle', 'task-form'], it => className(target).includes(it)) && isTaskToggle(target.parentNode))
+    target === null || !isAnchor(target) && (none(CONTROL_CLASS_NAMES, it => className(target).includes(it)) && isTaskToggle(target.parentNode))
 
 interface Props extends DraggableProps {
     id: number
