@@ -1,6 +1,6 @@
 import React, { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { API_URL, GITHUB_AUTH_URL, GITHUB_REPOSITORY_URL, VK_AUTH_URL } from '../../config'
+import { API_URL, GITHUB_AUTH_URL, VK_AUTH_URL } from '../../config'
 import Icon from '../Icon'
 
 interface Props {
@@ -38,18 +38,6 @@ const DropdownNav: FC<Props> = ({ onSynchronize, isTemporaryUserLoggedIn }) => {
                         </button>
                     </li>
                 </>}
-                <li>
-                    <a
-                        target="_blank"
-                        rel="noreferrer"
-                        className={(isTemporaryUserLoggedIn ? 'text-success ' : '') + 'dropdown-item'}
-                        role="menuitem"
-                        href={encodeURI(`${GITHUB_REPOSITORY_URL}/issues/new?title=${t('feedbackTitle')}&body=${t('feedbackBody')}`)}
-                    >
-                        <Icon icon="fa-solid fa-comment" style={{ marginRight: '0.2em' }}/>
-                        {t('giveFeedback')}
-                    </a>
-                </li>
                 <li>
                     <button type="button" className="text-danger dropdown-item" role="menuitem" onClick={handleLogout}>
                         <Icon icon="fa-solid fa-right-from-bracket" style={{ marginRight: '0.2em' }}/>
