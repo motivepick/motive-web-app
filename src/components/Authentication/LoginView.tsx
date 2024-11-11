@@ -1,7 +1,7 @@
 import React, { FC, PropsWithChildren, useCallback, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { API_URL, GITHUB_AUTH_URL, VK_AUTH_URL } from '../../config'
+import { API_URL, GITHUB_AUTH_URL, GITHUB_REPOSITORY_URL, VK_AUTH_URL } from '../../config'
 import './LoginView.css'
 import Icon from '../Icon'
 
@@ -39,7 +39,7 @@ const LoginView: FC<LoginViewProps> = () => {
                 </div>
                 <div className="row">
                     <div className="col text-center">
-                        <small><Trans i18nKey="description" components={{ 'link1': <LinkText to="https://github.com/motivepick/motive-web-app"/> }}/></small>
+                        <small><Trans i18nKey="description" components={{ 'link1': <LinkText to={GITHUB_REPOSITORY_URL}/> }}/></small>
                     </div>
                 </div>
                 <div className="row" style={{ marginTop: '30px', marginBottom: '10px' }}>
@@ -84,7 +84,7 @@ const LoginView: FC<LoginViewProps> = () => {
             </main>
             <div className="footer">
             <span className="text-muted">
-                 <a href="mailto:milestone@yahoo.com">
+                 <a href="mailto:yaskovdev@gmail.com">
                      {t('contactUs')}
                  </a>
             </span>

@@ -24,7 +24,7 @@ const PrivacyView: FC = () =>
 
                     <p>If you have additional questions or require more information about our Privacy Policy, do
                         not hesitate to contact us through email at <a
-                            href="mailto:milestone@yahoo.com">milestone@yahoo.com</a></p>
+                            href="mailto:yaskovdev@gmail.com">yaskovdev@gmail.com</a></p>
 
                     <h3 className="text-center">General Data Protection Regulation (GDPR)</h3>
                     <p>We are a Data Controller of your information. If you'd like to learn more about GDPR and
