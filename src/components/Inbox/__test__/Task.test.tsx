@@ -15,7 +15,7 @@ const noop: DraggableChildrenFn = () => null
 const task = () => (
     <Task
         id={382}
-        name="Athens and Thessaloniki: check activities in https://www.tripadvisor.com"
+        name="Athens and Thessaloniki: check activities on https://www.tripadvisor.com"
         description="If it wasn't split yet, remind the creator to do it."
         closed={false}
         isDraggable={false}
