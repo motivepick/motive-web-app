@@ -1,7 +1,7 @@
 import React, { FC, PropsWithChildren, useCallback, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { API_URL, GITHUB_AUTH_URL, GITHUB_REPOSITORY_URL, VK_AUTH_URL } from '../../config'
+import { API_URL, CONTACT_EMAIL, GITHUB_AUTH_URL, GITHUB_REPOSITORY_URL, VK_AUTH_URL } from '../../config'
 import './LoginView.css'
 import Icon from '../Icon'
 
@@ -84,8 +84,8 @@ const LoginView: FC<LoginViewProps> = () => {
             </main>
             <div className="footer">
             <span className="text-muted">
-                 <a href="mailto:yaskovdev@gmail.com">
-                     {t('contactUs')}
+                 <a href={`mailto:${CONTACT_EMAIL}`}>
+                     {CONTACT_EMAIL}
                  </a>
             </span>
                 <span className="text-muted"> | <Link to="/privacy">{t('privacyPolicy')}</Link></span>

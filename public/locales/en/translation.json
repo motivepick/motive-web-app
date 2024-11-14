@@ -13,7 +13,6 @@
   "loading": "Loading...",
   "new.task": "What should I not forget?",
   "task.description": "Additional Details",
-  "contactUs": "Contact us",
   "privacyPolicy": "Privacy Policy",
   "numberOfTasks_one": "{{count}} task",
   "numberOfTasks_other": "{{count}} tasks",
