@@ -12,11 +12,12 @@ import {
 } from '../models/appModel'
 import { API_URL } from '../config'
 import { DateTime } from 'luxon'
+import { SCHEDULE_TAG } from './tags'
 
 export const api = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({ baseUrl: API_URL, credentials: 'include' }),
-    tagTypes: ['Schedule'],
+    tagTypes: [SCHEDULE_TAG],
     endpoints: (builder) => ({
         rephraseTask: builder.mutation<IRephrasedTask, string>({
             query: (originalTask) => ({
@@ -35,9 +36,9 @@ export const api = createApi({
                 future: response.future,
                 overdue: response.overdue
             }),
-            providesTags: ['Schedule']
+            providesTags: [SCHEDULE_TAG]
         }),
-        updateTasksOrderAsync: builder.mutation<void, ITaskPositionIndex>({
+        updateTasksOrderAsync: builder.mutation<ITask, ITaskPositionIndex>({
             query: (taskPositionIndex) => ({
                 url: '/orders',
                 method: 'POST',
@@ -50,27 +51,29 @@ export const api = createApi({
                 method: 'POST',
                 body: task
             }),
-            invalidatesTags: (result) => result?.dueDate ? ['Schedule'] : []
+            invalidatesTags: (result) => result?.dueDate ? [SCHEDULE_TAG] : []
         }),
         closeTask: builder.mutation<ITask, number>({
             query: (id) => ({
                 url: `/tasks/${id}/closing`,
                 method: 'PUT'
-            })
+            }),
+            invalidatesTags: () => [SCHEDULE_TAG]
         }),
         reopenTask: builder.mutation<ITask, number>({
             query: (id) => ({
                 url: `/tasks/${id}/reopen`,
                 method: 'PUT'
             }),
-            invalidatesTags: (result) => result?.dueDate ? ['Schedule'] : []
+            invalidatesTags: (result) => result?.dueDate ? [SCHEDULE_TAG] : []
         }),
         updateTask: builder.mutation<ITask, { id: number, request: UpdateTaskRequest }>({
             query: ({ id, request }) => ({
                 url: `/tasks/${id}`,
                 method: 'PUT',
                 body: request
-            })
+            }),
+            invalidatesTags: () => [SCHEDULE_TAG]
         })
     })
 })

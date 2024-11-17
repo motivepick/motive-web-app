@@ -1,12 +1,5 @@
 import { DateTime } from 'luxon'
 
-export type IScheduleTaskPositionIndex = {
-    sourceDroppableId: string
-    destinationDroppableId: string
-    sourceIndex: number
-    destinationIndex: number
-}
-
 export type IPage = {
     size: number
     number: number
@@ -53,8 +46,8 @@ export type DueDateExtractionResult = {
 
 export type ITaskPositionIndex = {
     sourceListType: string
+    taskId: number
     destinationListType: string
-    sourceIndex: number
     destinationIndex: number
 }
 

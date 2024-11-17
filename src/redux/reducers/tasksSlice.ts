@@ -61,6 +61,19 @@ const tasksSlice = createSlice({
                 const taskListId = meta.arg.type
                 state.taskLists[taskListId].status = 'FAILED'
             })
+            .addMatcher(
+                api.endpoints.fetchSchedule.matchFulfilled,
+                (state, { payload }) => {
+                    Object.entries(payload).forEach(([key, value]) => {
+                        state.taskLists[key] = {
+                            status: 'SUCCEEDED',
+                            totalElements: value.length,
+                            allIds: value.map(it => it.id)
+                        }
+                        value.forEach(it => state.byId[it.id] = it)
+                    })
+                }
+            )
             .addMatcher(api.endpoints.createTask.matchFulfilled, (state, { payload }) => {
                 const taskList = state.taskLists[TASK_LIST_ID.INBOX]
                 taskList.totalElements += 1
@@ -87,9 +100,12 @@ const tasksSlice = createSlice({
                 state.byId[payload.id] = payload
             })
             .addMatcher(api.endpoints.updateTasksOrderAsync.matchPending, (state, { meta }) => {
-                const { sourceListType, sourceIndex, destinationListType, destinationIndex } = meta.arg.originalArgs
-                const id = state.taskLists[sourceListType].allIds.splice(sourceIndex, 1)[0]
-                state.taskLists[destinationListType].allIds.splice(destinationIndex, 0, id)
+                const { sourceListType, taskId, destinationListType, destinationIndex } = meta.arg.originalArgs
+                state.taskLists[sourceListType].allIds = state.taskLists[sourceListType].allIds.filter(it => it != taskId)
+                state.taskLists[destinationListType].allIds.splice(destinationIndex, 0, taskId)
+            })
+            .addMatcher(api.endpoints.updateTasksOrderAsync.matchFulfilled, (state, { payload }) => {
+                state.byId[payload.id] = payload
             })
     }
 })

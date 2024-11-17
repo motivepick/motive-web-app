@@ -10,6 +10,7 @@ import Spinner from './common/Spinner'
 import ProtectedRoute from './ProtectedRoute'
 import { TASK_LIST_ID } from '../models/appModel'
 import { DEFAULT_LIMIT } from '../config'
+import { SCHEDULE_TAG } from '../redux/tags'
 
 const Root: FC = () => {
     const dispatch = useDispatch<AppDispatch>()
@@ -24,7 +25,7 @@ const Root: FC = () => {
 
     const handleSynchronize = useCallback(() => {
         dispatch(resetTaskLists())
-        dispatch(api.util.invalidateTags(['Schedule']));
+        dispatch(api.util.invalidateTags([SCHEDULE_TAG]));
         [TASK_LIST_ID.INBOX, TASK_LIST_ID.CLOSED].forEach(taskListId => fetchTaskLists({ type: taskListId, offset: 0, limit: DEFAULT_LIMIT }))
     }, [])
 

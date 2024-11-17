@@ -47,11 +47,11 @@ const InboxView: FC = () => {
     }, [updateTaskMutation])
 
     const updateTaskPositionIndex: OnDragEndResponder = useCallback((result) => {
-        const { source, destination } = result
+        const { draggableId, source, destination } = result
         if (userReallyChangedOrder(source, destination)) {
             updateTasksOrderAsyncMutation({
                 sourceListType: source.droppableId,
-                sourceIndex: source.index,
+                taskId: parseInt(draggableId),
                 destinationListType: source.droppableId,
                 destinationIndex: destination!.index
             })
