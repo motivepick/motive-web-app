@@ -82,7 +82,8 @@ export type ISchedule = IScheduleFutureAndOverdue & IScheduleWeek
 export type TaskListState = {
     status: 'IDLE' | 'PENDING' | 'SUCCEEDED' | 'FAILED'
     totalElements: number
-    allIds: number[]
+    allIds: number[],
+    meta?: any
 }
 
 export type TaskListsState = {

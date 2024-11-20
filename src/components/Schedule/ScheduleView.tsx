@@ -47,18 +47,17 @@ const ScheduleView: FC = () => {
 
     const weekdays = Object
         .keys(schedule)
-        .filter(day => !['INBOX', 'CLOSED', 'future', 'overdue'].includes(day))
-
+        .filter(day => day.startsWith('SCHEDULE'))
     return (
         <DragDropContext onDragEnd={updateTaskPositionIndex}>
             {
-                weekdays.map(date =>
+                weekdays.map(day =>
                     <DroppableTaskListWithHeader
-                        key={date}
-                        droppableId={date}
+                        key={day}
+                        droppableId={day}
                         isDraggable
-                        header={t('dueDate', { date })}
-                        tasks={schedule[date].allIds.map(id => byId[id])}
+                        header={t('dueDate', { date: schedule[day].meta.day })}
+                        tasks={schedule[day].allIds.map(id => byId[id])}
                         onTaskClose={closeTask}
                         onSaveTask={updateTask}
                     />)
@@ -67,7 +66,7 @@ const ScheduleView: FC = () => {
                 droppableId="future"
                 isDraggable
                 header={t('futureTasks')}
-                tasks={schedule['future'].allIds.map(id => byId[id])}
+                tasks={schedule['FUTURE'].allIds.map(id => byId[id])}
                 onTaskClose={closeTask}
                 onSaveTask={updateTask}
             />
@@ -76,7 +75,7 @@ const ScheduleView: FC = () => {
                 isDraggable
                 isDropDisabled
                 header={t('overdueTasks')}
-                tasks={schedule['overdue'].allIds.map(id => byId[id])}
+                tasks={schedule['OVERDUE'].allIds.map(id => byId[id])}
                 onTaskClose={closeTask}
                 onSaveTask={updateTask}
             />
