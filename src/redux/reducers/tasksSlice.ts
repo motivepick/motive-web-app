@@ -1,5 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { FetchTaskListQueryParams, IPage, ISearchUserTasksResponse, ITask, ITaskPositionIndex, TASK_LIST_ID, TaskListsState } from '../../models/appModel'
+import {
+    FetchTaskListQueryParams,
+    ISearchUserTasksResponse,
+    ITask,
+    ITaskPositionIndex,
+    SCHEDULE_TASK_LIST_IDS,
+    TASK_LIST_ID,
+    TaskListsState
+} from '../../models/appModel'
 import { api } from '../api'
 import { AppDispatch, RootState } from '../store'
 import fetchClient from '../../fetchClient'
@@ -34,11 +42,13 @@ export const updateScheduleTasksOrder = createAppAsyncThunk('tasks/updateSchedul
     dispatch(updateScheduleTasksPositions(payload))
     // TODO: dispatch dueDate update here
     const state = getState()
-    const weekTaskIds: number[] = Array
-        .from(Array(7).keys())
-        .reduce((acc: number[], key: number) => acc.concat(state.tasks.taskLists[`SCHEDULE_${key}`].allIds), [])
-    const tasks = [...state.tasks.taskLists['OVERDUE'].allIds, ...weekTaskIds, ...state.tasks.taskLists['FUTURE'].allIds]
-    console.log('AFTER DISPATCH', tasks)
+    const { taskLists } = state.tasks
+    const taskIds = [
+        ...taskLists[TASK_LIST_ID.OVERDUE].allIds,
+        ...SCHEDULE_TASK_LIST_IDS.flatMap(key => taskLists[key].allIds),
+        ...taskLists[TASK_LIST_ID.FUTURE].allIds
+    ]
+    console.log('AFTER DISPATCH', taskIds)
     // const params = { offset: payload.offset, limit: payload.limit }
     // const response = await fetchClient.get<ISearchUserTasksResponse>(`/task-lists/${payload.type}`, { params })
     return {
@@ -76,7 +86,7 @@ const tasksSlice = createSlice({
         },
         updateScheduleTasksPositions: (state, { payload }) => {
             const { sourceListType, taskId, destinationListType, destinationIndex } = payload
-            state.taskLists[sourceListType].allIds = state.taskLists[sourceListType].allIds.filter(it => it != taskId)
+            state.taskLists[sourceListType].allIds = state.taskLists[sourceListType].allIds.filter(it => it !== taskId)
             state.taskLists[destinationListType].allIds.splice(destinationIndex, 0, taskId)
         }
     },
@@ -135,7 +145,7 @@ const tasksSlice = createSlice({
             })
             .addMatcher(api.endpoints.closeTask.matchFulfilled, (state, { payload }) => {
                 state.taskLists[TASK_LIST_ID.INBOX].totalElements -= 1
-                state.taskLists[TASK_LIST_ID.INBOX].allIds = state.taskLists[TASK_LIST_ID.INBOX].allIds.filter(it => it != payload.id)
+                state.taskLists[TASK_LIST_ID.INBOX].allIds = state.taskLists[TASK_LIST_ID.INBOX].allIds.filter(it => it !== payload.id)
                 if (state.taskLists[TASK_LIST_ID.CLOSED].status === 'SUCCEEDED') {
                     state.taskLists[TASK_LIST_ID.CLOSED].totalElements += 1
                     state.taskLists[TASK_LIST_ID.CLOSED].allIds.unshift(payload.id)
@@ -143,7 +153,7 @@ const tasksSlice = createSlice({
             })
             .addMatcher(api.endpoints.reopenTask.matchFulfilled, (state, { payload }) => {
                 state.taskLists[TASK_LIST_ID.CLOSED].totalElements -= 1
-                state.taskLists[TASK_LIST_ID.CLOSED].allIds = state.taskLists[TASK_LIST_ID.CLOSED].allIds.filter(it => it != payload.id)
+                state.taskLists[TASK_LIST_ID.CLOSED].allIds = state.taskLists[TASK_LIST_ID.CLOSED].allIds.filter(it => it !== payload.id)
                 if (state.taskLists[TASK_LIST_ID.INBOX].status === 'SUCCEEDED') {
                     state.taskLists[TASK_LIST_ID.INBOX].totalElements += 1
                     state.taskLists[TASK_LIST_ID.INBOX].allIds.unshift(payload.id)
@@ -154,7 +164,7 @@ const tasksSlice = createSlice({
             })
             .addMatcher(api.endpoints.updateTasksOrderAsync.matchPending, (state, { meta }) => {
                 // const { sourceListType, taskId, destinationListType, destinationIndex } = meta.arg.originalArgs
-                // state.taskLists[sourceListType].allIds = state.taskLists[sourceListType].allIds.filter(it => it != taskId)
+                // state.taskLists[sourceListType].allIds = state.taskLists[sourceListType].allIds.filter(it => it !== taskId)
                 // state.taskLists[destinationListType].allIds.splice(destinationIndex, 0, taskId)
             })
             .addMatcher(api.endpoints.updateTasksOrderAsync.matchFulfilled, (state, { payload }) => {

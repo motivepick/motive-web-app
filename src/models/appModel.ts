@@ -53,8 +53,19 @@ export type ITaskPositionIndex = {
 
 export enum TASK_LIST_ID {
     INBOX = 'INBOX',
-    CLOSED = 'CLOSED'
+    CLOSED = 'CLOSED',
+    OVERDUE = 'OVERDUE',
+    FUTURE = 'FUTURE',
+    SCHEDULE_0 = 'SCHEDULE_0',
+    SCHEDULE_1 = 'SCHEDULE_1',
+    SCHEDULE_2 = 'SCHEDULE_2',
+    SCHEDULE_3 = 'SCHEDULE_3',
+    SCHEDULE_4 = 'SCHEDULE_4',
+    SCHEDULE_5 = 'SCHEDULE_5',
+    SCHEDULE_6 = 'SCHEDULE_6',
 }
+
+export const SCHEDULE_TASK_LIST_IDS = Object.values(TASK_LIST_ID).filter(it => it.startsWith('SCHEDULE'))
 
 export type IRephrasedTask = {
     original: string

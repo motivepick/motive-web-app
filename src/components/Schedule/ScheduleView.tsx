@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux/store'
 import { useCloseTaskMutation, useFetchScheduleQuery, useUpdateTaskMutation, useUpdateTasksOrderAsyncMutation } from '../../redux/api'
-import { UpdateTaskRequest } from '../../models/appModel'
+import { SCHEDULE_TASK_LIST_IDS, TASK_LIST_ID, UpdateTaskRequest } from '../../models/appModel'
 import SpinnerView from '../common/Spinner'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import DroppableTaskListWithHeader from './DroppableTaskListWithHeader'
@@ -46,13 +46,10 @@ const ScheduleView: FC = () => {
 
     if (isLoading || isFetching) return <SpinnerView/>
 
-    const weekdays = Object
-        .keys(schedule)
-        .filter(day => day.startsWith('SCHEDULE'))
     return (
         <DragDropContext onDragEnd={updateTaskPositionIndex}>
             {
-                weekdays.map(day =>
+                SCHEDULE_TASK_LIST_IDS.map(day =>
                     <DroppableTaskListWithHeader
                         key={day}
                         droppableId={day}
@@ -64,7 +61,7 @@ const ScheduleView: FC = () => {
                     />)
             }
             <DroppableTaskListWithHeader
-                droppableId="FUTURE"
+                droppableId={TASK_LIST_ID.FUTURE}
                 isDraggable
                 header={t('futureTasks')}
                 tasks={schedule['FUTURE'].allIds.map(id => byId[id])}
@@ -72,7 +69,7 @@ const ScheduleView: FC = () => {
                 onSaveTask={updateTask}
             />
             <DroppableTaskListWithHeader
-                droppableId="OVERDUE"
+                droppableId={TASK_LIST_ID.OVERDUE}
                 isDraggable
                 isDropDisabled
                 header={t('overdueTasks')}
