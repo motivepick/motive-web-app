@@ -12,6 +12,11 @@ export type ISearchUserTasksResponse = {
     page: IPage
 }
 
+export type RescheduleTaskRequest = {
+    dueDate: DateTime
+    taskIds: number[]
+}
+
 export type IFetchScheduleWeekResponse = {
     week: IScheduleWeek
 }
@@ -44,10 +49,10 @@ export type DueDateExtractionResult = {
     dueDate: DateTime | null
 }
 
-export type ITaskPositionIndex = {
-    sourceListType: string
+export type TaskPositionChange = {
+    sourceListId: string
     taskId: number
-    destinationListType: string
+    destinationListId: string
     destinationIndex: number
 }
 

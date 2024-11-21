@@ -3,10 +3,11 @@ import {
     FetchTaskListQueryParams,
     ISearchUserTasksResponse,
     ITask,
-    ITaskPositionIndex,
+    RescheduleTaskRequest,
     SCHEDULE_TASK_LIST_IDS,
     TASK_LIST_ID,
-    TaskListsState
+    TaskListsState,
+    TaskPositionChange
 } from '../../models/appModel'
 import { api } from '../api'
 import { AppDispatch, RootState } from '../store'
@@ -38,9 +39,8 @@ export const fetchTaskLists = createAppAsyncThunk('tasks/fetchTaskList', async (
     }
 )
 
-export const updateScheduleTasksOrder = createAppAsyncThunk('tasks/updateScheduleTasksOrder', async (payload: ITaskPositionIndex, { getState, dispatch }) => {
+export const updateScheduleTasksOrder = createAppAsyncThunk('tasks/updateScheduleTasksOrder', async (payload: TaskPositionChange, { getState, dispatch }) => {
     dispatch(updateScheduleTasksPositions(payload))
-    // TODO: dispatch dueDate update here
     const state = getState()
     const { taskLists } = state.tasks
     const taskIds = [
@@ -48,24 +48,17 @@ export const updateScheduleTasksOrder = createAppAsyncThunk('tasks/updateSchedul
         ...SCHEDULE_TASK_LIST_IDS.flatMap(key => taskLists[key].allIds),
         ...taskLists[TASK_LIST_ID.FUTURE].allIds
     ]
-    console.log('AFTER DISPATCH', taskIds)
-    // const params = { offset: payload.offset, limit: payload.limit }
-    // const response = await fetchClient.get<ISearchUserTasksResponse>(`/task-lists/${payload.type}`, { params })
-    return {
-        content: [],
-        page: {
-            size: 0,
-            number: 0,
-            totalElements: 0,
-            totalPages: 0
-        }
-    }
+    const { taskId, destinationListId } = payload
+    const params: RescheduleTaskRequest = { taskIds, dueDate: taskLists[destinationListId].meta.day }
+    const response = await fetchClient.post<ITask>(`/tasks/${taskId}/reschedule`, { params })
+    // TODO: dispatch an action to update dueDate here
+    return response.data
 })
 
-const isScheduledTo = (task: ITask, startOfDayUtc: DateTime<Valid> | DateTime<Invalid>) => {
+const isScheduledTo = (task: ITask, startOfDay: DateTime<Valid> | DateTime<Invalid>) => {
     if (task.dueDate) {
-        const dueDate = DateTime.fromISO(task.dueDate, { zone: 'utc' })
-        return startOfDayUtc <= dueDate && dueDate < startOfDayUtc.plus({ days: 1 })
+        const dueDate = DateTime.fromISO(task.dueDate, { zone: 'utc' }).toLocal()
+        return startOfDay <= dueDate && dueDate < startOfDay.plus({ days: 1 })
     }
     return false
 }
@@ -85,9 +78,9 @@ const tasksSlice = createSlice({
             state.byId = INITIAL_STATE.byId
         },
         updateScheduleTasksPositions: (state, { payload }) => {
-            const { sourceListType, taskId, destinationListType, destinationIndex } = payload
-            state.taskLists[sourceListType].allIds = state.taskLists[sourceListType].allIds.filter(it => it !== taskId)
-            state.taskLists[destinationListType].allIds.splice(destinationIndex, 0, taskId)
+            const { sourceListId, taskId, destinationListId, destinationIndex } = payload
+            state.taskLists[sourceListId].allIds = state.taskLists[sourceListId].allIds.filter(it => it !== taskId)
+            state.taskLists[destinationListId].allIds.splice(destinationIndex, 0, taskId)
         }
     },
     extraReducers: (builder) => {
@@ -110,11 +103,11 @@ const tasksSlice = createSlice({
             })
             .addMatcher(api.endpoints.fetchSchedule.matchFulfilled, (state, { payload }) => {
                 payload.forEach(it => state.byId[it.id] = it)
-                const startOfTodayUtc = DateTime.utc().startOf('day')
+                const startOfToday = DateTime.now().startOf('day')
                 const days = Array
                     .from(Array(7).keys())
-                    .map(i => startOfTodayUtc.plus({ days: i }))
-                const overdueTasks = payload.filter(task => task.dueDate && DateTime.fromISO(task.dueDate, { zone: 'utc' }) < startOfTodayUtc)
+                    .map(i => startOfToday.plus({ days: i }))
+                const overdueTasks = payload.filter(task => task.dueDate && DateTime.fromISO(task.dueDate, { zone: 'utc' }).toLocal() < startOfToday)
                 state.taskLists['OVERDUE'] = {
                     status: 'SUCCEEDED',
                     totalElements: overdueTasks.length,
@@ -129,8 +122,8 @@ const tasksSlice = createSlice({
                         meta: { day }
                     }
                 })
-                const startOfNextWeekUtc = startOfTodayUtc.plus({ days: days.length })
-                const futureTasks = payload.filter(task => task.dueDate && DateTime.fromISO(task.dueDate, { zone: 'utc' }) >= startOfNextWeekUtc)
+                const startOfNextWeek = startOfToday.plus({ days: days.length })
+                const futureTasks = payload.filter(task => task.dueDate && DateTime.fromISO(task.dueDate, { zone: 'utc' }).toLocal() >= startOfNextWeek)
                 state.taskLists['FUTURE'] = {
                     status: 'SUCCEEDED',
                     totalElements: futureTasks.length,

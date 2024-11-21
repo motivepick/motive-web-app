@@ -27,9 +27,9 @@ const ScheduleView: FC = () => {
             const newDay = destination!.droppableId
             if (newDay !== 'overdue') {
                 dispatch(updateScheduleTasksOrder({
-                    sourceListType: source.droppableId,
+                    sourceListId: source.droppableId,
                     taskId: parseInt(draggableId),
-                    destinationListType: destination!.droppableId,
+                    destinationListId: destination!.droppableId,
                     destinationIndex: destination!.index
                 }))
             }

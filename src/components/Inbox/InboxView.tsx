@@ -50,9 +50,9 @@ const InboxView: FC = () => {
         const { draggableId, source, destination } = result
         if (userReallyChangedOrder(source, destination)) {
             updateTasksOrderAsyncMutation({
-                sourceListType: source.droppableId,
+                sourceListId: source.droppableId,
                 taskId: parseInt(draggableId),
-                destinationListType: source.droppableId,
+                destinationListId: source.droppableId,
                 destinationIndex: destination!.index
             })
         }
