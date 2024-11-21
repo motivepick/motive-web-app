@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { FetchTaskListQueryParams, ISearchUserTasksResponse, ITask, TASK_LIST_ID, TaskListsState } from '../../models/appModel'
+import { FetchTaskListQueryParams, IPage, ISearchUserTasksResponse, ITask, ITaskPositionIndex, TASK_LIST_ID, TaskListsState } from '../../models/appModel'
 import { api } from '../api'
 import { AppDispatch, RootState } from '../store'
 import fetchClient from '../../fetchClient'
@@ -30,6 +30,28 @@ export const fetchTaskLists = createAppAsyncThunk('tasks/fetchTaskList', async (
     }
 )
 
+export const updateScheduleTasksOrder = createAppAsyncThunk('tasks/updateScheduleTasksOrder', async (payload: ITaskPositionIndex, { getState, dispatch }) => {
+    dispatch(updateScheduleTasksPositions(payload))
+    // TODO: dispatch dueDate update here
+    const state = getState()
+    const weekTaskIds: number[] = Array
+        .from(Array(7).keys())
+        .reduce((acc: number[], key: number) => acc.concat(state.tasks.taskLists[`SCHEDULE_${key}`].allIds), [])
+    const tasks = [...state.tasks.taskLists['OVERDUE'].allIds, ...weekTaskIds, ...state.tasks.taskLists['FUTURE'].allIds]
+    console.log('AFTER DISPATCH', tasks)
+    // const params = { offset: payload.offset, limit: payload.limit }
+    // const response = await fetchClient.get<ISearchUserTasksResponse>(`/task-lists/${payload.type}`, { params })
+    return {
+        content: [],
+        page: {
+            size: 0,
+            number: 0,
+            totalElements: 0,
+            totalPages: 0
+        }
+    }
+})
+
 const isScheduledTo = (task: ITask, startOfDayUtc: DateTime<Valid> | DateTime<Invalid>) => {
     if (task.dueDate) {
         const dueDate = DateTime.fromISO(task.dueDate, { zone: 'utc' })
@@ -51,6 +73,11 @@ const tasksSlice = createSlice({
         resetTaskLists: (state) => {
             state.taskLists = INITIAL_STATE.taskLists
             state.byId = INITIAL_STATE.byId
+        },
+        updateScheduleTasksPositions: (state, { payload }) => {
+            const { sourceListType, taskId, destinationListType, destinationIndex } = payload
+            state.taskLists[sourceListType].allIds = state.taskLists[sourceListType].allIds.filter(it => it != taskId)
+            state.taskLists[destinationListType].allIds.splice(destinationIndex, 0, taskId)
         }
     },
     extraReducers: (builder) => {
@@ -85,7 +112,7 @@ const tasksSlice = createSlice({
                 }
                 days.forEach((day, index) => {
                     const tasks = payload.filter(task => isScheduledTo(task, day))
-                    state.taskLists['SCHEDULE_' + index] = {
+                    state.taskLists[`SCHEDULE_${index}`] = {
                         status: 'SUCCEEDED',
                         totalElements: tasks.length,
                         allIds: tasks.map(it => it.id),
@@ -136,5 +163,5 @@ const tasksSlice = createSlice({
     }
 })
 
-export const { toggleTaskListId, setTaskListId, resetTaskLists } = tasksSlice.actions
+export const { toggleTaskListId, setTaskListId, resetTaskLists, updateScheduleTasksPositions } = tasksSlice.actions
 export default tasksSlice.reducer
