@@ -43,11 +43,9 @@ export const updateScheduleTasksOrder = createAppAsyncThunk('tasks/updateSchedul
     dispatch(updateScheduleTasksPositions(payload))
     const state = getState()
     const { taskLists } = state.tasks
-    const taskIds = [
-        ...taskLists[TASK_LIST_ID.OVERDUE].allIds,
-        ...SCHEDULE_TASK_LIST_IDS.flatMap(key => taskLists[key].allIds),
-        ...taskLists[TASK_LIST_ID.FUTURE].allIds
-    ]
+    const taskIds = [TASK_LIST_ID.OVERDUE, ...SCHEDULE_TASK_LIST_IDS, TASK_LIST_ID.FUTURE]
+        .map(key => taskLists[key])
+        .flatMap(it => it.allIds)
     const { taskId, destinationListId } = payload
     const body: RescheduleTaskRequest = { taskIds, dueDate: taskLists[destinationListId].meta.day.toUTC() }
     const response = await fetchClient.post<ITask>(`/tasks/${taskId}/reschedule`, body)
