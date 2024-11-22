@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { CreateTaskRequest, IRephrasedTask, ITask, TaskPositionChange, IUser, UpdateTaskRequest } from '../models/appModel'
+import { CreateTaskRequest, IRephrasedTask, ITask, IUser, TaskPositionChange, UpdateTaskRequest } from '../models/appModel'
 import { API_URL } from '../config'
-import { DateTime } from 'luxon'
 import { SCHEDULE_TAG } from './tags'
 
 export const api = createApi({
@@ -20,7 +19,7 @@ export const api = createApi({
             query: () => '/user'
         }),
         fetchSchedule: builder.query<ITask[], void>({
-            query: () => ({ url: '/schedule', params: { timeZone: DateTime.local().toFormat('ZZZZ') } }),
+            query: () => ({ url: '/schedule' }),
             providesTags: [SCHEDULE_TAG]
         }),
         updateTasksOrderAsync: builder.mutation<ITask, TaskPositionChange>({
