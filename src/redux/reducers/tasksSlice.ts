@@ -51,7 +51,7 @@ export const updateScheduleTasksOrder = createAppAsyncThunk('tasks/updateSchedul
     const { taskId, destinationListId } = payload
     const body: RescheduleTaskRequest = { taskIds, dueDate: taskLists[destinationListId].meta.day.toUTC() }
     const response = await fetchClient.post<ITask>(`/tasks/${taskId}/reschedule`, body)
-    // TODO: dispatch an action to update dueDate here
+    dispatch(updateTaskDueDate(response.data))
     return response.data
 })
 
@@ -81,6 +81,10 @@ const tasksSlice = createSlice({
             const { sourceListId, taskId, destinationListId, destinationIndex } = payload
             state.taskLists[sourceListId].allIds = state.taskLists[sourceListId].allIds.filter(it => it !== taskId)
             state.taskLists[destinationListId].allIds.splice(destinationIndex, 0, taskId)
+        },
+        updateTaskDueDate: (state, { payload }) => {
+            const task = state.byId[payload.id]
+            task.dueDate = payload.dueDate
         }
     },
     extraReducers: (builder) => {
@@ -166,5 +170,5 @@ const tasksSlice = createSlice({
     }
 })
 
-export const { toggleTaskListId, setTaskListId, resetTaskLists, updateScheduleTasksPositions } = tasksSlice.actions
+export const { toggleTaskListId, setTaskListId, resetTaskLists, updateScheduleTasksPositions, updateTaskDueDate } = tasksSlice.actions
 export default tasksSlice.reducer
