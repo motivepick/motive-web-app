@@ -85,7 +85,7 @@ const tasksSlice = createSlice({
             task.dueDate = payload.dueDate
         }
     },
-    extraReducers: (builder) => {
+    extraReducers: builder => {
         builder
             .addCase(fetchTaskLists.pending, (state, { meta }) => {
                 const taskListId = meta.arg.type
@@ -158,12 +158,9 @@ const tasksSlice = createSlice({
                 state.byId[payload.id] = payload
             })
             .addMatcher(api.endpoints.updateTasksOrderAsync.matchPending, (state, { meta }) => {
-                // const { sourceListType, taskId, destinationListType, destinationIndex } = meta.arg.originalArgs
-                // state.taskLists[sourceListType].allIds = state.taskLists[sourceListType].allIds.filter(it => it !== taskId)
-                // state.taskLists[destinationListType].allIds.splice(destinationIndex, 0, taskId)
-            })
-            .addMatcher(api.endpoints.updateTasksOrderAsync.matchFulfilled, (state, { payload }) => {
-                // state.byId[payload.id] = payload
+                const { sourceListId, taskId, destinationListId, destinationIndex } = meta.arg.originalArgs
+                state.taskLists[sourceListId].allIds = state.taskLists[sourceListId].allIds.filter(it => it !== taskId)
+                state.taskLists[destinationListId].allIds.splice(destinationIndex, 0, taskId)
             })
     }
 })
