@@ -108,30 +108,33 @@ const tasksSlice = createSlice({
             .addMatcher(api.endpoints.fetchSchedule.matchFulfilled, (state, { payload }) => {
                 payload.forEach(it => state.byId[it.id] = it)
                 const startOfToday = DateTime.now().startOf('day')
-                const days = Array
-                    .from(Array(SCHEDULE_WEEK_TASK_LIST_IDS.length).keys())
-                    .map(i => startOfToday.plus({ days: i }))
-                const overdueTasks = payload.filter(task => task.dueDate && DateTime.fromISO(task.dueDate, { zone: 'utc' }).toLocal() < startOfToday)
+                const overdueTaskIds = payload
+                    .filter(task => task.dueDate && DateTime.fromISO(task.dueDate, { zone: 'utc' }).toLocal() < startOfToday)
+                    .map(it => it.id)
                 state.taskLists[TASK_LIST_ID.SCHEDULE_OVERDUE] = {
                     status: 'SUCCEEDED',
-                    totalElements: overdueTasks.length,
-                    allIds: overdueTasks.map(it => it.id)
+                    totalElements: overdueTaskIds.length,
+                    allIds: overdueTaskIds
                 }
-                days.forEach((day, index) => {
-                    const tasks = payload.filter(task => isScheduledTo(task, day))
-                    state.taskLists[`SCHEDULE_${index}`] = {
+                SCHEDULE_WEEK_TASK_LIST_IDS.forEach((it: TASK_LIST_ID) => {
+                    const offset = SCHEDULE_WEEK_TASK_LIST_IDS.indexOf(it)
+                    const day = startOfToday.plus({ days: offset })
+                    const allIds = payload.filter(task => isScheduledTo(task, day)).map(it => it.id)
+                    state.taskLists[it] = {
                         status: 'SUCCEEDED',
-                        totalElements: tasks.length,
-                        allIds: tasks.map(it => it.id),
+                        totalElements: allIds.length,
+                        allIds,
                         meta: { day }
                     }
                 })
-                const startOfNextWeek = startOfToday.plus({ days: days.length })
-                const futureTasks = payload.filter(task => task.dueDate && DateTime.fromISO(task.dueDate, { zone: 'utc' }).toLocal() >= startOfNextWeek)
+                const startOfNextWeek = startOfToday.plus({ days: SCHEDULE_WEEK_TASK_LIST_IDS.length })
+                const futureTaskIds = payload
+                    .filter(task => task.dueDate && DateTime.fromISO(task.dueDate, { zone: 'utc' }).toLocal() >= startOfNextWeek)
+                    .map(it => it.id)
                 state.taskLists[TASK_LIST_ID.SCHEDULE_FUTURE] = {
                     status: 'SUCCEEDED',
-                    totalElements: futureTasks.length,
-                    allIds: futureTasks.map(it => it.id),
+                    totalElements: futureTaskIds.length,
+                    allIds: futureTaskIds,
                     meta: { day: startOfNextWeek }
                 }
             })
