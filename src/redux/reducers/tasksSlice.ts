@@ -4,7 +4,7 @@ import {
     ISearchUserTasksResponse,
     ITask,
     RescheduleTaskRequest,
-    SCHEDULE_TASK_LIST_IDS,
+    SCHEDULE_WEEK_TASK_LIST_IDS,
     TASK_LIST_ID,
     TaskListsState,
     TaskPositionChange
@@ -43,7 +43,7 @@ export const updateScheduleTasksOrder = createAppAsyncThunk('tasks/updateSchedul
     dispatch(updateScheduleTasksPositions(payload))
     const state = getState()
     const { taskLists } = state.tasks
-    const taskIds = [TASK_LIST_ID.OVERDUE, ...SCHEDULE_TASK_LIST_IDS, TASK_LIST_ID.FUTURE]
+    const taskIds = [TASK_LIST_ID.SCHEDULE_OVERDUE, ...SCHEDULE_WEEK_TASK_LIST_IDS, TASK_LIST_ID.SCHEDULE_FUTURE]
         .map(id => taskLists[id])
         .flatMap(it => it.allIds)
     const { taskId, destinationListId } = payload
@@ -77,7 +77,9 @@ const tasksSlice = createSlice({
         },
         updateScheduleTasksPositions: (state, { payload }) => {
             const { sourceListId, taskId, destinationListId, destinationIndex } = payload
+            state.taskLists[sourceListId].totalElements -= 1
             state.taskLists[sourceListId].allIds = state.taskLists[sourceListId].allIds.filter(it => it !== taskId)
+            state.taskLists[destinationListId].totalElements += 1
             state.taskLists[destinationListId].allIds.splice(destinationIndex, 0, taskId)
         },
         updateTaskDueDate: (state, { payload }) => {
@@ -107,10 +109,10 @@ const tasksSlice = createSlice({
                 payload.forEach(it => state.byId[it.id] = it)
                 const startOfToday = DateTime.now().startOf('day')
                 const days = Array
-                    .from(Array(7).keys())
+                    .from(Array(SCHEDULE_WEEK_TASK_LIST_IDS.length).keys())
                     .map(i => startOfToday.plus({ days: i }))
                 const overdueTasks = payload.filter(task => task.dueDate && DateTime.fromISO(task.dueDate, { zone: 'utc' }).toLocal() < startOfToday)
-                state.taskLists['OVERDUE'] = {
+                state.taskLists[TASK_LIST_ID.SCHEDULE_OVERDUE] = {
                     status: 'SUCCEEDED',
                     totalElements: overdueTasks.length,
                     allIds: overdueTasks.map(it => it.id)
@@ -126,10 +128,11 @@ const tasksSlice = createSlice({
                 })
                 const startOfNextWeek = startOfToday.plus({ days: days.length })
                 const futureTasks = payload.filter(task => task.dueDate && DateTime.fromISO(task.dueDate, { zone: 'utc' }).toLocal() >= startOfNextWeek)
-                state.taskLists['FUTURE'] = {
+                state.taskLists[TASK_LIST_ID.SCHEDULE_FUTURE] = {
                     status: 'SUCCEEDED',
                     totalElements: futureTasks.length,
-                    allIds: futureTasks.map(it => it.id)
+                    allIds: futureTasks.map(it => it.id),
+                    meta: { day: startOfNextWeek }
                 }
             })
             .addMatcher(api.endpoints.createTask.matchFulfilled, (state, { payload }) => {
