@@ -2,16 +2,17 @@ import React, { FC, useCallback } from 'react'
 import { DragDropContext, DraggableLocation, DropResult } from '@hello-pangea/dnd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../redux/store'
+import { AppDispatch, RootState } from '../../redux/store'
 import { useCloseTaskMutation, useFetchScheduleQuery, useUpdateTaskMutation, useUpdateTasksOrderAsyncMutation } from '../../redux/api'
-import { UpdateTaskRequest } from '../../models/appModel'
+import { SCHEDULE_WEEK_TASK_LIST_IDS, TASK_LIST_ID, UpdateTaskRequest } from '../../models/appModel'
 import SpinnerView from '../common/Spinner'
 import { userReallyChangedOrder } from '../../utils/dragAndDropUtils'
 import DroppableTaskListWithHeader from './DroppableTaskListWithHeader'
+import { updateScheduleTasksOrder } from '../../redux/reducers/tasksSlice'
 
 const ScheduleView: FC = () => {
     const { t } = useTranslation()
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
 
     const byId = useSelector((state: RootState) => state.tasks.byId)
     const schedule = useSelector((state: RootState) => state.tasks.taskLists)
@@ -24,13 +25,13 @@ const ScheduleView: FC = () => {
         const { draggableId, source, destination } = result
         if (userReallyChangedOrder(source, destination as DraggableLocation)) {
             const newDay = destination!.droppableId
-            if (newDay !== 'overdue') {
-                updateTasksOrderAsyncMutation({
-                    sourceListType: source.droppableId,
+            if (newDay !== TASK_LIST_ID.SCHEDULE_OVERDUE) {
+                dispatch(updateScheduleTasksOrder({
+                    sourceListId: source.droppableId,
                     taskId: parseInt(draggableId),
-                    destinationListType: destination!.droppableId,
+                    destinationListId: destination!.droppableId,
                     destinationIndex: destination!.index
-                })
+                }))
             }
         }
     }, [dispatch, updateTasksOrderAsyncMutation])
@@ -45,38 +46,34 @@ const ScheduleView: FC = () => {
 
     if (isLoading || isFetching) return <SpinnerView/>
 
-    const weekdays = Object
-        .keys(schedule)
-        .filter(day => !['INBOX', 'CLOSED', 'future', 'overdue'].includes(day))
-
     return (
         <DragDropContext onDragEnd={updateTaskPositionIndex}>
             {
-                weekdays.map(date =>
+                SCHEDULE_WEEK_TASK_LIST_IDS.map(day =>
                     <DroppableTaskListWithHeader
-                        key={date}
-                        droppableId={date}
+                        key={day}
+                        droppableId={day}
                         isDraggable
-                        header={t('dueDate', { date })}
-                        tasks={schedule[date].allIds.map(id => byId[id])}
+                        header={t('dueDate', { date: schedule[day].meta.day })}
+                        tasks={schedule[day].allIds.map(id => byId[id])}
                         onTaskClose={closeTask}
                         onSaveTask={updateTask}
                     />)
             }
             <DroppableTaskListWithHeader
-                droppableId="future"
+                droppableId={TASK_LIST_ID.SCHEDULE_FUTURE}
                 isDraggable
                 header={t('futureTasks')}
-                tasks={schedule['future'].allIds.map(id => byId[id])}
+                tasks={schedule[TASK_LIST_ID.SCHEDULE_FUTURE].allIds.map(id => byId[id])}
                 onTaskClose={closeTask}
                 onSaveTask={updateTask}
             />
             <DroppableTaskListWithHeader
-                droppableId="overdue"
+                droppableId={TASK_LIST_ID.SCHEDULE_OVERDUE}
                 isDraggable
                 isDropDisabled
                 header={t('overdueTasks')}
-                tasks={schedule['overdue'].allIds.map(id => byId[id])}
+                tasks={schedule[TASK_LIST_ID.SCHEDULE_OVERDUE].allIds.map(id => byId[id])}
                 onTaskClose={closeTask}
                 onSaveTask={updateTask}
             />

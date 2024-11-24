@@ -12,8 +12,9 @@ export type ISearchUserTasksResponse = {
     page: IPage
 }
 
-export type IFetchScheduleWeekResponse = {
-    week: IScheduleWeek
+export type RescheduleTaskRequest = {
+    dueDate: DateTime
+    taskIds: number[]
 }
 
 export type ITask = {
@@ -44,17 +45,36 @@ export type DueDateExtractionResult = {
     dueDate: DateTime | null
 }
 
-export type ITaskPositionIndex = {
-    sourceListType: string
+export type TaskPositionChange = {
+    sourceListId: string
     taskId: number
-    destinationListType: string
+    destinationListId: string
     destinationIndex: number
 }
 
 export enum TASK_LIST_ID {
     INBOX = 'INBOX',
-    CLOSED = 'CLOSED'
+    CLOSED = 'CLOSED',
+    SCHEDULE_0 = 'SCHEDULE_0',
+    SCHEDULE_1 = 'SCHEDULE_1',
+    SCHEDULE_2 = 'SCHEDULE_2',
+    SCHEDULE_3 = 'SCHEDULE_3',
+    SCHEDULE_4 = 'SCHEDULE_4',
+    SCHEDULE_5 = 'SCHEDULE_5',
+    SCHEDULE_6 = 'SCHEDULE_6',
+    SCHEDULE_OVERDUE = 'SCHEDULE_OVERDUE',
+    SCHEDULE_FUTURE = 'SCHEDULE_FUTURE'
 }
+
+export const SCHEDULE_WEEK_TASK_LIST_IDS = [
+    TASK_LIST_ID.SCHEDULE_0,
+    TASK_LIST_ID.SCHEDULE_1,
+    TASK_LIST_ID.SCHEDULE_2,
+    TASK_LIST_ID.SCHEDULE_3,
+    TASK_LIST_ID.SCHEDULE_4,
+    TASK_LIST_ID.SCHEDULE_5,
+    TASK_LIST_ID.SCHEDULE_6
+]
 
 export type IRephrasedTask = {
     original: string
@@ -68,21 +88,11 @@ export type IUser = {
     temporary: boolean
 }
 
-export type IScheduleFutureAndOverdue = {
-    future: ITask[]
-    overdue: ITask[]
-}
-
-export type IScheduleWeek = {
-    [day: string]: ITask[]
-}
-
-export type ISchedule = IScheduleFutureAndOverdue & IScheduleWeek
-
 export type TaskListState = {
     status: 'IDLE' | 'PENDING' | 'SUCCEEDED' | 'FAILED'
     totalElements: number
-    allIds: number[]
+    allIds: number[],
+    meta?: any
 }
 
 export type TaskListsState = {

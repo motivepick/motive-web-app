@@ -1,17 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import {
-    CreateTaskRequest,
-    IFetchScheduleWeekResponse,
-    IRephrasedTask,
-    ISchedule,
-    IScheduleFutureAndOverdue,
-    ITask,
-    ITaskPositionIndex,
-    IUser,
-    UpdateTaskRequest
-} from '../models/appModel'
+import { CreateTaskRequest, IRephrasedTask, ITask, IUser, TaskPositionChange, UpdateTaskRequest } from '../models/appModel'
 import { API_URL } from '../config'
-import { DateTime } from 'luxon'
 import { SCHEDULE_TAG } from './tags'
 
 export const api = createApi({
@@ -29,16 +18,11 @@ export const api = createApi({
         fetchUser: builder.query<IUser, void>({
             query: () => '/user'
         }),
-        fetchSchedule: builder.query<ISchedule, void>({
-            query: () => ({ url: '/schedule', params: { timeZone: DateTime.local().toFormat('ZZZZ') } }),
-            transformResponse: (response: IScheduleFutureAndOverdue & IFetchScheduleWeekResponse) => ({
-                ...response.week,
-                future: response.future,
-                overdue: response.overdue
-            }),
+        fetchSchedule: builder.query<ITask[], void>({
+            query: () => ({ url: '/schedule' }),
             providesTags: [SCHEDULE_TAG]
         }),
-        updateTasksOrderAsync: builder.mutation<ITask, ITaskPositionIndex>({
+        updateTasksOrderAsync: builder.mutation<ITask, TaskPositionChange>({
             query: (taskPositionIndex) => ({
                 url: '/orders',
                 method: 'POST',
