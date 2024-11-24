@@ -54,7 +54,7 @@ const ScheduleView: FC = () => {
                         key={day}
                         droppableId={day}
                         isDraggable
-                        header={t('dueDate', { date: schedule[day].meta.day })}
+                        header={t('dueDate', { date: schedule[day].meta.fromIncl })}
                         tasks={schedule[day].allIds.map(id => byId[id])}
                         onTaskClose={closeTask}
                         onSaveTask={updateTask}

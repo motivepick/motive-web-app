@@ -76,6 +76,8 @@ export const SCHEDULE_WEEK_TASK_LIST_IDS = [
     TASK_LIST_ID.SCHEDULE_6
 ]
 
+export const SCHEDULE_TASK_LIST_IDS = [TASK_LIST_ID.SCHEDULE_OVERDUE, ...SCHEDULE_WEEK_TASK_LIST_IDS, TASK_LIST_ID.SCHEDULE_FUTURE]
+
 export type IRephrasedTask = {
     original: string
     rephrased: string
@@ -88,11 +90,16 @@ export type IUser = {
     temporary: boolean
 }
 
+export type ScheduleTaskListMeta = {
+    fromIncl: DateTime,
+    untilExcl: DateTime
+}
+
 export type TaskListState = {
     status: 'IDLE' | 'PENDING' | 'SUCCEEDED' | 'FAILED'
     totalElements: number
     allIds: number[],
-    meta?: any
+    meta: ScheduleTaskListMeta
 }
 
 export type TaskListsState = {

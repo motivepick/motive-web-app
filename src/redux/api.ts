@@ -34,30 +34,26 @@ export const api = createApi({
                 url: '/tasks',
                 method: 'POST',
                 body: task
-            }),
-            invalidatesTags: (result) => result?.dueDate ? [SCHEDULE_TAG] : []
+            })
         }),
         closeTask: builder.mutation<ITask, number>({
             query: (id) => ({
                 url: `/tasks/${id}/closing`,
                 method: 'PUT'
-            }),
-            invalidatesTags: () => [SCHEDULE_TAG]
+            })
         }),
         reopenTask: builder.mutation<ITask, number>({
             query: (id) => ({
                 url: `/tasks/${id}/reopen`,
                 method: 'PUT'
-            }),
-            invalidatesTags: (result) => result?.dueDate ? [SCHEDULE_TAG] : []
+            })
         }),
         updateTask: builder.mutation<ITask, { id: number, request: UpdateTaskRequest }>({
             query: ({ id, request }) => ({
                 url: `/tasks/${id}`,
                 method: 'PUT',
                 body: request
-            }),
-            invalidatesTags: () => [SCHEDULE_TAG]
+            })
         })
     })
 })
