@@ -39,7 +39,7 @@ export const fetchTaskLists = createAppAsyncThunk('tasks/fetchTaskList', async (
     }
 )
 
-export const updateScheduleTasksOrder = createAppAsyncThunk('tasks/updateScheduleTasksOrder', async (payload: TaskPositionChange, { getState, dispatch }) => {
+export const updateScheduleTasksOrder = createAppAsyncThunk('tasks/updateScheduleTasksOrder', async (payload: TaskPositionChange, { getState }) => {
     const state = getState()
     const { taskLists } = state.tasks
     const taskIds = [TASK_LIST_ID.SCHEDULE_OVERDUE, ...SCHEDULE_WEEK_TASK_LIST_IDS, TASK_LIST_ID.SCHEDULE_FUTURE]
