@@ -40,7 +40,6 @@ export const fetchTaskLists = createAppAsyncThunk('tasks/fetchTaskList', async (
 )
 
 export const updateScheduleTasksOrder = createAppAsyncThunk('tasks/updateScheduleTasksOrder', async (payload: TaskPositionChange, { getState, dispatch }) => {
-    dispatch(updateScheduleTasksPositions(payload))
     const state = getState()
     const { taskLists } = state.tasks
     const taskIds = [TASK_LIST_ID.SCHEDULE_OVERDUE, ...SCHEDULE_WEEK_TASK_LIST_IDS, TASK_LIST_ID.SCHEDULE_FUTURE]
@@ -49,7 +48,6 @@ export const updateScheduleTasksOrder = createAppAsyncThunk('tasks/updateSchedul
     const { taskId, destinationListId } = payload
     const body: RescheduleTaskRequest = { taskIds, dueDate: taskLists[destinationListId].meta.day.toUTC() }
     const response = await fetchClient.post<ITask>(`/tasks/${taskId}/reschedule`, body)
-    dispatch(updateTaskDueDate(response.data))
     return response.data
 })
 
@@ -74,17 +72,6 @@ const tasksSlice = createSlice({
         resetTaskLists: (state) => {
             state.taskLists = INITIAL_STATE.taskLists
             state.byId = INITIAL_STATE.byId
-        },
-        updateScheduleTasksPositions: (state, { payload }) => {
-            const { sourceListId, taskId, destinationListId, destinationIndex } = payload
-            state.taskLists[sourceListId].totalElements -= 1
-            state.taskLists[sourceListId].allIds = state.taskLists[sourceListId].allIds.filter(it => it !== taskId)
-            state.taskLists[destinationListId].totalElements += 1
-            state.taskLists[destinationListId].allIds.splice(destinationIndex, 0, taskId)
-        },
-        updateTaskDueDate: (state, { payload }) => {
-            const task = state.byId[payload.id]
-            task.dueDate = payload.dueDate
         }
     },
     extraReducers: builder => {
@@ -104,6 +91,17 @@ const tasksSlice = createSlice({
             .addCase(fetchTaskLists.rejected, (state, { meta }) => {
                 const taskListId = meta.arg.type
                 state.taskLists[taskListId].status = 'FAILED'
+            })
+            .addCase(updateScheduleTasksOrder.pending, (state, { meta }) => {
+                const { sourceListId, taskId, destinationListId, destinationIndex } = meta.arg
+                state.taskLists[sourceListId].totalElements -= 1
+                state.taskLists[sourceListId].allIds = state.taskLists[sourceListId].allIds.filter(it => it !== taskId)
+                state.taskLists[destinationListId].totalElements += 1
+                state.taskLists[destinationListId].allIds.splice(destinationIndex, 0, taskId)
+            })
+            .addCase(updateScheduleTasksOrder.fulfilled, (state, { payload }) => {
+                const task = state.byId[payload.id]
+                task.dueDate = payload.dueDate
             })
             .addMatcher(api.endpoints.fetchSchedule.matchFulfilled, (state, { payload }) => {
                 payload.forEach(it => state.byId[it.id] = it)
@@ -171,5 +169,5 @@ const tasksSlice = createSlice({
     }
 })
 
-export const { toggleTaskListId, setTaskListId, resetTaskLists, updateScheduleTasksPositions, updateTaskDueDate } = tasksSlice.actions
+export const { toggleTaskListId, setTaskListId, resetTaskLists } = tasksSlice.actions
 export default tasksSlice.reducer
