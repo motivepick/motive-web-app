@@ -13,7 +13,7 @@ export type ISearchUserTasksResponse = {
 }
 
 export type RescheduleTaskRequest = {
-    dueDate: DateTime
+    dueDate: DateTime | null
     taskIds: number[]
 }
 

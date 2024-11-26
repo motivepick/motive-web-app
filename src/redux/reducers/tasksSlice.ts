@@ -62,8 +62,8 @@ export const updateScheduleTasksOrder = createAppAsyncThunk('tasks/updateSchedul
     const taskIds = SCHEDULE_TASK_LIST_IDS
         .map(id => taskLists[id])
         .flatMap(it => it.allIds)
-    const { taskId, destinationListId } = payload
-    const body: RescheduleTaskRequest = { taskIds, dueDate: taskLists[destinationListId].meta.fromIncl.toUTC() }
+    const { taskId, sourceListId, destinationListId } = payload
+    const body: RescheduleTaskRequest = { taskIds, dueDate: sourceListId === destinationListId ? null : taskLists[destinationListId].meta.fromIncl.toUTC() }
     const response = await fetchClient.post<ITask>(`/tasks/${taskId}/reschedule`, body)
     return response.data
 })
