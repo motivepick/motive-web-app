@@ -17,21 +17,27 @@ import fetchClient from '../../fetchClient'
 import { selectTaskList } from '../selectors/selectors'
 import { DateTime } from 'luxon'
 
+const emptyTaskList = (): TaskListState => ({
+    status: 'IDLE',
+    totalElements: 0,
+    allIds: [],
+    meta: { fromIncl: DateTime.fromObject({ year: 0 }), untilExcl: DateTime.fromObject({ year: 9999 }) }
+})
+
 const INITIAL_STATE: TaskListsState = {
     taskListId: TASK_LIST_ID.INBOX,
     taskLists: {
-        [TASK_LIST_ID.INBOX]: {
-            status: 'IDLE',
-            totalElements: 0,
-            allIds: [],
-            meta: { fromIncl: DateTime.fromObject({ year: 0 }), untilExcl: DateTime.fromObject({ year: 9999 }) }
-        },
-        [TASK_LIST_ID.CLOSED]: {
-            status: 'IDLE',
-            totalElements: 0,
-            allIds: [],
-            meta: { fromIncl: DateTime.fromObject({ year: 0 }), untilExcl: DateTime.fromObject({ year: 9999 }) }
-        }
+        [TASK_LIST_ID.INBOX]: emptyTaskList(),
+        [TASK_LIST_ID.CLOSED]: emptyTaskList(),
+        [TASK_LIST_ID.SCHEDULE_0]: emptyTaskList(),
+        [TASK_LIST_ID.SCHEDULE_1]: emptyTaskList(),
+        [TASK_LIST_ID.SCHEDULE_2]: emptyTaskList(),
+        [TASK_LIST_ID.SCHEDULE_3]: emptyTaskList(),
+        [TASK_LIST_ID.SCHEDULE_4]: emptyTaskList(),
+        [TASK_LIST_ID.SCHEDULE_5]: emptyTaskList(),
+        [TASK_LIST_ID.SCHEDULE_6]: emptyTaskList(),
+        [TASK_LIST_ID.SCHEDULE_OVERDUE]: emptyTaskList(),
+        [TASK_LIST_ID.SCHEDULE_FUTURE]: emptyTaskList()
     },
     byId: {}
 }
@@ -74,12 +80,18 @@ const removeTask = (taskList: TaskListState, taskId: number) => {
     taskList.allIds = taskList.allIds.filter(it => it !== taskId)
 }
 
-const addTaskIfScheduled = (taskList: TaskListState, task: ITask) => {
+const addTaskIfScheduled = (taskList: TaskListState, task: ITask, addFn: 'unshift' | 'push') => {
     const { fromIncl, untilExcl } = taskList.meta
     if (fromIncl && untilExcl && isScheduledTo(task, fromIncl, untilExcl)) {
-        taskList.allIds.unshift(task.id)
+        taskList.allIds[addFn](task.id)
     }
 }
+
+const prependTaskIfScheduled = (taskList: TaskListState, task: ITask) =>
+    addTaskIfScheduled(taskList, task, 'unshift')
+
+const appendTaskIfScheduled = (taskList: TaskListState, task: ITask) =>
+    addTaskIfScheduled(taskList, task, 'push')
 
 const tasksSlice = createSlice({
     name: 'tasks',
@@ -128,53 +140,36 @@ const tasksSlice = createSlice({
             .addMatcher(api.endpoints.fetchSchedule.matchFulfilled, (state, { payload }) => {
                 payload.forEach(it => state.byId[it.id] = it)
                 const startOfToday = DateTime.now().startOf('day')
-                const overdueTaskIds = payload
-                    .filter(task => task.dueDate && DateTime.fromISO(task.dueDate, { zone: 'utc' }).toLocal() < startOfToday)
-                    .map(it => it.id)
-                state.taskLists[TASK_LIST_ID.SCHEDULE_OVERDUE] = {
-                    status: 'SUCCEEDED',
-                    totalElements: overdueTaskIds.length,
-                    allIds: overdueTaskIds,
-                    meta: {
-                        fromIncl: DateTime.fromObject({ year: 0 }),
-                        untilExcl: startOfToday
-                    }
-                }
-                SCHEDULE_WEEK_TASK_LIST_IDS.forEach((it: TASK_LIST_ID) => {
-                    const offset = SCHEDULE_WEEK_TASK_LIST_IDS.indexOf(it)
-                    const day = startOfToday.plus({ days: offset })
-                    const allIds = payload.filter(task => isScheduledTo(task, day, day.plus({ days: 1 }))).map(it => it.id)
-                    state.taskLists[it] = {
-                        status: 'SUCCEEDED',
-                        totalElements: allIds.length,
-                        allIds,
-                        meta: {
-                            fromIncl: day,
-                            untilExcl: day.plus({ days: 1 })
+                SCHEDULE_TASK_LIST_IDS.forEach(it => {
+                    if (it === TASK_LIST_ID.SCHEDULE_OVERDUE) {
+                        state.taskLists[it].meta = {
+                            fromIncl: DateTime.fromObject({ year: 0 }),
+                            untilExcl: startOfToday
+                        }
+                    } else if (it === TASK_LIST_ID.SCHEDULE_FUTURE) {
+                        state.taskLists[it].meta = {
+                            fromIncl: startOfToday.plus({ days: SCHEDULE_WEEK_TASK_LIST_IDS.length }),
+                            untilExcl: DateTime.fromObject({ year: 9999 })
+                        }
+                    } else {
+                        const fromIncl = startOfToday.plus({ days: SCHEDULE_WEEK_TASK_LIST_IDS.indexOf(it) })
+                        state.taskLists[it].meta = {
+                            fromIncl,
+                            untilExcl: fromIncl.plus({ days: 1 })
                         }
                     }
+                    state.taskLists[it].status = 'SUCCEEDED'
+                    payload.forEach(task => appendTaskIfScheduled(state.taskLists[it], task))
+                    state.taskLists[it].totalElements = state.taskLists[it].allIds.length
                 })
-                const startOfNextWeek = startOfToday.plus({ days: SCHEDULE_WEEK_TASK_LIST_IDS.length })
-                const futureTaskIds = payload
-                    .filter(task => task.dueDate && DateTime.fromISO(task.dueDate, { zone: 'utc' }).toLocal() >= startOfNextWeek)
-                    .map(it => it.id)
-                state.taskLists[TASK_LIST_ID.SCHEDULE_FUTURE] = {
-                    status: 'SUCCEEDED',
-                    totalElements: futureTaskIds.length,
-                    allIds: futureTaskIds,
-                    meta: {
-                        fromIncl: startOfNextWeek,
-                        untilExcl: DateTime.fromObject({ year: 9999 })
-                    }
-                }
             })
             .addMatcher(api.endpoints.createTask.matchFulfilled, (state, { payload }) => {
                 const taskList = state.taskLists[TASK_LIST_ID.INBOX]
                 taskList.totalElements += 1
                 taskList.allIds.unshift(payload.id)
                 state.byId[payload.id] = payload
-                if (state.taskLists[TASK_LIST_ID.SCHEDULE_0]?.status === 'SUCCEEDED' && payload.dueDate) {
-                    SCHEDULE_TASK_LIST_IDS.forEach(it => addTaskIfScheduled(state.taskLists[it], payload))
+                if (state.taskLists[TASK_LIST_ID.SCHEDULE_0].status === 'SUCCEEDED' && payload.dueDate) {
+                    SCHEDULE_TASK_LIST_IDS.forEach(it => prependTaskIfScheduled(state.taskLists[it], payload))
                 }
             })
             .addMatcher(api.endpoints.closeTask.matchFulfilled, (state, { payload }) => {
@@ -184,7 +179,7 @@ const tasksSlice = createSlice({
                     state.taskLists[TASK_LIST_ID.CLOSED].totalElements += 1
                     state.taskLists[TASK_LIST_ID.CLOSED].allIds.unshift(payload.id)
                 }
-                if (state.taskLists[TASK_LIST_ID.SCHEDULE_0]?.status === 'SUCCEEDED' && payload.dueDate) {
+                if (state.taskLists[TASK_LIST_ID.SCHEDULE_0].status === 'SUCCEEDED' && payload.dueDate) {
                     SCHEDULE_TASK_LIST_IDS.forEach(it => removeTask(state.taskLists[it], payload.id))
                 }
             })
@@ -195,15 +190,15 @@ const tasksSlice = createSlice({
                     state.taskLists[TASK_LIST_ID.INBOX].totalElements += 1
                     state.taskLists[TASK_LIST_ID.INBOX].allIds.unshift(payload.id)
                 }
-                if (state.taskLists[TASK_LIST_ID.SCHEDULE_0]?.status === 'SUCCEEDED' && payload.dueDate) {
-                    SCHEDULE_TASK_LIST_IDS.forEach(it => addTaskIfScheduled(state.taskLists[it], payload))
+                if (state.taskLists[TASK_LIST_ID.SCHEDULE_0].status === 'SUCCEEDED' && payload.dueDate) {
+                    SCHEDULE_TASK_LIST_IDS.forEach(it => prependTaskIfScheduled(state.taskLists[it], payload))
                 }
             })
             .addMatcher(api.endpoints.updateTask.matchFulfilled, (state, { payload }) => {
-                if (state.taskLists[TASK_LIST_ID.SCHEDULE_0]?.status === 'SUCCEEDED' && state.byId[payload.id].dueDate !== payload.dueDate) {
+                if (state.taskLists[TASK_LIST_ID.SCHEDULE_0].status === 'SUCCEEDED' && state.byId[payload.id].dueDate !== payload.dueDate) {
                     SCHEDULE_TASK_LIST_IDS.forEach(it => {
                         removeTask(state.taskLists[it], payload.id)
-                        addTaskIfScheduled(state.taskLists[it], payload)
+                        prependTaskIfScheduled(state.taskLists[it], payload)
                     })
                 }
                 state.byId[payload.id] = payload
