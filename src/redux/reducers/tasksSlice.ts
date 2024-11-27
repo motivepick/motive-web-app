@@ -158,6 +158,7 @@ const tasksSlice = createSlice({
                             untilExcl: fromIncl.plus({ days: 1 })
                         }
                     }
+                    state.taskLists[it].allIds = []
                     state.taskLists[it].status = 'SUCCEEDED'
                     payload.forEach(task => appendTaskIfScheduled(state.taskLists[it], task))
                     state.taskLists[it].totalElements = state.taskLists[it].allIds.length
