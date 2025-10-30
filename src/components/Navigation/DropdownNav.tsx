@@ -2,6 +2,7 @@ import React, { FC, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { API_URL, GITHUB_AUTH_URL, VK_AUTH_URL } from '../../config'
 import Icon from '../Icon'
+import { NavLink } from 'react-router-dom'
 
 interface Props {
     onSynchronize: () => void
@@ -38,6 +39,16 @@ const DropdownNav: FC<Props> = ({ onSynchronize, isTemporaryUserLoggedIn }) => {
                         </button>
                     </li>
                 </>}
+                <li>
+                    <NavLink
+                        to="/feedback"
+                        className={(isTemporaryUserLoggedIn ? 'text-success ' : '') + 'dropdown-item'}
+                        role="menuitem"
+                    >
+                        <Icon icon="fa-solid fa-comment" style={{ marginRight: '0.2em' }}/>
+                        {t('giveFeedback')}
+                    </NavLink>
+                </li>
                 <li>
                     <button type="button" className="text-danger dropdown-item" role="menuitem" onClick={handleLogout}>
                         <Icon icon="fa-solid fa-right-from-bracket" style={{ marginRight: '0.2em' }}/>

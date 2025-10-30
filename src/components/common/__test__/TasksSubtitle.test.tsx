@@ -22,7 +22,7 @@ describe('TasksSubtitle', () => {
     })
 
     it('renders a number of tasks if "showNumberOfTasks" is "true"', () => {
-        render(<TasksSubtitle numberOfTasks={1} taskListId={TASK_LIST_ID.INBOX} onToggleOpenClosedTasks={jest.fn()}/>)
+        render(<TasksSubtitle numberOfTasks={1} taskListId={TASK_LIST_ID.INBOX} onToggleOpenClosedTasks={jest.fn()} showNumberOfTasks={true}/>)
         expect(screen.queryByText('numberOfTasks')).toBeInTheDocument()
     })
 

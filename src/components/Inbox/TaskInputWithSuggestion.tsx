@@ -17,6 +17,7 @@ const TaskInputWithSuggestion: FC<TaskInputWithSuggestionProps> = ({ onSubmit, p
     const [gptIndex, setGptIndex] = React.useState(-1)
     const [isLoading, setIsLoading] = React.useState(false)
     const [rephraseTask] = useRephraseTaskMutation()
+    const gptEnabled = false
 
     const submitTask = useCallback(async (e: KeyboardEvent<HTMLInputElement>) => {
         const input = e.target as HTMLInputElement
@@ -71,7 +72,7 @@ const TaskInputWithSuggestion: FC<TaskInputWithSuggestionProps> = ({ onSubmit, p
 
     return (
         <div className="input-group mb3">
-            {gptIndex > 0 &&
+            {gptEnabled && gptIndex > 0 &&
                 <button className="btn btn-outline-secondary" type="button" onClick={onGoBack}>
                     <FontAwesomeIcon icon={faChevronLeft}/>
                 </button>}
@@ -83,11 +84,11 @@ const TaskInputWithSuggestion: FC<TaskInputWithSuggestionProps> = ({ onSubmit, p
                 autoFocus={isBrowser}
                 ref={inputRef}
             />
-            {gptIndex < gptSuggestions.length - 1 &&
+            {gptEnabled && gptIndex < gptSuggestions.length - 1 &&
                 <button className="btn btn-outline-secondary" type="button" onClick={onGoForward}>
                     <FontAwesomeIcon icon={faChevronRight}/>
                 </button>}
-            {gptIndex === gptSuggestions.length - 1 &&
+            {gptEnabled && gptIndex === gptSuggestions.length - 1 &&
                 <button className="btn btn-outline-secondary" type="button" onClick={askGpt}>
                     {isLoading &&
                         <span>

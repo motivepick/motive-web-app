@@ -16,6 +16,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import Fallback from './components/Fallback'
 import { faBars, faComment, faRightFromBracket, faRotate } from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faVk } from '@fortawesome/free-brands-svg-icons'
+import FeedbackView from './components/Feedback/FeedbackView'
 
 const container = document.getElementById('root') as Element
 const root = createRoot(container)
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
             {
                 path: '/schedule',
                 element: <ScheduleView/>
+            },
+            {
+                path: '/feedback',
+                element: <FeedbackView/>
             }
         ]
     },
